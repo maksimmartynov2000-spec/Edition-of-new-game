@@ -1,1 +1,1050 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Орден Света: Математическая Цитадель (мини)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0; padding: 0;
+            font-family: 'Georgia', serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        :root {
+            --bg-dark: #07080e;
+            --panel-bg: rgba(15, 18, 32, 0.94);
+            --gold: #ffd700;
+            --cyan: #06b6d4;
+            --royal: #a855f7;
+            --text-light: #f8fafc;
+        }
+        html, body { height: 100%; width: 100%; overflow: hidden; }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            display: flex; flex-direction: column;
+            background: radial-gradient(circle at center, #111428 0%, #06b6d4 100%);
+            transition: background 0.5s ease;
+        }
+        body.mega-storm {
+            background: radial-gradient(circle at center, #2e1065 0%, #030712 100%) !important;
+            animation: cosmicVibe 4s infinite linear;
+        }
+        @keyframes cosmicVibe { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+
+        .modal-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #111324 0%, #030408 100%);
+            z-index: 200; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; padding: 20px;
+            padding-top: calc(20px + env(safe-area-inset-top));
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+            overflow-y: auto;
+        }
+        .start-title { color: var(--gold); font-size: 1.8rem; text-align: center; margin-bottom: 5px; text-shadow: 0 0 10px rgba(255,215,0,0.2); }
+        .start-subtitle { color: #94a3b8; font-size: 0.85rem; margin-bottom: 20px; text-align: center; }
+
+        .config-container {
+            width: 100%; max-width: 450px; background: rgba(15, 18, 32, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px;
+            padding: 18px; max-height: 72vh; overflow-y: auto;
+        }
+        .config-section { margin-bottom: 18px; }
+        .config-section:last-child { margin-bottom: 0; }
+        .config-section-title {
+            color: var(--cyan); font-size: 0.85rem; text-transform: uppercase;
+            letter-spacing: 0.5px; margin-bottom: 10px; font-weight: bold;
+            border-bottom: 1px solid rgba(6, 182, 212, 0.2); padding-bottom: 5px;
+        }
+        .type-select-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .btn-type {
+            background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px; padding: 12px 8px; color: white; text-align: center;
+            font-size: 0.85rem; font-weight: bold; cursor: pointer;
+        }
+        .btn-type.selected { border-color: var(--cyan); background: rgba(6, 182, 212, 0.15); box-shadow: 0 0 12px rgba(6, 182, 212, 0.35); }
+        .op-select-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .btn-op {
+            background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px; padding: 12px 8px; color: white; text-align: center;
+            font-size: 0.85rem; font-weight: bold; cursor: pointer;
+        }
+        .btn-op.selected { border-color: var(--gold); background: rgba(255, 215, 0, 0.12); box-shadow: 0 0 12px rgba(255, 215, 0, 0.3); }
+        .diff-row {
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 10px; padding: 10px; margin-bottom: 8px;
+        }
+        .diff-row:last-child { margin-bottom: 0; }
+        .diff-row-label { font-size: 0.8rem; color: #f1f5f9; font-weight: bold; margin-bottom: 6px; }
+        .diff-stars { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+        .btn-star {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px; padding: 8px 2px; color: #94a3b8; text-align: center;
+            font-size: 0.85rem; font-weight: bold; cursor: pointer; white-space: nowrap; overflow: hidden;
+        }
+        .btn-star.selected { background: rgba(255, 215, 0, 0.18); border-color: var(--gold); color: var(--gold); }
+        .config-hint { font-size: 0.72rem; color: #64748b; margin-top: 4px; }
+        .btn-config-continue {
+            width: 100%; max-width: 450px; background: linear-gradient(45deg, #0284c7, #06b6d4);
+            border: none; color: white; padding: 15px; font-size: 1.05rem;
+            font-weight: bold; border-radius: 12px; margin-top: 15px; cursor: pointer;
+            opacity: 0.4; pointer-events: none; transition: opacity 0.2s ease;
+        }
+        .btn-config-continue.ready { opacity: 1; pointer-events: auto; }
+
+        .top-panel-wrapper {
+            flex-shrink: 0; background: var(--panel-bg);
+            border-bottom: 2px solid rgba(255, 215, 0, 0.15); z-index: 10;
+            display: flex; flex-direction: column; width: 100%; overflow: hidden;
+        }
+        .game-clock-bar {
+            text-align: center; font-size: 0.8rem; color: var(--gold);
+            background: rgba(0, 0, 0, 0.25); padding: 4px 0; font-weight: bold;
+            padding-top: calc(4px + env(safe-area-inset-top));
+        }
+        header {
+            display: flex; justify-content: center; padding: 10px;
+            padding-left: calc(8px + env(safe-area-inset-left));
+            padding-right: calc(8px + env(safe-area-inset-right));
+            width: 100%;
+        }
+        .resource-card {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 8px 24px; border-radius: 10px; background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255,255,255,0.05); min-width: 0;
+        }
+        .res-label { font-size: 0.75rem; color: #94a3b8; white-space: nowrap; }
+        .res-val { font-size: clamp(1rem, 4vw, 1.4rem); font-weight: bold; margin-top: 2px; white-space: nowrap; }
+
+        .game-space {
+            flex: 1; position: relative; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; padding: 10px; min-height: 0; width: 100%;
+        }
+        #cityCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+        .math-box {
+            position: relative; z-index: 2; background: rgba(5, 7, 15, 0.9);
+            border: 2px solid var(--cyan); box-shadow: 0 0 25px rgba(6, 182, 212, 0.25);
+            border-radius: 16px; padding: 16px; text-align: center; width: 100%; max-width: 360px;
+            backdrop-filter: blur(8px);
+            transition: background-color 0.15s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .badge-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; }
+        .combo-badge {
+            background: linear-gradient(45deg, #ef4444, #f59e0b); color: white;
+            padding: 2px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;
+        }
+        .combo-badge.frenzy { background: linear-gradient(45deg, #a855f7, #ec4899); }
+        .speed-badge { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; }
+        .speed-badge.active-speed { background: linear-gradient(45deg, #0284c7, #06b6d4); color: white; border: none; }
+
+        .stats-counter-row {
+            font-size: 0.75rem; color: #94a3b8; margin-bottom: 10px;
+            background: rgba(255,255,255,0.03); padding: 4px; border-radius: 6px;
+            display: flex; justify-content: center; gap: 16px; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .stats-counter-row span { font-weight: bold; }
+
+        .timer-bar-container { width: 100%; height: 5px; background: rgba(255,255,255,0.05); border-radius: 3px; margin-bottom: 12px; overflow: hidden; }
+        .timer-bar { width: 100%; height: 100%; background: var(--cyan); }
+        .math-question { font-size: 2.2rem; font-weight: bold; margin-bottom: 14px; color: var(--text-light); }
+        .answers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+        .btn-answer {
+            background: rgba(6, 182, 212, 0.06); border: 1px solid rgba(6, 182, 212, 0.3);
+            color: white; padding: 14px; border-radius: 12px; font-size: 1.25rem; font-weight: bold;
+            cursor: pointer; position: relative; transition: background 0.1s, transform 0.1s;
+        }
+        .btn-answer:active { transform: scale(0.95); background: rgba(6, 182, 212, 0.2); }
+
+        .floating-reward {
+            position: fixed; pointer-events: none; font-weight: 900; font-size: 1.4rem; z-index: 300;
+            font-family: 'Impact', 'Arial Black', sans-serif; text-align: center;
+            text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 0 4px 8px rgba(0,0,0,0.7);
+            animation: rewardFlyFast 0.52s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        .floating-reward.crit { font-size: 2.0rem; animation: critFlyFast 0.62s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes rewardFlyFast {
+            0% { transform: translate(-50%, 0px) scale(0.6); opacity: 0; }
+            12% { opacity: 1; transform: translate(-50%, -35px) scale(1.15); }
+            80% { opacity: 1; transform: translate(-50%, -60px) scale(1.0); }
+            100% { transform: translate(-50%, -85px) scale(0.8); opacity: 0; }
+        }
+        @keyframes critFlyFast {
+            0% { transform: translate(-50%, 0px) scale(0.5); opacity: 0; }
+            15% { opacity: 1; transform: translate(-50%, -45px) scale(1.35); }
+            35% { transform: translate(-50%, -40px) scale(1.15); }
+            80% { opacity: 1; transform: translate(-50%, -70px) scale(1.05); }
+            100% { transform: translate(-50%, -100px) scale(0.75); opacity: 0; }
+        }
+
+        .control-panel {
+            flex-shrink: 0; background: var(--panel-bg); backdrop-filter: blur(15px);
+            border-top: 2px solid rgba(255, 255, 255, 0.08); padding: 12px;
+            padding-bottom: calc(14px + env(safe-area-inset-bottom));
+            padding-left: calc(10px + env(safe-area-inset-left));
+            padding-right: calc(10px + env(safe-area-inset-right));
+            z-index: 10; width: 100%;
+        }
+        .btn-final {
+            width: 100%; background: linear-gradient(45deg, #1e1b4b, #4c1d95);
+            border: 1px solid var(--royal); text-align: center; padding: 14px; border-radius: 12px; cursor: pointer;
+        }
+        .btn-final .name { color: #f3e8ff; font-size: 0.95rem; display: block; font-weight: bold; }
+        .btn-final:active { transform: scale(0.98); }
+
+        .win-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #030712; z-index: 100; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center; padding: 20px;
+            opacity: 0; pointer-events: none; transition: opacity 0.8s ease;
+        }
+        .win-screen.active { opacity: 1; pointer-events: auto; }
+
+        @media (max-height: 600px) {
+            .math-box { padding: 8px; max-width: 320px; }
+            .math-question { font-size: 1.6rem; margin-bottom: 6px; }
+            .btn-answer { padding: 8px; font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Экран настройки генерации примеров -->
+    <div class="modal-screen" id="configScreen">
+        <h1 class="start-title">🔮 Настройка Испытаний</h1>
+        <p class="start-subtitle">Определите, какими примерами Орден будет проверять ваш разум</p>
+        <div class="config-container">
+            <div class="config-section">
+                <div class="config-section-title">1️⃣ Вид чисел</div>
+                <div class="type-select-row" id="typeSelectRow">
+                    <button class="btn-type" data-value="positive">🔵 Положительные числа</button>
+                    <button class="btn-type" data-value="negative">🔴 Отрицательные числа</button>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <div class="config-section-title">2️⃣ Режимы вычислений</div>
+                <div class="op-select-grid" id="opSelectGrid">
+                    <button class="btn-op" data-op="add">➕ Сложение</button>
+                    <button class="btn-op" data-op="sub">➖ Вычитание</button>
+                    <button class="btn-op" data-op="mul">✖️ Умножение</button>
+                    <button class="btn-op" data-op="div">➗ Деление</button>
+                </div>
+                <div class="config-hint">Можно выбрать один или несколько режимов</div>
+            </div>
+
+            <div class="config-section" id="difficultyContainer" style="display:none;">
+                <div class="config-section-title">3️⃣ Сложность по режимам</div>
+                <div id="difficultyList"></div>
+                <div class="config-hint">Для каждого выбранного режима — своя сложность</div>
+            </div>
+        </div>
+        <button class="btn-config-continue" id="btnConfigContinue" onclick="finishConfig()">⚔️ Начать испытание</button>
+    </div>
+
+    <div class="top-panel-wrapper">
+        <div class="game-clock-bar" id="gameClock">⏳ Время Эпохи: 00:00</div>
+        <header>
+            <div class="resource-card">
+                <div class="res-label">🪙 Таланты</div>
+                <div class="res-val" id="val-gold">0</div>
+            </div>
+        </header>
+    </div>
+
+    <div class="game-space">
+        <canvas id="cityCanvas"></canvas>
+        <div class="math-box" id="mainMathBox">
+            <div class="stats-counter-row">
+                <div>✅ Верно: <span id="stat-correct" style="color:#10b981;">0</span></div>
+                <div>❌ Ошибки: <span id="stat-wrong" style="color:#ef4444;">0</span></div>
+            </div>
+            <div class="badge-container">
+                <div class="combo-badge" id="comboBadge" style="display:none;">Серия: 🔥 х1.0</div>
+                <div class="speed-badge" id="speedBadge">Скорость: +0%</div>
+            </div>
+            <div class="timer-bar-container">
+                <div class="timer-bar" id="timerBar"></div>
+            </div>
+            <div class="math-question" id="mathQuestion">Загрузка...</div>
+            <div class="answers-grid" id="answersGrid"></div>
+        </div>
+    </div>
+
+    <div class="control-panel">
+        <button class="btn-final" id="btn-exam">
+            <span class="name">🏆 СДАТЬ ВЕЛИКИЙ ЭКЗАМЕН 🏆</span>
+        </button>
+    </div>
+
+    <div class="win-screen" id="winScreen">
+        <h1 style="color:var(--gold); font-size:2.2rem; margin-bottom:15px;">Экзамен сдан!</h1>
+        <p id="winDesc" style="padding:0 25px; color:#94a3b8; line-height:1.5; font-size: 1.1rem;"></p>
+        <button style="margin-top:30px; padding:12px 25px; background:var(--gold); border:none; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="location.reload()">Начать заново</button>
+    </div>
+
+    <script>
+        // ===================== НАСТРОЙКА ГЕНЕРАЦИИ ПРИМЕРОВ =====================
+        const OP_LABELS = { add: '➕ Сложение', sub: '➖ Вычитание', mul: '✖️ Умножение', div: '➗ Деление' };
+        const OP_ORDER = ['add', 'sub', 'mul', 'div'];
+
+        let exampleConfig = {
+            numberType: null,     // 'positive' | 'negative'
+            operations: {}        // { add: level(1-5), sub: level, ... } — только выбранные режимы
+        };
+
+        document.querySelectorAll('.btn-type').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.btn-type').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                exampleConfig.numberType = btn.getAttribute('data-value');
+                updateConfigValidity();
+            });
+        });
+
+        document.querySelectorAll('.btn-op').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const op = btn.getAttribute('data-op');
+                if (btn.classList.contains('selected')) {
+                    btn.classList.remove('selected');
+                    delete exampleConfig.operations[op];
+                } else {
+                    btn.classList.add('selected');
+                    exampleConfig.operations[op] = null; // сложность ещё не выбрана
+                }
+                renderDifficultyList();
+                updateConfigValidity();
+            });
+        });
+
+        function renderDifficultyList() {
+            const container = document.getElementById('difficultyContainer');
+            const list = document.getElementById('difficultyList');
+            const selectedOps = OP_ORDER.filter(op => op in exampleConfig.operations);
+
+            if (selectedOps.length === 0) {
+                container.style.display = 'none';
+                list.innerHTML = '';
+                return;
+            }
+
+            container.style.display = 'block';
+            list.innerHTML = '';
+
+            selectedOps.forEach(op => {
+                const row = document.createElement('div');
+                row.className = 'diff-row';
+
+                const label = document.createElement('div');
+                label.className = 'diff-row-label';
+                label.innerText = OP_LABELS[op];
+                row.appendChild(label);
+
+                const starsWrap = document.createElement('div');
+                starsWrap.className = 'diff-stars';
+
+                for (let lvl = 1; lvl <= 5; lvl++) {
+                    const starBtn = document.createElement('button');
+                    starBtn.className = 'btn-star';
+                    starBtn.innerText = `${lvl}★`;
+                    if (exampleConfig.operations[op] === lvl) starBtn.classList.add('selected');
+                    starBtn.addEventListener('click', () => {
+                        exampleConfig.operations[op] = lvl;
+                        row.querySelectorAll('.btn-star').forEach(s => s.classList.remove('selected'));
+                        starBtn.classList.add('selected');
+                        updateConfigValidity();
+                    });
+                    starsWrap.appendChild(starBtn);
+                }
+
+                row.appendChild(starsWrap);
+                list.appendChild(row);
+            });
+        }
+
+        function updateConfigValidity() {
+            const btn = document.getElementById('btnConfigContinue');
+            const selectedOps = Object.keys(exampleConfig.operations);
+            const allHaveDifficulty = selectedOps.length > 0 && selectedOps.every(op => exampleConfig.operations[op] !== null);
+            const valid = !!exampleConfig.numberType && allHaveDifficulty;
+            if (valid) btn.classList.add('ready'); else btn.classList.remove('ready');
+        }
+
+        function finishConfig() {
+            const selectedOps = Object.keys(exampleConfig.operations);
+            const allHaveDifficulty = selectedOps.length > 0 && selectedOps.every(op => exampleConfig.operations[op] !== null);
+            if (!exampleConfig.numberType || !allHaveDifficulty) return;
+
+            document.getElementById('configScreen').style.display = 'none';
+            startGame();
+        }
+
+        // ===================== ГЕНЕРАТОРЫ ПРИМЕРОВ =====================
+        function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+        function randSign() { return Math.random() < 0.5 ? -1 : 1; }
+        function fmt(n) { return n < 0 ? `(${n})` : `${n}`; }
+
+        // --- ОБЩИЕ ТАБЛИЦЫ СЛОЖНОСТИ (единые для + и - режимов чисел) ---
+        const ADD_SUB_RANGE = { 1: 10, 2: 20, 3: 50, 4: 100, 5: 200 };
+        const DIVISOR_POOL = {
+            1: [1, 2, 5, 10],
+            2: [1, 2, 3, 4, 5, 10],
+            3: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            4: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            5: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        };
+        const QUOTIENT_MAX = { 1: 5, 2: 10, 3: 15, 4: 25, 5: 50 };
+        const DIV_ZERO_CHANCE = 0.10; // фиксированная доля примеров "деление на 0", не зависит от таблиц
+        const MUL_TABLE = {
+            1: [0, 1, 2, 5, 10],
+            2: [0, 1, 2, 3, 4, 5, 10],
+            3: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        };
+
+        // --- "МЕШОК" ЗНАКОВ: гарантирует, что все 4 комбинации (+/+ +/- -/+ -/-)
+        // встретятся равномерно, но порядок внутри цикла остаётся случайным ---
+        function createSignBag() { return { queue: [] }; }
+        function nextSignPair(bag) {
+            if (bag.queue.length === 0) {
+                bag.queue = shuffleArray(['++', '+-', '-+', '--']);
+            }
+            const token = bag.queue.pop();
+            return [token[0] === '+' ? 1 : -1, token[1] === '+' ? 1 : -1];
+        }
+        const signBags = {
+            add: createSignBag(),
+            sub: createSignBag(),
+            mul: createSignBag(),
+            div: createSignBag()
+        };
+
+        // --- ПОЛОЖИТЕЛЬНЫЕ ЧИСЛА ---
+        function genAddPositive(level) {
+            const range = ADD_SUB_RANGE[level];
+            // генерируем сразу сумму в нужном диапазоне, затем делим на слагаемые —
+            // гарантированное попадание в диапазон без повторных попыток
+            const sum = randInt(2, range);
+            const n1 = randInt(1, sum - 1);
+            const n2 = sum - n1;
+            return { text: `${n1} + ${n2}`, answer: sum, a: n1, b: n2 };
+        }
+
+        function genSubPositive(level) {
+            const maxOperand = ADD_SUB_RANGE[level];
+            const n1 = randInt(2, maxOperand);
+            const n2 = randInt(0, n1);
+            return { text: `${n1} - ${n2}`, answer: n1 - n2, a: n1, b: n2 };
+        }
+
+        function genMulPositive(level) {
+            let a, b;
+            if (level <= 3) {
+                const table = MUL_TABLE[level];
+                a = table[randInt(0, table.length - 1)];
+                b = randInt(0, 10);
+                if (Math.random() < 0.5) { const t = a; a = b; b = t; }
+            } else if (level === 4) {
+                a = randInt(10, 20);
+                b = randInt(0, 10);
+            } else {
+                a = randInt(10, 99);
+                b = randInt(0, 10);
+            }
+            return { text: `${a} × ${b}`, answer: a * b, a: a, b: b };
+        }
+
+        function genDivPositive(level) {
+            if (Math.random() < DIV_ZERO_CHANCE) {
+                const dividend = randInt(1, Math.max(10, QUOTIENT_MAX[level] * 2));
+                return { text: `${dividend} ÷ 0`, answer: null, noSolution: true, a: dividend, b: 0 };
+            }
+            const pool = DIVISOR_POOL[level];
+            const divisor = pool[randInt(0, pool.length - 1)];
+            const quotient = randInt(0, QUOTIENT_MAX[level]);
+            const dividend = divisor * quotient;
+            return { text: `${dividend} ÷ ${divisor}`, answer: quotient, a: dividend, b: divisor };
+        }
+
+        // --- ОТРИЦАТЕЛЬНЫЕ ЧИСЛА ---
+        function genAddNegative(level) {
+            const range = ADD_SUB_RANGE[level];
+            const [s1, s2] = nextSignPair(signBags.add);
+            const mag1 = randInt(0, range);
+            // при одинаковых знаках вклады складываются по модулю — магнитуду нужно ограничить,
+            // чтобы сумма гарантированно осталась в диапазоне без повторных попыток
+            const mag2 = (s1 === s2) ? randInt(0, range - mag1) : randInt(0, range);
+            const n1 = s1 * mag1;
+            const n2 = s2 * mag2;
+            return { text: `${fmt(n1)} + ${fmt(n2)}`, answer: n1 + n2, a: n1, b: n2 };
+        }
+
+        function genSubNegative(level) {
+            const range = ADD_SUB_RANGE[level];
+            const [s1, s2] = nextSignPair(signBags.sub);
+            const mag1 = randInt(0, range);
+            // при разных знаках операндов их вклады в разность складываются по модулю —
+            // магнитуду нужно ограничить, чтобы результат остался в диапазоне
+            const mag2 = (s1 !== s2) ? randInt(0, range - mag1) : randInt(0, range);
+            const n1 = s1 * mag1;
+            const n2 = s2 * mag2;
+            return { text: `${fmt(n1)} - ${fmt(n2)}`, answer: n1 - n2, a: n1, b: n2 };
+        }
+
+        function genMulNegative(level) {
+            let magA, magB;
+            if (level <= 3) {
+                const table = MUL_TABLE[level];
+                magA = table[randInt(0, table.length - 1)];
+                magB = randInt(0, 10);
+            } else if (level === 4) {
+                magA = randInt(10, 20);
+                magB = randInt(0, 10);
+            } else {
+                magA = randInt(10, 99);
+                magB = randInt(0, 10);
+            }
+            const [s1, s2] = nextSignPair(signBags.mul);
+            const a = magA === 0 ? 0 : magA * s1;
+            const b = magB === 0 ? 0 : magB * s2;
+            return { text: `${fmt(a)} × ${fmt(b)}`, answer: a * b, a: a, b: b };
+        }
+
+        function genDivNegative(level) {
+            if (Math.random() < DIV_ZERO_CHANCE) {
+                const dividendMag = randInt(1, Math.max(10, QUOTIENT_MAX[level] * 2));
+                const dividend = dividendMag * randSign();
+                return { text: `${fmt(dividend)} ÷ 0`, answer: null, noSolution: true, a: dividend, b: 0 };
+            }
+            const pool = DIVISOR_POOL[level];
+            const divisorMag = pool[randInt(0, pool.length - 1)];
+            const quotientMag = randInt(0, QUOTIENT_MAX[level]);
+            const [s1, s2] = nextSignPair(signBags.div); // s1 — знак делителя, s2 — знак частного
+            const divisor = divisorMag * s1;
+            const quotient = quotientMag === 0 ? 0 : quotientMag * s2;
+            const dividend = divisor * quotient;
+            return { text: `${fmt(dividend)} ÷ ${fmt(divisor)}`, answer: quotient, a: dividend, b: divisor };
+        }
+
+        // --- ГЕНЕРАЦИЯ ОТВЛЕКАЮЩИХ ВАРИАНТОВ ОТВЕТА ---
+        function noCarryAdd(a, b) {
+            if (a < 0 || b < 0) return null;
+            const sa = String(a), sb = String(b);
+            const maxLen = Math.max(sa.length, sb.length);
+            const pa = sa.padStart(maxLen, '0');
+            const pb = sb.padStart(maxLen, '0');
+            let digits = '';
+            for (let i = 0; i < maxLen; i++) {
+                digits += (parseInt(pa[i]) + parseInt(pb[i])) % 10;
+            }
+            const val = parseInt(digits, 10);
+            return Number.isNaN(val) ? null : val;
+        }
+
+        function pushStructural(arr, val, correctAnswer, isNegative) {
+            if (val === undefined || val === null || !Number.isFinite(val)) return;
+            val = Math.round(val);
+            if (val === correctAnswer) return;
+            if (!isNegative && val < 0) return;
+            if (arr.includes(val)) return;
+            arr.push(val);
+        }
+
+        function shuffleArray(arr) {
+            const copy = arr.slice();
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        function buildDistractors(opKey, a, b, correctAnswer, isNegative, count) {
+            // Приоритетный дистрактор: перепутанный знак ответа — самая частая ошибка
+            // при работе с отрицательными числами (модуль верный, знак — нет)
+            let priority = [];
+            if (isNegative && correctAnswer !== 0) {
+                pushStructural(priority, -correctAnswer, correctAnswer, isNegative);
+            }
+
+            let structural = [];
+
+            if (opKey === 'add') {
+                pushStructural(structural, noCarryAdd(a, b), correctAnswer, isNegative);
+                pushStructural(structural, a - b, correctAnswer, isNegative);
+            } else if (opKey === 'sub') {
+                pushStructural(structural, b - a, correctAnswer, isNegative);
+                pushStructural(structural, a + b, correctAnswer, isNegative);
+            } else if (opKey === 'mul') {
+                pushStructural(structural, a * (b + 1), correctAnswer, isNegative);
+                pushStructural(structural, a * (b - 1), correctAnswer, isNegative);
+                pushStructural(structural, (a + 1) * b, correctAnswer, isNegative);
+                pushStructural(structural, a + b, correctAnswer, isNegative);
+            } else if (opKey === 'div') {
+                pushStructural(structural, correctAnswer + 1, correctAnswer, isNegative);
+                pushStructural(structural, correctAnswer - 1, correctAnswer, isNegative);
+                if (Math.abs(b) <= Math.abs(correctAnswer) * 3 + 10) {
+                    pushStructural(structural, b, correctAnswer, isNegative);
+                }
+            }
+
+            structural = shuffleArray(structural);
+
+            const used = new Set([correctAnswer]);
+            const result = [];
+
+            // сначала — приоритетный "знаковый" дистрактор (если применим)
+            for (const v of priority) {
+                if (result.length >= count) break;
+                if (!used.has(v)) { result.push(v); used.add(v); }
+            }
+
+            // затем до 2 структурных дистракторов на оставшиеся места
+            const structuralTake = Math.min(2, structural.length, count - result.length);
+            for (let i = 0; i < structuralTake; i++) {
+                const v = structural[i];
+                if (!used.has(v)) { result.push(v); used.add(v); }
+            }
+
+            const deltaMax = Math.max(3, Math.round(Math.abs(correctAnswer) * 0.15));
+            let guard = 0;
+            while (result.length < count && guard < 100) {
+                guard++;
+                let delta = randInt(-deltaMax, deltaMax);
+                if (delta === 0) delta = 1;
+                const fake = correctAnswer + delta;
+                if (!isNegative && fake < 0) continue;
+                if (fake === a || fake === b) continue;
+                if (used.has(fake)) continue;
+                result.push(fake); used.add(fake);
+            }
+
+            let widen = deltaMax;
+            while (result.length < count) {
+                widen++;
+                const fake = correctAnswer + widen * (Math.random() < 0.5 ? -1 : 1);
+                if (!isNegative && fake < 0) continue;
+                if (used.has(fake)) continue;
+                result.push(fake); used.add(fake);
+            }
+
+            return result;
+        }
+
+        function buildNoSolutionOptions(dividend, isNegative) {
+            const used = new Set();
+            const opts = [];
+
+            function tryAdd(v) {
+                if (v === undefined || v === null || !Number.isFinite(v)) return false;
+                v = Math.round(v);
+                if (!isNegative && v < 0) return false;
+                if (used.has(v)) return false;
+                used.add(v);
+                opts.push(v);
+                return true;
+            }
+
+            tryAdd(0);
+            tryAdd(dividend);
+
+            const deltaMax = Math.max(5, Math.round(Math.abs(dividend) * 0.3));
+            let guard = 0;
+            while (opts.length < 3 && guard < 60) {
+                guard++;
+                tryAdd(dividend + randInt(-deltaMax, deltaMax));
+            }
+            let widen = deltaMax;
+            while (opts.length < 3) {
+                widen++;
+                tryAdd(dividend + widen * (Math.random() < 0.5 ? -1 : 1));
+            }
+
+            return opts;
+        }
+
+        function generateProblem(opKey, level, isNegative) {
+            if (!isNegative) {
+                if (opKey === 'add') return genAddPositive(level);
+                if (opKey === 'sub') return genSubPositive(level);
+                if (opKey === 'mul') return genMulPositive(level);
+                return genDivPositive(level);
+            } else {
+                if (opKey === 'add') return genAddNegative(level);
+                if (opKey === 'sub') return genSubNegative(level);
+                if (opKey === 'mul') return genMulNegative(level);
+                return genDivNegative(level);
+            }
+        }
+
+        // ===================== ИГРОВАЯ ЛОГИКА (минимальная) =====================
+        let gameActive = false;
+        let totalSeconds = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+
+        const speedBonusBaseFactor = 0.5; // сила бонуса "Молния" от оставшегося времени
+        const comboStepBonus = 0.1;       // шаг усиления серии
+
+        const state = {
+            gold: 0,
+            clickBase: 12,
+            combo: 0,
+            critChance: 0.05,
+            critMultiplier: 4.0
+        };
+
+        let correctAnswer = 0;
+        let timeRemaining = 100;
+        let timerInterval = null;
+        let currentProblemMeta = null;
+
+        const canvas = document.getElementById('cityCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        let megaShowActive = false;
+        let megaShowTimer = 0;
+        let bgFlashState = 0;
+        let isUltimateStorm = false;
+
+        function startGame() {
+            gameActive = true;
+            resizeCanvas();
+            generateMath();
+        }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        function generateMath() {
+            if (!gameActive) return;
+            clearInterval(timerInterval);
+            timeRemaining = 100;
+            document.getElementById('timerBar').style.width = '100%';
+
+            const baseDurationSeconds = 100 / 7.5; // ~13.33с
+            const decrementPerTick = 100 / (baseDurationSeconds * 10); // 10 тиков/сек
+
+            timerInterval = setInterval(() => {
+                if (!gameActive) return;
+                timeRemaining -= decrementPerTick;
+                if (timeRemaining <= 0) timeRemaining = 0;
+                document.getElementById('timerBar').style.width = `${timeRemaining}%`;
+
+                let currentSpeedBonus = Math.floor(timeRemaining * speedBonusBaseFactor);
+                let sBadge = document.getElementById('speedBadge');
+                if (currentSpeedBonus > 0) {
+                    sBadge.className = "speed-badge active-speed";
+                    sBadge.innerText = `Молния: +${currentSpeedBonus}%`;
+                } else {
+                    sBadge.className = "speed-badge";
+                    sBadge.innerText = `Скорость: +0%`;
+                }
+            }, 100);
+
+            const isNegative = exampleConfig.numberType === 'negative';
+            const opsKeys = Object.keys(exampleConfig.operations);
+            const opKey = opsKeys[Math.floor(Math.random() * opsKeys.length)];
+            const level = exampleConfig.operations[opKey];
+
+            currentProblemMeta = { isNegative, opKey, level };
+
+            const problem = generateProblem(opKey, level, isNegative);
+
+            document.getElementById('mathQuestion').innerText = problem.text;
+
+            const grid = document.getElementById('answersGrid');
+            grid.innerHTML = '';
+
+            if (problem.noSolution) {
+                correctAnswer = 'NO_SOLUTION';
+                const fakeNums = buildNoSolutionOptions(problem.a, isNegative);
+                let opts = ['Нет решения', ...fakeNums.map(String)];
+                opts = shuffleArray(opts);
+                opts.forEach(optText => {
+                    const b = document.createElement('button');
+                    b.className = 'btn-answer';
+                    b.innerText = optText;
+                    b.onclick = (e) => checkAnswer(optText === 'Нет решения' ? 'NO_SOLUTION' : Number(optText), e);
+                    grid.appendChild(b);
+                });
+            } else {
+                correctAnswer = problem.answer;
+                const fakeNums = buildDistractors(opKey, problem.a, problem.b, correctAnswer, isNegative, 3);
+                let arr = shuffleArray([correctAnswer, ...fakeNums]);
+                arr.forEach(ans => {
+                    const b = document.createElement('button');
+                    b.className = 'btn-answer'; b.innerText = ans;
+                    b.onclick = (e) => checkAnswer(ans, e);
+                    grid.appendChild(b);
+                });
+            }
+        }
+
+        function triggerAnniversaryEffects(count) {
+            // ВАУ-эффект на каждую тысячу примеров
+            if (count % 1000 === 0) {
+                megaShowActive = true;
+                isUltimateStorm = true;
+                megaShowTimer = 4500;
+                document.body.classList.add('mega-storm');
+
+                let mathBox = document.getElementById('mainMathBox');
+                mathBox.style.borderColor = 'var(--gold)';
+                mathBox.style.boxShadow = '0 0 50px rgba(255, 215, 0, 0.9)';
+
+                spawnRewardText(`🌌 ${count} РЕШЕНО! АБСОЛЮТНЫЙ РАЗУМ! 🌌`, window.innerWidth / 2, window.innerHeight / 2 - 50, 'var(--gold)', true);
+                return;
+            }
+
+            // Каждые 100 примеров
+            if (count % 100 === 0) {
+                megaShowActive = true;
+                isUltimateStorm = false;
+                megaShowTimer = 270;
+
+                let mathBox = document.getElementById('mainMathBox');
+                mathBox.style.borderColor = 'var(--royal)';
+                mathBox.style.boxShadow = '0 0 40px rgba(168, 85, 247, 0.8)';
+
+                spawnRewardText(`👑 ЮБИЛЕЙ: ${count} РЕШЕННЫХ ЗАДАЧ! 👑`, window.innerWidth / 2, window.innerHeight / 2 - 30, 'var(--royal)', true);
+
+                let bursts = 0;
+                let interval = setInterval(() => {
+                    if (!gameActive) { clearInterval(interval); return; }
+                    let rx = Math.random() * window.innerWidth;
+                    let ry = Math.random() * window.innerHeight * 0.7;
+                    let colors = ['#ffd700', '#a855f7', '#06b6d4', '#f472b6', '#10b981'];
+                    let col = colors[Math.floor(Math.random() * colors.length)];
+                    for (let i = 0; i < 30; i++) {
+                        particles.push(new CustomSpark(rx, ry, col, Math.random() * 6 - 3, Math.random() * 6 - 3, Math.random() * 3 + 2, 1.5));
+                    }
+                    bursts++;
+                    if (bursts > 12) clearInterval(interval);
+                }, 250);
+                return;
+            }
+
+            // Каждые 10 примеров
+            if (count % 10 === 0) {
+                megaShowActive = true;
+                isUltimateStorm = false;
+                megaShowTimer = 75;
+
+                let mathBox = document.getElementById('mainMathBox');
+                mathBox.style.borderColor = 'var(--cyan)';
+                mathBox.style.boxShadow = '0 0 30px rgba(6, 182, 212, 0.7)';
+
+                const mathBoxRect = mathBox.getBoundingClientRect();
+                const mx = mathBoxRect.left + mathBoxRect.width / 2;
+                const my = mathBoxRect.top + mathBoxRect.height / 2;
+                for (let angle = 0; angle < Math.PI * 2; angle += 0.25) {
+                    let speed = 3.5;
+                    let vx = Math.cos(angle) * speed;
+                    let vy = Math.sin(angle) * speed;
+                    particles.push(new CustomSpark(mx, my, 'var(--cyan)', vx, vy, Math.random() * 1.5 + 1.5, 1.0));
+                }
+            }
+        }
+
+        function checkAnswer(chosen, event) {
+            if (!gameActive) return;
+
+            let clickX = window.innerWidth / 2;
+            let clickY = window.innerHeight / 2;
+            if (event && event.currentTarget) {
+                const rect = event.currentTarget.getBoundingClientRect();
+                clickX = rect.left + rect.width / 2;
+                clickY = rect.top + rect.height / 2;
+            }
+
+            if (chosen === correctAnswer) {
+                correctCount++;
+                document.getElementById('stat-correct').innerText = correctCount;
+
+                state.combo++;
+                let comboMultiplier = 1 + (state.combo * comboStepBonus);
+                let speedBonusPercent = 1 + (timeRemaining * 0.01 * speedBonusBaseFactor);
+                let isCrit = Math.random() < state.critChance;
+
+                let rewardGold = Math.floor(state.clickBase * comboMultiplier * speedBonusPercent * (isCrit ? state.critMultiplier : 1));
+                state.gold += rewardGold;
+
+                const badge = document.getElementById('comboBadge');
+                badge.style.display = 'inline-block';
+                badge.innerText = `Серия: 🔥 x${comboMultiplier.toFixed(1)}`;
+                if (state.combo >= 5) badge.classList.add('frenzy'); else badge.classList.remove('frenzy');
+
+                if (isCrit) {
+                    spawnRewardText(`⚡ КРИТ! +${rewardGold} 🪙`, clickX, clickY, 'var(--gold)', true);
+                    buildSparks(35, 'var(--gold)');
+                } else {
+                    spawnRewardText(`+${rewardGold} 🪙`, clickX, clickY, '#22d3ee', false);
+                    buildSparks(12, 'var(--cyan)');
+                }
+
+                triggerAnniversaryEffects(correctCount);
+
+            } else {
+                wrongCount++;
+                document.getElementById('stat-wrong').innerText = wrongCount;
+
+                state.combo = Math.floor(state.combo / 2);
+                const badge = document.getElementById('comboBadge');
+                if (state.combo > 0) {
+                    let comboMultiplier = 1 + (state.combo * comboStepBonus);
+                    badge.style.display = 'inline-block';
+                    badge.innerText = `Серия: 🔥 x${comboMultiplier.toFixed(1)}`;
+                    badge.classList.remove('frenzy');
+                } else {
+                    badge.style.display = 'none'; badge.classList.remove('frenzy');
+                }
+
+                spawnRewardText('Ошибка!', clickX, clickY, '#f87171', false);
+                buildSparks(10, '#ef4444');
+            }
+            generateMath();
+            updateUI();
+        }
+
+        function spawnRewardText(txt, x, y, color, isCrit) {
+            const marginX = 80;
+            const marginTop = 110;
+            const marginBottom = 30;
+            const clampedX = Math.min(Math.max(x, marginX), window.innerWidth - marginX);
+            const clampedY = Math.min(Math.max(y, marginTop), window.innerHeight - marginBottom);
+
+            const el = document.createElement('div');
+            el.className = isCrit ? 'floating-reward crit' : 'floating-reward';
+            el.innerText = txt;
+            el.style.left = `${clampedX}px`;
+            el.style.top = `${clampedY}px`;
+            el.style.maxWidth = `${window.innerWidth - marginX}px`;
+            el.style.color = color;
+            document.body.appendChild(el);
+
+            setTimeout(() => el.remove(), isCrit ? 620 : 509);
+        }
+
+        class CustomSpark {
+            constructor(x, y, color, vx, vy, radius, lifeMultiplier = 1.0) {
+                this.x = x; this.y = y;
+                this.vx = vx; this.vy = vy;
+                this.radius = radius;
+                this.opacity = 1;
+                this.color = color;
+                this.decay = 0.015 / lifeMultiplier;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.opacity -= this.decay;
+            }
+            draw() {
+                ctx.save(); ctx.beginPath(); ctx.globalAlpha = Math.max(0, this.opacity);
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fillStyle = this.color;
+                ctx.fill(); ctx.restore();
+            }
+        }
+
+        function buildSparks(num, color) {
+            const spaceRect = document.querySelector('.game-space').getBoundingClientRect();
+            const centerX = spaceRect.left + spaceRect.width / 2;
+            const centerY = spaceRect.top + spaceRect.height / 2;
+            for (let i = 0; i < num; i++) {
+                let vx = Math.random() * 4 - 2;
+                let vy = Math.random() * 4 - 2;
+                particles.push(new CustomSpark(centerX, centerY, color, vx, vy, Math.random() * 2 + 1, 1.0));
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (megaShowActive) {
+                megaShowTimer--;
+                bgFlashState += 0.1;
+
+                let mathBox = document.getElementById('mainMathBox');
+
+                if (isUltimateStorm) {
+                    let r = Math.floor(Math.sin(bgFlashState) * 127 + 128);
+                    let g = Math.floor(Math.sin(bgFlashState + 2) * 127 + 128);
+                    let b = Math.floor(Math.cos(bgFlashState) * 127 + 128);
+                    mathBox.style.backgroundColor = `rgba(${r}, ${g}, ${b}, 0.35)`;
+                    mathBox.style.borderColor = `rgb(${g}, ${b}, ${r})`;
+
+                    let colors = ['#ff0055', '#00ffcc', '#ffcc00', '#ff00ff', '#00ff00', '#ffffff'];
+                    for (let k = 0; k < 3; k++) {
+                        let angle = Math.random() * Math.PI * 2;
+                        let spd = Math.random() * 8 + 4;
+                        let vx = Math.cos(angle) * spd;
+                        let vy = Math.sin(angle) * spd;
+                        let c = colors[Math.floor(Math.random() * colors.length)];
+                        particles.push(new CustomSpark(canvas.width / 2, canvas.height * 0.4, c, vx, vy, Math.random() * 5 + 2, 4.0));
+                    }
+                } else {
+                    let r = Math.floor(Math.sin(bgFlashState) * 30 + 15);
+                    let g = Math.floor(Math.sin(bgFlashState + 1) * 20 + 10);
+                    let b = Math.floor(Math.cos(bgFlashState) * 40 + 25);
+                    mathBox.style.backgroundColor = `rgba(${r}, ${g}, ${b}, 0.93)`;
+                }
+
+                if (megaShowTimer <= 0) {
+                    megaShowActive = false;
+                    isUltimateStorm = false;
+                    document.body.classList.remove('mega-storm');
+                    mathBox.style.backgroundColor = `rgba(5, 7, 15, 0.9)`;
+                    mathBox.style.borderColor = 'var(--cyan)';
+                    mathBox.style.boxShadow = '0 0 25px rgba(6, 182, 212, 0.25)';
+                }
+            }
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                p.update();
+                p.draw();
+                if (p.opacity <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        function formatTime(sec) {
+            let m = Math.floor(sec / 60).toString().padStart(2, '0');
+            let s = (sec % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function updateUI() {
+            document.getElementById('val-gold').innerText = Math.floor(state.gold).toLocaleString();
+        }
+
+        setInterval(() => {
+            if (!gameActive) return;
+            totalSeconds++;
+            document.getElementById('gameClock').innerText = `⏳ Время Эпохи: ${formatTime(totalSeconds)}`;
+        }, 1000);
+
+        document.getElementById('btn-exam').addEventListener('click', () => {
+            if (!gameActive) return;
+            const confirmed = confirm('Вы действительно хотите сдать экзамен? Игра завершится.');
+            if (!confirmed) return;
+
+            gameActive = false;
+            document.getElementById('winDesc').innerText =
+                `⏱️ Время: ${formatTime(totalSeconds)}\n🪙 Талантов набрано: ${Math.floor(state.gold).toLocaleString()}\n✅ Верно: ${correctCount} | ❌ Ошибок: ${wrongCount}`;
+            document.getElementById('winScreen').classList.add('active');
+        });
+    </script>
+</body>
+</html>
 
