@@ -113,6 +113,7 @@
         .frac-stack .num, .frac-stack .den { font-size: 0.62em; padding: 0 3px; }
         .frac-stack .bar { width: 100%; height: 2px; background: currentColor; margin: 2px 0; }
         .mixed-whole { font-size: 1em; margin-right: 2px; }
+        .frac-paren { font-size: 1.3em; line-height: 1; vertical-align: middle; }
 
         .top-panel-wrapper {
             flex-shrink: 0; background: var(--panel-bg);
@@ -824,28 +825,151 @@
             return n;
         }
 
+        // ===================== ДРОБИ: ВСПОМОГАТЕЛЬНЫЕ ПОДБОРЩИКИ =====================
+
+        // Детерминированный подбор пары числителей (при общем знаменателе den), гарантирующий,
+        // что результат (сумма/разность) реально сократим — без угадывания и без риска промаха.
+        function pickReducibleAddSubPair(den, isAdd) {
+            const divisors = [];
+            for (let d = 2; d <= den; d++) if (den % d === 0) divisors.push(d);
+
+            for (let attempt = 0; attempt < 15; attempt++) {
+                const f = divisors[randInt(0, divisors.length - 1)];
+                const n1 = randFracProper(den);
+                const requiredMod = isAdd ? ((f - (n1 % f)) % f) : (n1 % f);
+                const candidates = [];
+                for (let n2 = 1; n2 < den; n2++) {
+                    if (n2 % f === requiredMod && gcd(n2, den) === 1) candidates.push(n2);
+                }
+                if (candidates.length > 0) {
+                    return { n1, n2: candidates[randInt(0, candidates.length - 1)] };
+                }
+            }
+            // Гарантированный фолбэк: при f = den сумма/разность всегда кратна den (реально сокращается)
+            const n1 = randFracProper(den);
+            const n2 = isAdd ? (den - n1) : n1;
+            return { n1, n2 };
+        }
+
+        // Пара разных знаменателей, ни один из которых не делится на другой (нужен настоящий НОК)
+        function pickDifferentDenominators(pool) {
+            let d1, d2, guard = 0;
+            do {
+                d1 = pool[randInt(0, pool.length - 1)];
+                d2 = pool[randInt(0, pool.length - 1)];
+                guard++;
+            } while ((d1 === d2 || d2 % d1 === 0 || d1 % d2 === 0) && guard < 30);
+            return { d1, d2 };
+        }
+
+        // Общий множитель k в допустимых пределах пула (чтобы d1=k*mult не выходил за диапазон уровня
+        // ни при mult=2, ни при mult=3 — проверяем худший случай)
+        function pickCrossFactor(pool) {
+            const maxDen = Math.max(...pool);
+            const kOptions = [2, 3, 4, 5].filter(k => k * 3 <= maxDen);
+            return kOptions.length ? kOptions[randInt(0, kOptions.length - 1)] : 2;
+        }
+
+        // Умножение: гарантированное перекрёстное сокращение (числитель второй дроби делит
+        // знаменатель первой, при этом каждая дробь по отдельности несократима)
+        function pickCancelMulPair(level) {
+            const pool = FRAC_DEN_POOL[level];
+            const k = pickCrossFactor(pool);
+            const d1 = k * randInt(2, 3);
+            const n2 = k;
+            const d2Pool = pool.filter(d => d > n2 && gcd(d, n2) === 1);
+            const d2 = d2Pool.length ? d2Pool[randInt(0, d2Pool.length - 1)] : n2 + 1;
+            const n1 = randFracProper(d1);
+            return { n1, d1, n2, d2 };
+        }
+
+        // Умножение: гарантированное ОТСУТСТВИЕ возможности сократить (ни по одной диагонали)
+        function pickNoCancelMulPair(level) {
+            const pool = FRAC_DEN_POOL[level];
+            const d1 = pool[randInt(0, pool.length - 1)];
+            let d2, n1, n2, guard = 0;
+            do {
+                d2 = pool[randInt(0, pool.length - 1)];
+                n1 = randFracProper(d1);
+                n2 = randFracProper(d2);
+                guard++;
+            } while ((gcd(n2, d1) !== 1 || gcd(n1, d2) !== 1) && guard < 30);
+            if (gcd(n2, d1) !== 1 || gcd(n1, d2) !== 1) { n1 = 1; n2 = 1; } // гарантированный фолбэк
+            return { n1, d1, n2, d2 };
+        }
+
+        // Деление: гарантированная возможность сокращения (общий множитель либо в числителях,
+        // либо в знаменателях — механика отличается от умножения из-за переворота второй дроби)
+        function pickCancelDivPair(level) {
+            const pool = FRAC_DEN_POOL[level];
+            if (Math.random() < 0.5) {
+                // общий множитель в числителях
+                const k = pickCrossFactor(pool);
+                const d1Pool = pool.filter(d => d > k && gcd(d, k) === 1);
+                const d2Pool = pool.filter(d => d > k && gcd(d, k) === 1);
+                const d1 = d1Pool.length ? d1Pool[randInt(0, d1Pool.length - 1)] : k + 1;
+                const d2 = d2Pool.length ? d2Pool[randInt(0, d2Pool.length - 1)] : k + 1;
+                return { n1: k, d1, n2: k, d2 };
+            }
+            // общий множитель в знаменателях — просто берём одинаковый знаменатель
+            const d = pool[randInt(0, pool.length - 1)];
+            return { n1: randFracProper(d), d1: d, n2: randFracProper(d), d2: d };
+        }
+
+        // Деление: гарантированное отсутствие сокращения (ни в числителях, ни в знаменателях)
+        function pickNoCancelDivPair(level) {
+            const pool = FRAC_DEN_POOL[level];
+            let d1, d2, n1, n2, guard = 0;
+            do {
+                d1 = pool[randInt(0, pool.length - 1)];
+                d2 = pool[randInt(0, pool.length - 1)];
+                n1 = randFracProper(d1);
+                n2 = randFracProper(d2);
+                guard++;
+            } while ((gcd(n1, n2) !== 1 || gcd(d1, d2) !== 1) && guard < 30);
+            if (gcd(n1, n2) !== 1 || gcd(d1, d2) !== 1) { n1 = 1; n2 = 1; d1 = 2; d2 = 3; } // фолбэк
+            return { n1, d1, n2, d2 };
+        }
+
         // ===================== ДРОБИ: ПОДБОР ВЕЛИЧИН ПО УРОВНЯМ =====================
         function pickAddSubMagnitudes(level, opKey) {
             if (level === 5) {
                 const wholePool = [1, 2, 3, 4, 5];
-                const denPool = FRAC_DEN_POOL[5];
-                const den = denPool[randInt(0, denPool.length - 1)];
+                // Гарантированный минимальный порог сложности: разные знаменатели дробных частей
+                // (не сводится к тривиальному "уже общий знаменатель")
+                let { d1, d2 } = pickDifferentDenominators(FRAC_DEN_POOL[5]);
+                let n1 = randFracProper(d1);
+                let n2 = randFracProper(d2);
+
+                // Для вычитания смещаем вероятность в сторону "нужен заём" — чаще, чем получилось бы случайно
+                if (opKey === 'sub' && Math.random() < 0.7) {
+                    const borrowNeeded = (n1 * d2) < (n2 * d1);
+                    if (!borrowNeeded) {
+                        // меняем местами дробные части операндов целиком (парами num/den),
+                        // чтобы дробная часть первого операнда стала меньше второго
+                        const tN = n1, tD = d1;
+                        n1 = n2; d1 = d2;
+                        n2 = tN; d2 = tD;
+                    }
+                }
+
                 return {
-                    whole1: wholePool[randInt(0, wholePool.length - 1)], n1: randFracProper(den), d1: den,
-                    whole2: wholePool[randInt(0, wholePool.length - 1)], n2: randFracProper(den), d2: den
+                    whole1: wholePool[randInt(0, wholePool.length - 1)], n1, d1,
+                    whole2: wholePool[randInt(0, wholePool.length - 1)], n2, d2
                 };
             }
-            if (level === 1 || level === 2) {
-                const pool = FRAC_DEN_POOL[level];
+            if (level === 1) {
+                const pool = FRAC_DEN_POOL[1];
                 const den = pool[randInt(0, pool.length - 1)];
-                let n1, n2, guard = 0, result;
-                do {
-                    n1 = randFracProper(den);
-                    n2 = randFracProper(den);
-                    result = opKey === 'add' ? (n1 + n2) : (n1 - n2);
-                    guard++;
-                } while (level === 2 && gcd(result, den) === 1 && guard < 30);
+                const n1 = randFracProper(den);
+                const n2 = randFracProper(den);
                 return { whole1: 0, n1, d1: den, whole2: 0, n2, d2: den };
+            }
+            if (level === 2) {
+                const pool = FRAC_DEN_POOL[2];
+                const den = pool[randInt(0, pool.length - 1)];
+                const pair = pickReducibleAddSubPair(den, opKey === 'add');
+                return { whole1: 0, n1: pair.n1, d1: den, whole2: 0, n2: pair.n2, d2: den };
             }
             if (level === 3) {
                 const smallPool = [2, 3, 4, 5];
@@ -858,14 +982,8 @@
                 const n2 = randFracProper(d2);
                 return { whole1: 0, n1, d1, whole2: 0, n2, d2 };
             }
-            // level 4 — разные знаменатели, требуется НОК
-            const pool = FRAC_DEN_POOL[4];
-            let d1, d2, guard = 0;
-            do {
-                d1 = pool[randInt(0, pool.length - 1)];
-                d2 = pool[randInt(0, pool.length - 1)];
-                guard++;
-            } while ((d1 === d2 || d2 % d1 === 0 || d1 % d2 === 0) && guard < 30);
+            // level 4 — разные знаменатели, требуется настоящий НОК
+            const { d1, d2 } = pickDifferentDenominators(FRAC_DEN_POOL[4]);
             const n1 = randFracProper(d1);
             const n2 = randFracProper(d2);
             return { whole1: 0, n1, d1, whole2: 0, n2, d2 };
@@ -874,9 +992,8 @@
         function pickMulDivMagnitudes(level, opKey) {
             if (level === 5) {
                 const wholePool = [1, 2, 3, 4, 5];
-                const denPool = FRAC_DEN_POOL[5];
-                const d1 = denPool[randInt(0, denPool.length - 1)];
-                const d2 = denPool[randInt(0, denPool.length - 1)];
+                // Гарантированный минимальный порог сложности: разные знаменатели дробных частей
+                const { d1, d2 } = pickDifferentDenominators(FRAC_DEN_POOL[5]);
                 return {
                     whole1: wholePool[randInt(0, wholePool.length - 1)], n1: randFracProper(d1), d1,
                     whole2: wholePool[randInt(0, wholePool.length - 1)], n2: randFracProper(d2), d2
@@ -893,28 +1010,25 @@
                 return { whole1: 0, n1: whole, d1: 1, whole2: 0, n2: n, d2: d };
             }
             if (level === 3) {
-                // перекрёстное сокращение: числитель второй дроби делит знаменатель первой,
-                // но при этом сама дробь n2/d2 должна остаться несократимой
-                const kOptions = [2, 3, 4, 5];
-                const k = kOptions[randInt(0, kOptions.length - 1)];
-                const d1 = k * randInt(2, 3);
-                const n2 = k;
-                const pool3 = FRAC_DEN_POOL[3].filter(d => d > n2 && gcd(d, n2) === 1);
-                const d2 = pool3.length ? pool3[randInt(0, pool3.length - 1)] : n2 + 1;
-                const n1 = randFracProper(d1);
-                return { whole1: 0, n1, d1, whole2: 0, n2, d2 };
+                // Уровень 3: возможность сократить есть НЕ ВСЕГДА (иначе ученик просто запоминает
+                // шаблон "тут всегда что-то сокращается", вместо того чтобы реально её искать)
+                const hasCancelOpportunity = Math.random() < 0.5;
+                let p;
+                if (opKey === 'div') p = hasCancelOpportunity ? pickCancelDivPair(3) : pickNoCancelDivPair(3);
+                else p = hasCancelOpportunity ? pickCancelMulPair(3) : pickNoCancelMulPair(3);
+                return { whole1: 0, n1: p.n1, d1: p.d1, whole2: 0, n2: p.n2, d2: p.d2 };
             }
-            // level 1-2 — простые дроби
-            const pool = FRAC_DEN_POOL[level];
+            if (level === 2) {
+                // Уровень 2: сокращение результата гарантировано ВСЕГДА (в отличие от уровня 3)
+                const p = opKey === 'div' ? pickCancelDivPair(2) : pickCancelMulPair(2);
+                return { whole1: 0, n1: p.n1, d1: p.d1, whole2: 0, n2: p.n2, d2: p.d2 };
+            }
+            // level 1 — простые дроби без гарантий на сокращение
+            const pool = FRAC_DEN_POOL[1];
             const d1 = pool[randInt(0, pool.length - 1)];
             const d2 = pool[randInt(0, pool.length - 1)];
-            let n1, n2, guard = 0, prodNum, prodDen;
-            do {
-                n1 = randFracProper(d1);
-                n2 = randFracProper(d2);
-                prodNum = n1 * n2; prodDen = d1 * d2;
-                guard++;
-            } while (level === 2 && gcd(prodNum, prodDen) === 1 && guard < 30);
+            const n1 = randFracProper(d1);
+            const n2 = randFracProper(d2);
             return { whole1: 0, n1, d1, whole2: 0, n2, d2 };
         }
 
@@ -1009,8 +1123,21 @@
                 }
             }
 
+            // Приоритет 1 намеренно ограничен 2 слотами: если сработало сразу 3 (знак + несократимость +
+            // забытая целая часть), для специфичной ошибки операции (структурной) всегда остаётся место.
+            // Порядок внутри перемешан, чтобы не всегда отбрасывался один и тот же кандидат.
+            priority = shuffleArray(priority).slice(0, 2);
+
             // ===== ПРИОРИТЕТ 2: типовые структурные ошибки по операциям =====
             let structural = [];
+
+            // "Перепутали операцию" — сделали сложение вместо вычитания и наоборот
+            if (opKey === 'add') {
+                pushFrac(structural, fracSub(f1, f2), correctAnswer, used);
+            } else if (opKey === 'sub') {
+                pushFrac(structural, fracAdd(f1, f2), correctAnswer, used);
+            }
+
             if (opKey === 'add') {
                 // "сложили в лоб": числители и знаменатели отдельно
                 pushFrac(structural, { num: f1.num + f2.num, den: f1.den + f2.den }, correctAnswer, used);
@@ -1019,11 +1146,25 @@
             } else if (opKey === 'mul') {
                 // перемножили "как складывают"
                 pushFrac(structural, { num: f1.num + f2.num, den: f1.den + f2.den }, correctAnswer, used);
+                // перемножили числители, но забыли перемножить знаменатели (взяли один из исходных)
+                pushFrac(structural, simplifyFrac(f1.num * f2.num, f1.den), correctAnswer, used);
+                pushFrac(structural, simplifyFrac(f1.num * f2.num, f2.den), correctAnswer, used);
             } else if (opKey === 'div') {
                 // забыли перевернуть вторую дробь — просто перемножили
                 pushFrac(structural, simplifyFrac(f1.num * f2.num, f1.den * f2.den), correctAnswer, used);
                 // перевернули не ту дробь (первую вместо второй)
                 pushFrac(structural, simplifyFrac(f1.den * f2.num, f1.num * f2.den), correctAnswer, used);
+            }
+
+            // "Частичное приведение к общему знаменателю" — перевели только одну из дробей,
+            // а числитель второй использовали как есть. Применимо только когда знаменатели различны.
+            if ((opKey === 'add' || opKey === 'sub') && f1.den !== f2.den) {
+                const lcd = f1.den * f2.den / gcd(f1.den, f2.den);
+                const conv1 = f1.num * (lcd / f1.den);
+                const conv2 = f2.num * (lcd / f2.den);
+                const sign = opKey === 'add' ? 1 : -1;
+                pushFrac(structural, { num: conv1 + sign * f2.num, den: lcd }, correctAnswer, used); // забыли перевести вторую
+                pushFrac(structural, { num: f1.num + sign * conv2, den: lcd }, correctAnswer, used); // забыли перевести первую
             }
 
             // Смешанные числа (5★, вычитание): "не заняли" — вычли дробные части по модулю
@@ -1041,15 +1182,34 @@
                 }
             }
 
+            // Смешанные числа (5★, умножение/деление): перемножили/разделили целые части
+            // и дробные части ОТДЕЛЬНО, не переведя сначала в неправильную дробь
+            if (level === 5 && (opKey === 'mul' || opKey === 'div')) {
+                const m1 = toMixedParts(f1), m2 = toMixedParts(f2);
+                const wholePart = m1.whole * m2.whole;
+                const frac1 = { num: m1.remNum, den: m1.den };
+                const frac2 = { num: m2.remNum, den: m2.den };
+                const fracPart = (opKey === 'mul') ? fracMul(frac1, frac2)
+                    : (m2.remNum !== 0 ? fracDiv(frac1, frac2) : null);
+                if (fracPart) {
+                    const combined = fracAdd({ num: wholePart, den: 1 }, fracPart);
+                    const signedCombined = correctAnswer.num < 0
+                        ? { num: -Math.abs(combined.num), den: combined.den }
+                        : combined;
+                    pushFrac(structural, signedCombined, correctAnswer, used);
+                }
+            }
+
             structural = shuffleArray(structural);
 
             const result = [];
             for (const v of priority) { if (result.length >= count) break; result.push(v); }
             for (const v of structural) { if (result.length >= count) break; result.push(v); }
 
-            // Остаток — случайный разброс на основе знаменателей самого примера
+            // Остаток — случайный разброс на основе знаменателей самого примера.
+            // Если правильный ответ — целое число (den=1), фолбэк тоже должен иногда предлагать целые числа.
             const candidateDens = Array.from(new Set([f1.den, f2.den, correctAnswer.den, f1.den * f2.den]))
-                .filter(d => d >= 2 && d <= 60);
+                .filter(d => d >= 1 && d <= 60);
             if (candidateDens.length === 0) candidateDens.push(4);
 
             let guard = 0;
@@ -1064,7 +1224,7 @@
             let widen = 1;
             while (result.length < count) {
                 widen++;
-                const den = 2 + widen;
+                const den = (correctAnswer.den === 1 && Math.random() < 0.5) ? 1 : (2 + widen);
                 const sign = (isNegative && Math.random() < 0.5) ? -1 : 1;
                 pushFrac(result, simplifyFrac(sign * widen, den), correctAnswer, used);
             }
@@ -1092,14 +1252,14 @@
                     inner = fracStackHtml(m.remNum, m.den);
                 }
                 const body = `<span class="frac-display">${signPrefix}${inner}</span>`;
-                return frac.num < 0 ? `(${body})` : body;
+                return frac.num < 0 ? `<span class="frac-paren">(</span>${body}<span class="frac-paren">)</span>` : body;
             }
             if (frac.den === 1) {
-                return frac.num < 0 ? `(${frac.num})` : `${frac.num}`;
+                return frac.num < 0 ? `<span class="frac-paren">(</span>${frac.num}<span class="frac-paren">)</span>` : `${frac.num}`;
             }
             const sign = frac.num < 0 ? '−' : '';
             const body = `<span class="frac-display">${sign}${fracStackHtml(Math.abs(frac.num), frac.den)}</span>`;
-            return frac.num < 0 ? `(${body})` : body;
+            return frac.num < 0 ? `<span class="frac-paren">(</span>${body}<span class="frac-paren">)</span>` : body;
         }
 
         const FRAC_OP_SYMBOL = { add: '+', sub: '−', mul: '×', div: '÷' };
