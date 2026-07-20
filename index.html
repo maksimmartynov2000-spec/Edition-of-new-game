@@ -1077,11 +1077,12 @@
 
         // Добавляет кандидата в массив, нормализуя знак знаменателя и отсеивая дубли/совпадение с ответом.
         // used — общий Set ключей на весь процесс сборки вариантов.
-        function pushFrac(arr, cand, correctAnswer, used) {
+        function pushFrac(arr, cand, correctAnswer, used, isNegative) {
             if (!cand) return;
             let { num, den } = cand;
             if (!Number.isFinite(num) || !Number.isFinite(den) || den === 0) return;
             if (den < 0) { num = -num; den = -den; }
+            if (!isNegative && num < 0) return; // в позитивном режиме отрицательные дистракторы недопустимы
             if (num === correctAnswer.num && den === correctAnswer.den) return;
             const key = fracKey(num, den);
             if (used.has(key)) return;
@@ -1097,7 +1098,7 @@
 
             // Знаковая ошибка — верный модуль, неверный знак
             if (isNegative && correctAnswer.num !== 0) {
-                pushFrac(priority, { num: -correctAnswer.num, den: correctAnswer.den }, correctAnswer, used);
+                pushFrac(priority, { num: -correctAnswer.num, den: correctAnswer.den }, correctAnswer, used, isNegative);
             }
 
             // "Забыли сократить" — несокращённая, но математически равная дробь.
@@ -1111,7 +1112,7 @@
                 let nNum = rawNum, nDen = rawDen;
                 if (nDen < 0) { nNum = -nNum; nDen = -nDen; }
                 if ((gcd(nNum, nDen) || 1) > 1) {
-                    pushFrac(priority, { num: nNum, den: nDen }, correctAnswer, used);
+                    pushFrac(priority, { num: nNum, den: nDen }, correctAnswer, used, isNegative);
                 }
             }
 
@@ -1119,7 +1120,7 @@
             if (level === 5) {
                 const m = toMixedParts(correctAnswer);
                 if (m.whole !== 0 && m.remNum !== 0) {
-                    pushFrac(priority, { num: m.sign * m.remNum, den: m.den }, correctAnswer, used);
+                    pushFrac(priority, { num: m.sign * m.remNum, den: m.den }, correctAnswer, used, isNegative);
                 }
             }
 
@@ -1133,27 +1134,27 @@
 
             // "Перепутали операцию" — сделали сложение вместо вычитания и наоборот
             if (opKey === 'add') {
-                pushFrac(structural, fracSub(f1, f2), correctAnswer, used);
+                pushFrac(structural, fracSub(f1, f2), correctAnswer, used, isNegative);
             } else if (opKey === 'sub') {
-                pushFrac(structural, fracAdd(f1, f2), correctAnswer, used);
+                pushFrac(structural, fracAdd(f1, f2), correctAnswer, used, isNegative);
             }
 
             if (opKey === 'add') {
                 // "сложили в лоб": числители и знаменатели отдельно
-                pushFrac(structural, { num: f1.num + f2.num, den: f1.den + f2.den }, correctAnswer, used);
+                pushFrac(structural, { num: f1.num + f2.num, den: f1.den + f2.den }, correctAnswer, used, isNegative);
             } else if (opKey === 'sub') {
-                pushFrac(structural, { num: f1.num - f2.num, den: f1.den - f2.den }, correctAnswer, used);
+                pushFrac(structural, { num: f1.num - f2.num, den: f1.den - f2.den }, correctAnswer, used, isNegative);
             } else if (opKey === 'mul') {
                 // перемножили "как складывают"
-                pushFrac(structural, { num: f1.num + f2.num, den: f1.den + f2.den }, correctAnswer, used);
+                pushFrac(structural, { num: f1.num + f2.num, den: f1.den + f2.den }, correctAnswer, used, isNegative);
                 // перемножили числители, но забыли перемножить знаменатели (взяли один из исходных)
-                pushFrac(structural, simplifyFrac(f1.num * f2.num, f1.den), correctAnswer, used);
-                pushFrac(structural, simplifyFrac(f1.num * f2.num, f2.den), correctAnswer, used);
+                pushFrac(structural, simplifyFrac(f1.num * f2.num, f1.den), correctAnswer, used, isNegative);
+                pushFrac(structural, simplifyFrac(f1.num * f2.num, f2.den), correctAnswer, used, isNegative);
             } else if (opKey === 'div') {
                 // забыли перевернуть вторую дробь — просто перемножили
-                pushFrac(structural, simplifyFrac(f1.num * f2.num, f1.den * f2.den), correctAnswer, used);
+                pushFrac(structural, simplifyFrac(f1.num * f2.num, f1.den * f2.den), correctAnswer, used, isNegative);
                 // перевернули не ту дробь (первую вместо второй)
-                pushFrac(structural, simplifyFrac(f1.den * f2.num, f1.num * f2.den), correctAnswer, used);
+                pushFrac(structural, simplifyFrac(f1.den * f2.num, f1.num * f2.den), correctAnswer, used, isNegative);
             }
 
             // "Частичное приведение к общему знаменателю" — перевели только одну из дробей,
@@ -1163,8 +1164,8 @@
                 const conv1 = f1.num * (lcd / f1.den);
                 const conv2 = f2.num * (lcd / f2.den);
                 const sign = opKey === 'add' ? 1 : -1;
-                pushFrac(structural, { num: conv1 + sign * f2.num, den: lcd }, correctAnswer, used); // забыли перевести вторую
-                pushFrac(structural, { num: f1.num + sign * conv2, den: lcd }, correctAnswer, used); // забыли перевести первую
+                pushFrac(structural, { num: conv1 + sign * f2.num, den: lcd }, correctAnswer, used, isNegative); // забыли перевести вторую
+                pushFrac(structural, { num: f1.num + sign * conv2, den: lcd }, correctAnswer, used, isNegative); // забыли перевести первую
             }
 
             // Смешанные числа (5★, вычитание): "не заняли" — вычли дробные части по модулю
@@ -1177,7 +1178,7 @@
                         const noBorrowWhole = m1.whole - m2.whole;
                         const noBorrowFrac = simplifyFrac(-fracDiff.num, fracDiff.den);
                         const noBorrowValue = fracAdd({ num: noBorrowWhole, den: 1 }, noBorrowFrac);
-                        pushFrac(structural, noBorrowValue, correctAnswer, used);
+                        pushFrac(structural, noBorrowValue, correctAnswer, used, isNegative);
                     }
                 }
             }
@@ -1196,7 +1197,7 @@
                     const signedCombined = correctAnswer.num < 0
                         ? { num: -Math.abs(combined.num), den: combined.den }
                         : combined;
-                    pushFrac(structural, signedCombined, correctAnswer, used);
+                    pushFrac(structural, signedCombined, correctAnswer, used, isNegative);
                 }
             }
 
@@ -1219,14 +1220,14 @@
                 const maxNum = Math.max(den * 2, 5);
                 const num = randInt(isNegative ? -maxNum : 0, maxNum);
                 if (num === 0) continue; // избегаем тривиального нуля как "случайного" варианта
-                pushFrac(result, simplifyFrac(num, den), correctAnswer, used);
+                pushFrac(result, simplifyFrac(num, den), correctAnswer, used, isNegative);
             }
             let widen = 1;
             while (result.length < count) {
                 widen++;
                 const den = (correctAnswer.den === 1 && Math.random() < 0.5) ? 1 : (2 + widen);
                 const sign = (isNegative && Math.random() < 0.5) ? -1 : 1;
-                pushFrac(result, simplifyFrac(sign * widen, den), correctAnswer, used);
+                pushFrac(result, simplifyFrac(sign * widen, den), correctAnswer, used, isNegative);
             }
 
             return result;
