@@ -262,8 +262,11 @@
                     <button class="btn-op" data-op="sub">➖ Вычитание</button>
                     <button class="btn-op" data-op="mul">✖️ Умножение</button>
                     <button class="btn-op" data-op="div">➗ Деление</button>
-                    <button class="btn-op frac-only-op" data-op="simplify" style="display:none;">🔽 Сокращение</button>
-                    <button class="btn-op frac-only-op" data-op="mixedConvert" style="display:none;">🔄 Смешанные дроби</button>
+                    <button class="btn-op frac-only-op" data-op="simplify" style="display:none;">➗ Сокращение</button>
+                    <button class="btn-op frac-only-op" data-op="toMixed" style="display:none;">🔼 В смешанное число</button>
+                    <button class="btn-op frac-only-op" data-op="toImproper" style="display:none;">🔽 В неправильную дробь</button>
+                    <button class="btn-op frac-only-op" data-op="fracOfNumber" style="display:none;">🎯 Дробь от числа</button>
+                    <button class="btn-op frac-only-op" data-op="findWhole" style="display:none;">🔎 Найти число</button>
                 </div>
                 <div class="config-hint">Можно выбрать один или несколько режимов</div>
             </div>
@@ -322,10 +325,11 @@
         // ===================== НАСТРОЙКА ГЕНЕРАЦИИ ПРИМЕРОВ =====================
         const OP_LABELS = {
             add: '➕ Сложение', sub: '➖ Вычитание', mul: '✖️ Умножение', div: '➗ Деление',
-            simplify: '🔽 Сокращение', mixedConvert: '🔄 Смешанные дроби'
+            simplify: '➗ Сокращение', toMixed: '🔼 В смешанное число', toImproper: '🔽 В неправильную дробь',
+            fracOfNumber: '🎯 Дробь от числа', findWhole: '🔎 Найти число'
         };
-        const OP_ORDER = ['add', 'sub', 'mul', 'div', 'simplify', 'mixedConvert'];
-        const FRAC_ONLY_OPS = ['simplify', 'mixedConvert'];
+        const OP_ORDER = ['add', 'sub', 'mul', 'div', 'simplify', 'toMixed', 'toImproper', 'fracOfNumber', 'findWhole'];
+        const FRAC_ONLY_OPS = ['simplify', 'toMixed', 'toImproper', 'fracOfNumber', 'findWhole'];
 
         let exampleConfig = {
             category: null,        // 'integer' | 'fraction'
@@ -1255,83 +1259,121 @@
 
         // ===================== ДРОБИ: РЕЖИМ "СОКРАЩЕНИЕ" =====================
         // Всегда положительный режим (не зависит от общей настройки положительные/отрицательные).
-        const SIMPLIFY_POOLS = {
-            1: { denPool: [2, 3, 4, 5], mPool: [2, 3] },
-            2: { denPool: [2, 3, 4, 5, 6, 7, 8], mPool: [2, 3, 4] },
-            3: { denPool: [2, 3, 4, 5, 6, 7, 8, 9, 10], mPool: [2, 3, 4, 5] },
-            4: { denPool: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], mPool: [3, 4, 5, 6] },
-            5: { denPool: [2, 3, 4, 5, 6, 7, 8, 9, 10], mPool: [6, 7, 8, 9, 10] }
+        // Сложность строится на ДВУХ независимых осях:
+        //  1) "Очевидность" общего множителя (2,5,10 — сразу видно; 3,4 — привычно; 6,7,8,9,11 — незаметно)
+        //  2) Величина самих чисел (знаменатель цели) — растёт по уровням, но с широким нижним диапазоном,
+        //     чтобы иногда встречались "очевидный множитель на крупных числах" и наоборот.
+        const SIMPLIFY_DEN_POOL = {
+            1: [2, 3, 4, 5],
+            2: [2, 3, 4, 5, 6, 7, 8],
+            3: [2, 3, 4, 5, 6, 7, 8, 9, 10],
+            4: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+            5: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
         };
-
-        function generateSimplifyProblem(level) {
-            const { denPool, mPool } = SIMPLIFY_POOLS[level];
-            const denR = denPool[randInt(0, denPool.length - 1)];
-            const numR = randFracProper(denR);
-            const m = mPool[randInt(0, mPool.length - 1)];
-            const given = { num: numR * m, den: denR * m };
-            const answer = { num: numR, den: denR }; // уже несократима по построению
-            return { isFraction: true, opKey: 'simplify', level, given, answer };
+        const SIMPLIFY_M_TIERS = {
+            obvious: [2, 5, 10],   // чётность / кратность 10 — видно сразу
+            semi: [3, 4],          // привычные, но чуть менее очевидные
+            hidden: [6, 7, 8, 9, 11] // нужно реально присматриваться
+        };
+        const SIMPLIFY_M_WEIGHTS = {
+            1: { obvious: 0.80, semi: 0.20, hidden: 0.00 },
+            2: { obvious: 0.55, semi: 0.35, hidden: 0.10 },
+            3: { obvious: 0.30, semi: 0.40, hidden: 0.30 },
+            4: { obvious: 0.15, semi: 0.30, hidden: 0.55 },
+            5: { obvious: 0.05, semi: 0.15, hidden: 0.80 }
+        };
+        function pickWeightedM(level) {
+            const w = SIMPLIFY_M_WEIGHTS[level];
+            const r = Math.random();
+            const tier = r < w.obvious ? 'obvious' : (r < w.obvious + w.semi ? 'semi' : 'hidden');
+            const pool = SIMPLIFY_M_TIERS[tier];
+            return pool[randInt(0, pool.length - 1)];
         }
 
-        function buildSimplifyDistractors(given, answer, count) {
+        function generateSimplifyProblem(level) {
+            const denPool = SIMPLIFY_DEN_POOL[level];
+            const denR = denPool[randInt(0, denPool.length - 1)];
+            const numR = randFracProper(denR);
+            const m = pickWeightedM(level);
+            const given = { num: numR * m, den: denR * m };
+            const answer = { num: numR, den: denR }; // уже несократима по построению
+            return { isFraction: true, opKey: 'simplify', level, given, answer, m };
+        }
+
+        function buildSimplifyDistractors(given, answer, count, m) {
             const used = new Set([fracKey(answer.num, answer.den)]);
             const priority = [];
 
             // Самая частая ловушка: вообще не сократили
             pushFrac(priority, { num: given.num, den: given.den }, answer, used, false);
 
-            // Частичное сокращение: поделили только числитель или только знаменатель
-            const g = gcd(given.num, given.den);
+            // Частичное сокращение: поделили только числитель или только знаменатель.
+            // Работает только если m составное (есть промежуточный делитель) — иначе пропускаем.
             const partialDivisors = [];
-            for (let d = 2; d < g; d++) if (g % d === 0) partialDivisors.push(d);
+            for (let d = 2; d < m; d++) if (m % d === 0) partialDivisors.push(d);
             if (partialDivisors.length > 0) {
                 const pd = partialDivisors[randInt(0, partialDivisors.length - 1)];
                 pushFrac(priority, { num: given.num / pd, den: given.den }, answer, used, false);
                 pushFrac(priority, { num: given.num, den: given.den / pd }, answer, used, false);
             }
 
+            // Универсальные ловушки — работают ВСЕГДА, даже когда m простое (закрывают пробел на лёгких уровнях)
+            // "Вычли вместо того чтобы поделить" — характерная ошибка новичков
+            if (given.num > 1 && given.den > 1) {
+                pushFrac(priority, { num: given.num - 1, den: given.den - 1 }, answer, used, false);
+            }
+            // "Поделили на правдоподобное, но неверное число" — соседнее с реальным множителем
+            for (const mWrong of [m - 1, m + 1]) {
+                if (mWrong < 2) continue;
+                const roughNum = Math.max(1, Math.round(given.num / mWrong));
+                const roughDen = Math.max(1, Math.round(given.den / mWrong));
+                pushFrac(priority, { num: roughNum, den: roughDen }, answer, used, false);
+            }
+
             const result = [];
             for (const v of shuffleArray(priority)) { if (result.length >= count) break; result.push(v); }
 
-            // Случайный фолбэк — правдоподобные "почти правильные" дроби рядом с исходным знаменателем
+            // Случайный фолбэк — НЕ пересокращаем (иначе вариант визуально "выпадает" мелким размером
+            // рядом с остальными несокращёнными числами); держим тот же масштаб, что у given/ответа
             let guard = 0;
             while (result.length < count && guard < 200) {
                 guard++;
-                const den = Math.max(2, answer.den + randInt(-2, 2));
+                const den = Math.max(2, given.den + randInt(-3, 3));
                 const num = randInt(1, den - 1);
-                pushFrac(result, simplifyFrac(num, den), answer, used, false);
+                pushFrac(result, { num, den }, answer, used, false);
             }
             let widen = 1;
             while (result.length < count) {
                 widen++;
-                pushFrac(result, simplifyFrac(widen, widen + 1), answer, used, false);
+                pushFrac(result, { num: widen, den: widen + 1 }, answer, used, false);
             }
 
             return result;
         }
 
-        // ===================== ДРОБИ: РЕЖИМ "СМЕШАННЫЕ ДРОБИ" =====================
-        // Всегда положительный режим. Направление перевода зависит от уровня:
-        // 1-3★ — неправильная дробь → смешанное число, 4-5★ — смешанное число → неправильная дробь.
+        // ===================== ДРОБИ: "В СМЕШАННОЕ ЧИСЛО" / "В НЕПРАВИЛЬНУЮ ДРОБЬ" =====================
+        // Всегда положительный режим. Два независимых режима с одинаковой шкалой 1-5★ и схожим
+        // диапазоном чисел на каждом уровне — отличается только направление перевода.
         // Правильный ответ математически равен условию — меняется только форма записи.
         const MIXED_CONVERT_POOLS = {
             1: { wholePool: [1, 2], denPool: [2, 3, 4, 5] },
             2: { wholePool: [1, 2, 3], denPool: [2, 3, 4, 5, 6, 7, 8] },
             3: { wholePool: [1, 2, 3, 4], denPool: [2, 3, 4, 5, 6, 7, 8, 9, 10] },
-            4: { wholePool: [2, 3, 4, 5], denPool: [2, 3, 4, 5, 6, 7, 8, 9, 10] },
+            4: { wholePool: [2, 3, 4, 5], denPool: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
             5: { wholePool: [3, 4, 5, 6], denPool: [2, 3, 4, 5, 6, 7, 8, 9, 10] }
         };
 
-        function generateMixedConvertProblem(level) {
-            const direction = level <= 3 ? 'toMixed' : 'toImproper';
+        function buildMixedConvertCore(level, direction) {
             const { wholePool, denPool } = MIXED_CONVERT_POOLS[level];
             const whole = wholePool[randInt(0, wholePool.length - 1)];
             const den = denPool[randInt(0, denPool.length - 1)];
             const properNum = randFracProper(den);
             const improperNum = whole * den + properNum;
             const value = { num: improperNum, den }; // единое каноническое значение — форма лишь отображение
-            return { isFraction: true, opKey: 'mixedConvert', level, direction, given: value, answer: value, whole, properNum, den };
+            return { isFraction: true, opKey: direction, level, direction, given: value, answer: value, whole, properNum, den };
         }
+        function generateToMixedProblem(level) { return buildMixedConvertCore(level, 'toMixed'); }
+        function generateToImproperProblem(level) { return buildMixedConvertCore(level, 'toImproper'); }
 
         function buildMixedConvertDistractors(problem, count) {
             const { whole, properNum, den, direction, answer } = problem;
@@ -1372,6 +1414,105 @@
             }
 
             return result;
+        }
+
+        // ===================== ДРОБИ: "ДРОБЬ ОТ ЧИСЛА" / "НАЙТИ ЧИСЛО" =====================
+        // Всегда положительный режим. Ответ — обычное целое число (не дробь), число всегда
+        // подобрано так, чтобы делиться без остатка. Двухосевая сложность: отдельно растёт
+        // сложность самой дроби (знаменатель) и отдельно — величина числа ("единицы" k).
+        const FRAC_OF_NUM_DEN_POOL = {
+            1: [2, 3, 4, 5],
+            2: [2, 3, 4, 5, 6, 7, 8],
+            3: [2, 3, 4, 5, 6, 7, 8, 9, 10],
+            4: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            5: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        };
+        const FRAC_OF_NUM_K_POOL = {
+            1: [2, 3, 4, 5, 6, 7, 8, 9, 10],
+            2: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+            3: [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20],
+            4: [3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 18, 20, 22, 25],
+            5: [4, 5, 6, 8, 10, 12, 15, 18, 20, 24, 28, 32, 36, 40]
+        };
+
+        // Общая "заготовка": дробь num/den (несократима) + "единица" k. N = den*k, значение доли = num*k.
+        function pickFracOfNumberCore(level) {
+            const denPool = FRAC_OF_NUM_DEN_POOL[level];
+            const kPool = FRAC_OF_NUM_K_POOL[level];
+            const den = denPool[randInt(0, denPool.length - 1)];
+            const num = randFracProper(den);
+            const k = kPool[randInt(0, kPool.length - 1)];
+            return { num, den, k };
+        }
+
+        function generateFracOfNumberProblem(level) {
+            const { num, den, k } = pickFracOfNumberCore(level);
+            const N = den * k;
+            const answer = num * k; // всегда целое по построению
+            return { isFraction: true, opKey: 'fracOfNumber', level, fracNum: num, fracDen: den, N, k, answer };
+        }
+
+        function generateFindWholeProblem(level) {
+            const { num, den, k } = pickFracOfNumberCore(level);
+            const knownValue = num * k;
+            const answer = den * k; // искомое целое число X
+            return { isFraction: true, opKey: 'findWhole', level, fracNum: num, fracDen: den, knownValue, k, answer };
+        }
+
+        // Общий помощник сборки числовых (не дробных) дистракторов — с приоритетными
+        // "содержательными" кандидатами и случайным фолбэком без выхода за положительные значения
+        function buildWholeNumberDistractors(priorityCandidates, answer, count) {
+            const used = new Set([answer]);
+            const priority = [];
+            for (const val0 of priorityCandidates) {
+                if (!Number.isFinite(val0)) continue;
+                const val = Math.round(val0);
+                if (val <= 0 || val === answer || used.has(val)) continue;
+                used.add(val);
+                priority.push(val);
+            }
+
+            const result = [];
+            for (const v of shuffleArray(priority)) { if (result.length >= count) break; result.push(v); }
+
+            let guard = 0;
+            while (result.length < count && guard < 200) {
+                guard++;
+                const delta = randInt(1, Math.max(3, Math.round(answer * 0.3)));
+                const val = Math.random() < 0.5 ? answer + delta : Math.max(1, answer - delta);
+                if (val !== answer && !used.has(val)) { result.push(val); used.add(val); }
+            }
+            let widen = 0;
+            while (result.length < count) {
+                widen++;
+                const val = answer + widen * 3 + 1;
+                if (!used.has(val)) { result.push(val); used.add(val); }
+            }
+            return result;
+        }
+
+        function buildFracOfNumberDistractors(problem, count) {
+            const { fracNum, fracDen, N, k, answer } = problem;
+            const candidates = [
+                N * fracNum,                    // забыли поделить на знаменатель
+                k,                               // нашли только "единицу", забыли умножить на числитель
+                N - answer,                      // нашли "остаток" вместо самой доли
+                answer + k,                      // ошиблись на одну "долю" в бОльшую сторону
+                answer - k                       // ошиблись на одну "долю" в меньшую сторону
+            ];
+            return buildWholeNumberDistractors(candidates, answer, count);
+        }
+
+        function buildFindWholeDistractors(problem, count) {
+            const { fracNum, fracDen, knownValue, k, answer } = problem;
+            const candidates = [
+                knownValue,                                     // повторили данное число, забыли что-либо делать
+                k,                                               // взяли "единицу" за весь ответ
+                Math.round(knownValue * fracNum / fracDen),      // перепутали направление (умножили вместо деления)
+                answer + k,
+                answer - k
+            ];
+            return buildWholeNumberDistractors(candidates, answer, count);
         }
 
         // ===================== ДРОБИ: РЕНДЕРИНГ =====================
@@ -1498,7 +1639,7 @@
                     correctAnswer = problem.answer;
                     questionEl.innerHTML = `<span class="frac-row"><span class="task-label">Сократи дробь:</span>${renderFracValue(problem.given, 1)}</span>`;
 
-                    const fakeFracs = buildSimplifyDistractors(problem.given, correctAnswer, 3);
+                    const fakeFracs = buildSimplifyDistractors(problem.given, correctAnswer, 3, problem.m);
                     const options = shuffleArray([correctAnswer, ...fakeFracs]);
                     options.forEach(opt => {
                         const btn = document.createElement('button');
@@ -1510,9 +1651,9 @@
                     return;
                 }
 
-                // --- Режим "Смешанные дроби": перевод неправильная ↔ смешанное число ---
-                if (opKey === 'mixedConvert') {
-                    const problem = generateMixedConvertProblem(level);
+                // --- Режимы "В смешанное число" / "В неправильную дробь" — два независимых направления ---
+                if (opKey === 'toMixed' || opKey === 'toImproper') {
+                    const problem = opKey === 'toMixed' ? generateToMixedProblem(level) : generateToImproperProblem(level);
                     correctAnswer = problem.answer;
                     const questionRenderLevel = problem.direction === 'toMixed' ? 1 : 5;
                     const answerRenderLevel = problem.direction === 'toMixed' ? 5 : 1;
@@ -1527,6 +1668,44 @@
                         const btn = document.createElement('button');
                         btn.className = 'btn-answer';
                         btn.innerHTML = renderFracValue(opt, answerRenderLevel);
+                        btn.onclick = (e) => checkAnswer(opt, e);
+                        grid.appendChild(btn);
+                    });
+                    return;
+                }
+
+                // --- Режим "Дробь от числа": найти значение дроби от целого числа ---
+                if (opKey === 'fracOfNumber') {
+                    const problem = generateFracOfNumberProblem(level);
+                    correctAnswer = problem.answer;
+                    const fracHtml = renderFracValue({ num: problem.fracNum, den: problem.fracDen }, 1);
+                    questionEl.innerHTML = `<span class="task-label">Найди дробь от числа:</span><span class="frac-row">${fracHtml}<span class="frac-op-symbol">от ${problem.N}</span></span>`;
+
+                    const fakeNums = buildFracOfNumberDistractors(problem, 3);
+                    const options = shuffleArray([correctAnswer, ...fakeNums]);
+                    options.forEach(opt => {
+                        const btn = document.createElement('button');
+                        btn.className = 'btn-answer';
+                        btn.innerText = opt;
+                        btn.onclick = (e) => checkAnswer(opt, e);
+                        grid.appendChild(btn);
+                    });
+                    return;
+                }
+
+                // --- Режим "Найти число": по известной доле восстановить целое число ---
+                if (opKey === 'findWhole') {
+                    const problem = generateFindWholeProblem(level);
+                    correctAnswer = problem.answer;
+                    const fracHtml = renderFracValue({ num: problem.fracNum, den: problem.fracDen }, 1);
+                    questionEl.innerHTML = `<span class="task-label">Найди число, если известно:</span><span class="frac-row">${fracHtml}<span class="frac-op-symbol">от него = ${problem.knownValue}</span></span>`;
+
+                    const fakeNums = buildFindWholeDistractors(problem, 3);
+                    const options = shuffleArray([correctAnswer, ...fakeNums]);
+                    options.forEach(opt => {
+                        const btn = document.createElement('button');
+                        btn.className = 'btn-answer';
+                        btn.innerText = opt;
                         btn.onclick = (e) => checkAnswer(opt, e);
                         grid.appendChild(btn);
                     });
