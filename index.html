@@ -106,7 +106,7 @@
         }
 
         /* Красивое отображение дробей: числитель над чертой над знаменателем */
-        .frac-row { display: inline-flex; align-items: center; gap: 10px; }
+        .frac-row { display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
         .frac-op-symbol { font-size: 0.85em; }
         .frac-display { display: inline-flex; align-items: center; gap: 3px; vertical-align: middle; }
         .frac-stack { display: inline-flex; flex-direction: column; align-items: center; line-height: 1.1; vertical-align: middle; }
@@ -114,7 +114,8 @@
         .frac-stack .bar { width: 100%; height: 2px; background: currentColor; margin: 2px 0; }
         .mixed-whole { font-size: 1em; margin-right: 2px; }
         .frac-paren { font-size: 1.3em; line-height: 1; vertical-align: middle; }
-        .task-label { font-size: 0.55em; color: #94a3b8; display: block; margin-bottom: 8px; font-weight: normal; }
+        .task-label { font-size: 0.5em; color: #94a3b8; display: block; margin-bottom: 8px; font-weight: normal; }
+        .compound-question { font-size: 0.62em; line-height: 1.3; display: block; }
 
         .top-panel-wrapper {
             flex-shrink: 0; background: var(--panel-bg);
@@ -143,6 +144,7 @@
         .game-space {
             flex: 1; position: relative; display: flex; flex-direction: column;
             justify-content: center; align-items: center; padding: 10px; min-height: 0; width: 100%;
+            overflow-y: auto;
         }
         #cityCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
 
@@ -1637,7 +1639,7 @@
                 if (opKey === 'simplify') {
                     const problem = generateSimplifyProblem(level);
                     correctAnswer = problem.answer;
-                    questionEl.innerHTML = `<span class="frac-row"><span class="task-label">Сократи дробь:</span>${renderFracValue(problem.given, 1)}</span>`;
+                    questionEl.innerHTML = `<span class="compound-question"><span class="task-label">Сократи дробь:</span><span class="frac-row">${renderFracValue(problem.given, 1)}</span></span>`;
 
                     const fakeFracs = buildSimplifyDistractors(problem.given, correctAnswer, 3, problem.m);
                     const options = shuffleArray([correctAnswer, ...fakeFracs]);
@@ -1660,7 +1662,7 @@
                     const label = problem.direction === 'toMixed'
                         ? 'Переведи в смешанное число:'
                         : 'Переведи в неправильную дробь:';
-                    questionEl.innerHTML = `<span class="frac-row"><span class="task-label">${label}</span>${renderFracValue(problem.given, questionRenderLevel)}</span>`;
+                    questionEl.innerHTML = `<span class="compound-question"><span class="task-label">${label}</span><span class="frac-row">${renderFracValue(problem.given, questionRenderLevel)}</span></span>`;
 
                     const fakeFracs = buildMixedConvertDistractors(problem, 3);
                     const options = shuffleArray([correctAnswer, ...fakeFracs]);
@@ -1679,7 +1681,7 @@
                     const problem = generateFracOfNumberProblem(level);
                     correctAnswer = problem.answer;
                     const fracHtml = renderFracValue({ num: problem.fracNum, den: problem.fracDen }, 1);
-                    questionEl.innerHTML = `<span class="task-label">Найди дробь от числа:</span><span class="frac-row">${fracHtml}<span class="frac-op-symbol">от ${problem.N}</span></span>`;
+                    questionEl.innerHTML = `<span class="compound-question"><span class="task-label">Найди дробь от числа:</span><span class="frac-row">${fracHtml}<span class="frac-op-symbol">от ${problem.N}</span></span></span>`;
 
                     const fakeNums = buildFracOfNumberDistractors(problem, 3);
                     const options = shuffleArray([correctAnswer, ...fakeNums]);
@@ -1698,7 +1700,7 @@
                     const problem = generateFindWholeProblem(level);
                     correctAnswer = problem.answer;
                     const fracHtml = renderFracValue({ num: problem.fracNum, den: problem.fracDen }, 1);
-                    questionEl.innerHTML = `<span class="task-label">Найди число, если известно:</span><span class="frac-row">${fracHtml}<span class="frac-op-symbol">от него = ${problem.knownValue}</span></span>`;
+                    questionEl.innerHTML = `<span class="compound-question"><span class="task-label">Найди число, если известно:</span><span class="frac-row">${fracHtml}<span class="frac-op-symbol">от него = ${problem.knownValue}</span></span></span>`;
 
                     const fakeNums = buildFindWholeDistractors(problem, 3);
                     const options = shuffleArray([correctAnswer, ...fakeNums]);
