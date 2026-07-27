@@ -537,10 +537,11 @@
         };
         const QUOTIENT_MAX = { 1: 5, 2: 10, 3: 15, 4: 25, 5: 50 };
         const DIV_ZERO_CHANCE = 0.10; // фиксированная доля примеров "деление на 0", не зависит от таблиц
+        const MUL_ZERO_CHANCE = 0.08; // управляемая доля "умножения на 0" — не зависит от таблиц/диапазонов
         const MUL_TABLE = {
-            1: [0, 1, 2, 5, 10],
-            2: [0, 1, 2, 3, 4, 5, 10],
-            3: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            1: [1, 2, 5, 10],
+            2: [1, 2, 3, 4, 5, 10],
+            3: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         };
 
         // --- "МЕШОК" ЗНАКОВ: гарантирует, что все 4 комбинации (+/+ +/- -/+ -/-)
@@ -579,18 +580,27 @@
         }
 
         function genMulPositive(level) {
+            if (Math.random() < MUL_ZERO_CHANCE) {
+                // Намеренный, управляемый случай "умножение на 0" — не случайный побочный эффект таблиц
+                const maxOther = level <= 3 ? 10 : (level === 4 ? 20 : 99);
+                const other = randInt(1, maxOther);
+                const zeroFirst = Math.random() < 0.5;
+                const a = zeroFirst ? 0 : other;
+                const b = zeroFirst ? other : 0;
+                return { text: `${a} × ${b}`, answer: 0, a, b };
+            }
             let a, b;
             if (level <= 3) {
                 const table = MUL_TABLE[level];
                 a = table[randInt(0, table.length - 1)];
-                b = randInt(0, 10);
+                b = randInt(1, 10);
                 if (Math.random() < 0.5) { const t = a; a = b; b = t; }
             } else if (level === 4) {
                 a = randInt(10, 20);
-                b = randInt(0, 10);
+                b = randInt(1, 10);
             } else {
                 a = randInt(10, 99);
-                b = randInt(0, 10);
+                b = randInt(1, 10);
             }
             return { text: `${a} × ${b}`, answer: a * b, a: a, b: b };
         }
@@ -633,21 +643,31 @@
         }
 
         function genMulNegative(level) {
+            if (Math.random() < MUL_ZERO_CHANCE) {
+                // Намеренный, управляемый случай "умножение на 0" — знак ненулевого множителя
+                // берём напрямую (не через мешок знаков), как и в аналогичном случае деления на 0
+                const maxOther = level <= 3 ? 10 : (level === 4 ? 20 : 99);
+                const other = randInt(1, maxOther) * randSign();
+                const zeroFirst = Math.random() < 0.5;
+                const a = zeroFirst ? 0 : other;
+                const b = zeroFirst ? other : 0;
+                return { text: `${a} × ${fmt(b)}`, answer: 0, a, b };
+            }
             let magA, magB;
             if (level <= 3) {
                 const table = MUL_TABLE[level];
                 magA = table[randInt(0, table.length - 1)];
-                magB = randInt(0, 10);
+                magB = randInt(1, 10);
             } else if (level === 4) {
                 magA = randInt(10, 20);
-                magB = randInt(0, 10);
+                magB = randInt(1, 10);
             } else {
                 magA = randInt(10, 99);
-                magB = randInt(0, 10);
+                magB = randInt(1, 10);
             }
             const [s1, s2] = nextSignPair(signBags.mul);
-            const a = magA === 0 ? 0 : magA * s1;
-            const b = magB === 0 ? 0 : magB * s2;
+            const a = magA * s1;
+            const b = magB * s2;
             return { text: `${a} × ${fmt(b)}`, answer: a * b, a: a, b: b };
         }
 
@@ -668,9 +688,12 @@
         }
 
         // --- ГЕНЕРАЦИЯ ОТВЛЕКАЮЩИХ ВАРИАНТОВ ОТВЕТА ---
+        // Обе функции работают через МОДУЛЬ чисел (не зависят от знака a/b) — так ловушка
+        // "ошибка в разрядах" работает и в отрицательном режиме тоже. Знак результата
+        // применяется на стороне вызова (buildDistractors), обычно совпадающим со знаком
+        // правильного ответа — это изолирует "ошибку в цифрах" от "ошибки в знаке".
         function noCarryAdd(a, b) {
-            if (a < 0 || b < 0) return null;
-            const sa = String(a), sb = String(b);
+            const sa = String(Math.abs(a)), sb = String(Math.abs(b));
             const maxLen = Math.max(sa.length, sb.length);
             const pa = sa.padStart(maxLen, '0');
             const pb = sb.padStart(maxLen, '0');
@@ -685,8 +708,7 @@
         // Имитация "вычитания без заёма через разряд" — частая ошибка новичков:
         // по каждому разряду берут модуль разности цифр, не занимая десяток
         function noBorrowSub(a, b) {
-            if (a < 0 || b < 0) return null;
-            const sa = String(a), sb = String(b);
+            const sa = String(Math.abs(a)), sb = String(Math.abs(b));
             const maxLen = Math.max(sa.length, sb.length);
             const pa = sa.padStart(maxLen, '0');
             const pb = sb.padStart(maxLen, '0');
@@ -745,10 +767,18 @@
             let structural = [];
 
             if (opKey === 'add') {
-                pushStructural(structural, noCarryAdd(a, b), correctAnswer, isNegative);
+                const noCarryMag = noCarryAdd(a, b);
+                if (noCarryMag !== null) {
+                    const signedNoCarry = correctAnswer < 0 ? -noCarryMag : noCarryMag;
+                    pushStructural(structural, signedNoCarry, correctAnswer, isNegative);
+                }
                 pushStructural(structural, a - b, correctAnswer, isNegative);
             } else if (opKey === 'sub') {
-                pushStructural(structural, noBorrowSub(a, b), correctAnswer, isNegative);
+                const noBorrowMag = noBorrowSub(a, b);
+                if (noBorrowMag !== null) {
+                    const signedNoBorrow = correctAnswer < 0 ? -noBorrowMag : noBorrowMag;
+                    pushStructural(structural, signedNoBorrow, correctAnswer, isNegative);
+                }
                 pushStructural(structural, b - a, correctAnswer, isNegative);
                 pushStructural(structural, a + b, correctAnswer, isNegative);
             } else if (opKey === 'mul') {
