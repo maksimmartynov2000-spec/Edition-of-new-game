@@ -943,6 +943,26 @@
             5: [2, 3, 4, 5, 6, 7, 8, 9, 10]
         };
 
+        // Отдельные пулы для сложения/вычитания — знаменатели одинаковые на 4-5★ (12), различие
+        // между уровнями идёт через ограничение сверху на НОК (см. ADD_SUB_MAX_LCM), а не через
+        // сами числа: иначе НОК может случайно оказаться слишком большим для устного счёта
+        // (например, пара 7 и 9 технически "разные и не делятся", но их НОК = 63).
+        const ADD_SUB_FRAC_DEN_POOL = {
+            1: [2, 3, 4, 5],
+            2: [2, 3, 4, 5, 6, 7, 8],
+            3: [2, 3, 4, 5, 6, 7, 8, 9, 10],
+            4: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            5: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        };
+        const ADD_SUB_MAX_LCM = { 4: 20, 5: 24 };
+
+        // Умножение/деление на 5★ — без смешанных чисел, знаменатели чуть шире, чем на 3-4★,
+        // но перемножение двух дробей (в отличие от сложения) не требует поиска НОК, поэтому
+        // даже такой диапазон остаётся посильным для устного счёта.
+        const MUL_DIV_LEVEL5_POOL = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+
+        function lcm(a, b) { return (a * b) / gcd(a, b); }
+
         // Числитель правильной, уже несократимой дроби (условие примера всегда в сокращённом виде)
         function randFracProper(den) {
             if (den <= 1) return 0;
@@ -981,15 +1001,26 @@
             return { n1, n2 };
         }
 
-        // Пара разных знаменателей, ни один из которых не делится на другой (нужен настоящий НОК)
-        function pickDifferentDenominators(pool) {
+        // Пара разных знаменателей, ни один из которых не делится на другой, С ОГРАНИЧЕНИЕМ НОК
+        // сверху (maxLcm) — иначе даже "разные, не делящиеся" знаменатели могут дать неподъёмный
+        // для устного счёта НОК (например, 7 и 9 технически подходят, но их НОК = 63).
+        function pickDifferentDenominators(pool, maxLcm) {
+            const ok = (a, b) => a !== b && b % a !== 0 && a % b !== 0 && lcm(a, b) <= maxLcm;
             let d1, d2, guard = 0;
             do {
                 d1 = pool[randInt(0, pool.length - 1)];
                 d2 = pool[randInt(0, pool.length - 1)];
                 guard++;
-            } while ((d1 === d2 || d2 % d1 === 0 || d1 % d2 === 0) && guard < 30);
-            return { d1, d2 };
+            } while (!ok(d1, d2) && guard < 50);
+            if (ok(d1, d2)) return { d1, d2 };
+
+            // Детерминированный фолбэк — ищем любую валидную пару прямым перебором пула
+            for (const a of pool) {
+                for (const b of pool) {
+                    if (ok(a, b)) return { d1: a, d2: b };
+                }
+            }
+            return { d1: 2, d2: 3 }; // крайний фолбэк, всегда валиден (НОК=6)
         }
 
         // Общий множитель k в допустимых пределах пула (чтобы d1=k*mult не выходил за диапазон уровня
@@ -1001,9 +1032,9 @@
         }
 
         // Умножение: гарантированное перекрёстное сокращение (числитель второй дроби делит
-        // знаменатель первой, при этом каждая дробь по отдельности несократима)
-        function pickCancelMulPair(level) {
-            const pool = FRAC_DEN_POOL[level];
+        // знаменатель первой, при этом каждая дробь по отдельности несократима).
+        // Принимает пул знаменателей напрямую — переиспользуется для разных уровней/операций.
+        function pickCancelMulPair(pool) {
             const k = pickCrossFactor(pool);
             const d1 = k * randInt(2, 3);
             const n2 = k;
@@ -1014,8 +1045,7 @@
         }
 
         // Умножение: гарантированное ОТСУТСТВИЕ возможности сократить (ни по одной диагонали)
-        function pickNoCancelMulPair(level) {
-            const pool = FRAC_DEN_POOL[level];
+        function pickNoCancelMulPair(pool) {
             const d1 = pool[randInt(0, pool.length - 1)];
             let d2, n1, n2, guard = 0;
             do {
@@ -1030,8 +1060,7 @@
 
         // Деление: гарантированная возможность сокращения (общий множитель либо в числителях,
         // либо в знаменателях — механика отличается от умножения из-за переворота второй дроби)
-        function pickCancelDivPair(level) {
-            const pool = FRAC_DEN_POOL[level];
+        function pickCancelDivPair(pool) {
             if (Math.random() < 0.5) {
                 // общий множитель в числителях
                 const k = pickCrossFactor(pool);
@@ -1047,8 +1076,7 @@
         }
 
         // Деление: гарантированное отсутствие сокращения (ни в числителях, ни в знаменателях)
-        function pickNoCancelDivPair(level) {
-            const pool = FRAC_DEN_POOL[level];
+        function pickNoCancelDivPair(pool) {
             let d1, d2, n1, n2, guard = 0;
             do {
                 d1 = pool[randInt(0, pool.length - 1)];
@@ -1063,40 +1091,15 @@
 
         // ===================== ДРОБИ: ПОДБОР ВЕЛИЧИН ПО УРОВНЯМ =====================
         function pickAddSubMagnitudes(level, opKey) {
-            if (level === 5) {
-                const wholePool = [1, 2, 3, 4, 5];
-                // Гарантированный минимальный порог сложности: разные знаменатели дробных частей
-                // (не сводится к тривиальному "уже общий знаменатель")
-                let { d1, d2 } = pickDifferentDenominators(FRAC_DEN_POOL[5]);
-                let n1 = randFracProper(d1);
-                let n2 = randFracProper(d2);
-
-                // Для вычитания смещаем вероятность в сторону "нужен заём" — чаще, чем получилось бы случайно
-                if (opKey === 'sub' && Math.random() < 0.7) {
-                    const borrowNeeded = (n1 * d2) < (n2 * d1);
-                    if (!borrowNeeded) {
-                        // меняем местами дробные части операндов целиком (парами num/den),
-                        // чтобы дробная часть первого операнда стала меньше второго
-                        const tN = n1, tD = d1;
-                        n1 = n2; d1 = d2;
-                        n2 = tN; d2 = tD;
-                    }
-                }
-
-                return {
-                    whole1: wholePool[randInt(0, wholePool.length - 1)], n1, d1,
-                    whole2: wholePool[randInt(0, wholePool.length - 1)], n2, d2
-                };
-            }
             if (level === 1) {
-                const pool = FRAC_DEN_POOL[1];
+                const pool = ADD_SUB_FRAC_DEN_POOL[1];
                 const den = pool[randInt(0, pool.length - 1)];
                 const n1 = randFracProper(den);
                 const n2 = randFracProper(den);
                 return { whole1: 0, n1, d1: den, whole2: 0, n2, d2: den };
             }
             if (level === 2) {
-                const pool = FRAC_DEN_POOL[2];
+                const pool = ADD_SUB_FRAC_DEN_POOL[2];
                 const den = pool[randInt(0, pool.length - 1)];
                 const pair = pickReducibleAddSubPair(den, opKey === 'add');
                 return { whole1: 0, n1: pair.n1, d1: den, whole2: 0, n2: pair.n2, d2: den };
@@ -1112,8 +1115,12 @@
                 const n2 = randFracProper(d2);
                 return { whole1: 0, n1, d1, whole2: 0, n2, d2 };
             }
-            // level 4 — разные знаменатели, требуется настоящий НОК
-            const { d1, d2 } = pickDifferentDenominators(FRAC_DEN_POOL[4]);
+            // level 4 и 5 — разные знаменатели, требуется настоящий НОК, но с ограничением сверху
+            // (ADD_SUB_MAX_LCM), чтобы даже самый сложный случай оставался решаемым в уме.
+            // Уровни отличаются только величиной допустимого НОК (20 против 24), не самими числами.
+            const pool = ADD_SUB_FRAC_DEN_POOL[level];
+            const maxLcm = ADD_SUB_MAX_LCM[level];
+            const { d1, d2 } = pickDifferentDenominators(pool, maxLcm);
             const n1 = randFracProper(d1);
             const n2 = randFracProper(d2);
             return { whole1: 0, n1, d1, whole2: 0, n2, d2 };
@@ -1121,13 +1128,14 @@
 
         function pickMulDivMagnitudes(level, opKey) {
             if (level === 5) {
-                const wholePool = [1, 2, 3, 4, 5];
-                // Гарантированный минимальный порог сложности: разные знаменатели дробных частей
-                const { d1, d2 } = pickDifferentDenominators(FRAC_DEN_POOL[5]);
-                return {
-                    whole1: wholePool[randInt(0, wholePool.length - 1)], n1: randFracProper(d1), d1,
-                    whole2: wholePool[randInt(0, wholePool.length - 1)], n2: randFracProper(d2), d2
-                };
+                // Без смешанных чисел — знаменатели чуть шире, чем на 3-4★, сокращение возможно
+                // не всегда (как на 3★), но сами числа остаются посильными для устного счёта
+                const pool = MUL_DIV_LEVEL5_POOL;
+                const hasCancelOpportunity = Math.random() < 0.5;
+                const p = opKey === 'div'
+                    ? (hasCancelOpportunity ? pickCancelDivPair(pool) : pickNoCancelDivPair(pool))
+                    : (hasCancelOpportunity ? pickCancelMulPair(pool) : pickNoCancelMulPair(pool));
+                return { whole1: 0, n1: p.n1, d1: p.d1, whole2: 0, n2: p.n2, d2: p.d2 };
             }
             if (level === 4) {
                 // дробь × целое число (для деления — случайно, с какой стороны целое)
@@ -1142,15 +1150,17 @@
             if (level === 3) {
                 // Уровень 3: возможность сократить есть НЕ ВСЕГДА (иначе ученик просто запоминает
                 // шаблон "тут всегда что-то сокращается", вместо того чтобы реально её искать)
+                const pool = FRAC_DEN_POOL[3];
                 const hasCancelOpportunity = Math.random() < 0.5;
-                let p;
-                if (opKey === 'div') p = hasCancelOpportunity ? pickCancelDivPair(3) : pickNoCancelDivPair(3);
-                else p = hasCancelOpportunity ? pickCancelMulPair(3) : pickNoCancelMulPair(3);
+                const p = opKey === 'div'
+                    ? (hasCancelOpportunity ? pickCancelDivPair(pool) : pickNoCancelDivPair(pool))
+                    : (hasCancelOpportunity ? pickCancelMulPair(pool) : pickNoCancelMulPair(pool));
                 return { whole1: 0, n1: p.n1, d1: p.d1, whole2: 0, n2: p.n2, d2: p.d2 };
             }
             if (level === 2) {
                 // Уровень 2: сокращение результата гарантировано ВСЕГДА (в отличие от уровня 3)
-                const p = opKey === 'div' ? pickCancelDivPair(2) : pickCancelMulPair(2);
+                const pool = FRAC_DEN_POOL[2];
+                const p = opKey === 'div' ? pickCancelDivPair(pool) : pickCancelMulPair(pool);
                 return { whole1: 0, n1: p.n1, d1: p.d1, whole2: 0, n2: p.n2, d2: p.d2 };
             }
             // level 1 — простые дроби без гарантий на сокращение
@@ -1631,8 +1641,13 @@
         // wrapNegative по умолчанию false — отдельно стоящие значения (варианты ответа) никогда
         // не оборачиваются в скобки. Скобки применяются только ко второму операнду выражения,
         // и только если он отрицателен — так минус-знак не путается со знаком операции.
-        function renderFracValue(frac, level, wrapNegative = false) {
-            if (level === 5) {
+        // asMixed — явный флаг "показать как смешанное число", а НЕ признак уровня сложности.
+        // Раньше смешанный вид включался неявно при level===5, но теперь обычная арифметика
+        // (+,-,×,÷) на 5★ дробей больше не использует смешанные числа вообще — только два
+        // специальных режима ("В смешанное число"/"В неправильную дробь") явно запрашивают
+        // нужный вид независимо от того, какая сложность была использована при генерации чисел.
+        function renderFracValue(frac, asMixed, wrapNegative = false) {
+            if (asMixed) {
                 const m = toMixedParts(frac);
                 const signPrefix = m.sign < 0 ? '−' : '';
                 let inner;
@@ -1656,14 +1671,14 @@
 
         const FRAC_OP_SYMBOL = { add: '+', sub: '−', mul: '×', div: '÷' };
         function buildFractionQuestionHtml(f1, f2, opKey, level) {
-            // Для +/- со вторым отрицательным операндом переворачиваем оператор и показываем
-            // модуль вместо скобок ("3/4 - 1/2" вместо "3/4 + (-1/2)"). Для ×/÷ оставляем скобки.
+            // Обычная арифметика +/-/×/÷ больше никогда не показывает смешанные числа
+            // (даже на 5★) — asMixed всегда false здесь.
             if ((opKey === 'add' || opKey === 'sub') && f2.num < 0) {
                 const flippedOp = opKey === 'add' ? 'sub' : 'add';
                 const absF2 = { num: -f2.num, den: f2.den };
-                return `<span class="frac-row">${renderFracValue(f1, level, false)}<span class="frac-op-symbol">${FRAC_OP_SYMBOL[flippedOp]}</span>${renderFracValue(absF2, level, false)}</span>`;
+                return `<span class="frac-row">${renderFracValue(f1, false, false)}<span class="frac-op-symbol">${FRAC_OP_SYMBOL[flippedOp]}</span>${renderFracValue(absF2, false, false)}</span>`;
             }
-            return `<span class="frac-row">${renderFracValue(f1, level, false)}<span class="frac-op-symbol">${FRAC_OP_SYMBOL[opKey]}</span>${renderFracValue(f2, level, true)}</span>`;
+            return `<span class="frac-row">${renderFracValue(f1, false, false)}<span class="frac-op-symbol">${FRAC_OP_SYMBOL[opKey]}</span>${renderFracValue(f2, false, true)}</span>`;
         }
 
         // ===================== ДЕСЯТИЧНЫЕ ДРОБИ: АРИФМЕТИКА =====================
@@ -2011,14 +2026,14 @@
                 if (opKey === 'simplify') {
                     const problem = generateSimplifyProblem(level);
                     correctAnswer = problem.answer;
-                    questionEl.innerHTML = `<span class="compound-question"><span class="task-label">Сократи дробь:</span><span class="frac-row">${renderFracValue(problem.given, 1)}</span></span>`;
+                    questionEl.innerHTML = `<span class="compound-question"><span class="task-label">Сократи дробь:</span><span class="frac-row">${renderFracValue(problem.given, false)}</span></span>`;
 
                     const fakeFracs = buildSimplifyDistractors(problem.given, correctAnswer, 3, problem.m);
                     const options = shuffleArray([correctAnswer, ...fakeFracs]);
                     options.forEach(opt => {
                         const btn = document.createElement('button');
                         btn.className = 'btn-answer';
-                        btn.innerHTML = renderFracValue(opt, 1);
+                        btn.innerHTML = renderFracValue(opt, false);
                         btn.onclick = (e) => checkAnswer(opt, e);
                         grid.appendChild(btn);
                     });
@@ -2029,19 +2044,22 @@
                 if (opKey === 'toMixed' || opKey === 'toImproper') {
                     const problem = opKey === 'toMixed' ? generateToMixedProblem(level) : generateToImproperProblem(level);
                     correctAnswer = problem.answer;
-                    const questionRenderLevel = problem.direction === 'toMixed' ? 1 : 5;
-                    const answerRenderLevel = problem.direction === 'toMixed' ? 5 : 1;
+                    // Явный флаг "показать как смешанное число" — независимо от уровня сложности:
+                    // при переводе В смешанное условие (неправильная дробь) остаётся обычным,
+                    // а ответ (смешанное число) — да; при переводе В неправильную — наоборот.
+                    const questionAsMixed = problem.direction === 'toImproper';
+                    const answerAsMixed = problem.direction === 'toMixed';
                     const label = problem.direction === 'toMixed'
                         ? 'Переведи в смешанное число:'
                         : 'Переведи в неправильную дробь:';
-                    questionEl.innerHTML = `<span class="compound-question"><span class="task-label">${label}</span><span class="frac-row">${renderFracValue(problem.given, questionRenderLevel)}</span></span>`;
+                    questionEl.innerHTML = `<span class="compound-question"><span class="task-label">${label}</span><span class="frac-row">${renderFracValue(problem.given, questionAsMixed)}</span></span>`;
 
                     const fakeFracs = buildMixedConvertDistractors(problem, 3);
                     const options = shuffleArray([correctAnswer, ...fakeFracs]);
                     options.forEach(opt => {
                         const btn = document.createElement('button');
                         btn.className = 'btn-answer';
-                        btn.innerHTML = renderFracValue(opt, answerRenderLevel);
+                        btn.innerHTML = renderFracValue(opt, answerAsMixed);
                         btn.onclick = (e) => checkAnswer(opt, e);
                         grid.appendChild(btn);
                     });
@@ -2052,7 +2070,7 @@
                 if (opKey === 'fracOfNumber') {
                     const problem = generateFracOfNumberProblem(level);
                     correctAnswer = problem.answer;
-                    const fracHtml = renderFracValue({ num: problem.fracNum, den: problem.fracDen }, 1);
+                    const fracHtml = renderFracValue({ num: problem.fracNum, den: problem.fracDen }, false);
                     questionEl.innerHTML = `<span class="compound-question"><span class="task-label">Найди дробь от числа:</span><span class="frac-row">${fracHtml}<span class="frac-op-symbol">от ${problem.N}</span></span></span>`;
 
                     const fakeNums = buildFracOfNumberDistractors(problem, 3);
@@ -2071,7 +2089,7 @@
                 if (opKey === 'findWhole') {
                     const problem = generateFindWholeProblem(level);
                     correctAnswer = problem.answer;
-                    const fracHtml = renderFracValue({ num: problem.fracNum, den: problem.fracDen }, 1);
+                    const fracHtml = renderFracValue({ num: problem.fracNum, den: problem.fracDen }, false);
                     questionEl.innerHTML = `<span class="compound-question"><span class="task-label">Найди число, если известно:</span><span class="frac-row">${fracHtml}<span class="frac-op-symbol">от него = ${problem.knownValue}</span></span></span>`;
 
                     const fakeNums = buildFindWholeDistractors(problem, 3);
@@ -2096,7 +2114,7 @@
                 options.forEach(opt => {
                     const btn = document.createElement('button');
                     btn.className = 'btn-answer';
-                    btn.innerHTML = renderFracValue(opt, level);
+                    btn.innerHTML = renderFracValue(opt, false); // обычная арифметика больше не показывает смешанные числа
                     btn.onclick = (e) => checkAnswer(opt, e);
                     grid.appendChild(btn);
                 });
