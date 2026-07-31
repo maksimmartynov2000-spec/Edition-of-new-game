@@ -247,12 +247,10 @@
 
     <!-- Экран настройки генерации примеров -->
     <div class="modal-screen" id="configScreen">
-        <p style="color: var(--royal); font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase;">⚔️ Орден Счёта: Математическая Цитадель</p>
         <h1 class="start-title">🔮 Настройка Испытаний</h1>
 
         <!-- ШАГ 1: только выбор категории -->
         <div id="categoryStepScreen" style="width:100%; display:flex; flex-direction:column; align-items:center;">
-            <p class="start-subtitle">Выберите, с какими числами будет работать Орден</p>
             <div class="config-container">
                 <div class="config-section">
                     <div class="category-select-row" id="categorySelectRow">
@@ -266,8 +264,7 @@
 
         <!-- ШАГ 2: остальная настройка, открывается после выбора категории -->
         <div id="restStepScreen" style="display:none; width:100%; flex-direction:column; align-items:center;">
-            <button id="btnBackToCategory" style="background:none; border:none; color:#94a3b8; font-size:0.85rem; margin-bottom:8px; cursor:pointer; text-decoration:underline;">← Назад к выбору категории</button>
-            <p class="start-subtitle" id="restStepSubtitle">Определите, какими примерами Орден будет проверять ваш разум</p>
+            <button id="btnBackToCategory" style="align-self:flex-start; background:none; border:none; color:#94a3b8; font-size:1.4rem; margin-bottom:8px; margin-left:4px; cursor:pointer; line-height:1;">←</button>
             <div class="config-container">
                 <div class="config-section">
                     <div class="config-section-title">1️⃣ Вид чисел</div>
@@ -340,7 +337,7 @@
 
     <div class="control-panel">
         <button class="btn-final" id="btn-exam">
-            <span class="name">🏆 СДАТЬ ВЕЛИКИЙ ЭКЗАМЕН 🏆</span>
+            <span class="name">⚔️ Завершить испытание</span>
         </button>
     </div>
 
@@ -2133,6 +2130,21 @@
         }
         window.addEventListener('resize', resizeCanvas);
 
+        // Защита от точного повтора примера подряд: запоминаем "подпись" последнего показанного
+        // условия и, если новое сгенерированное совпало с ним, перегенерируем (с ограничением
+        // попыток, чтобы не зациклиться, если пул примеров крайне мал).
+        let lastProblemSignature = null;
+        function generateUniqueProblem(generatorFn, sigFn) {
+            let problem, sig, guard = 0;
+            do {
+                problem = generatorFn();
+                sig = sigFn(problem);
+                guard++;
+            } while (sig === lastProblemSignature && guard < 8);
+            lastProblemSignature = sig;
+            return problem;
+        }
+
         function generateMath() {
             if (!gameActive) return;
             clearInterval(timerInterval);
@@ -2175,7 +2187,10 @@
 
                 // --- Режим "Сокращение": дана несокращённая дробь, выбрать сокращённый вид ---
                 if (opKey === 'simplify') {
-                    const problem = generateSimplifyProblem(level);
+                    const problem = generateUniqueProblem(
+                        () => generateSimplifyProblem(level),
+                        (p) => `frac|simplify|${p.given.num}_${p.given.den}`
+                    );
                     correctAnswer = problem.answer;
                     questionEl.innerHTML = `<span class="compound-question"><span class="task-label">Сократи дробь:</span><span class="frac-row">${renderFracValue(problem.given, false)}</span></span>`;
 
@@ -2193,7 +2208,10 @@
 
                 // --- Режимы "В смешанное число" / "В неправильную дробь" — два независимых направления ---
                 if (opKey === 'toMixed' || opKey === 'toImproper') {
-                    const problem = opKey === 'toMixed' ? generateToMixedProblem(level) : generateToImproperProblem(level);
+                    const problem = generateUniqueProblem(
+                        () => opKey === 'toMixed' ? generateToMixedProblem(level) : generateToImproperProblem(level),
+                        (p) => `frac|${opKey}|${p.given.num}_${p.given.den}`
+                    );
                     correctAnswer = problem.answer;
                     // Явный флаг "показать как смешанное число" — независимо от уровня сложности:
                     // при переводе В смешанное условие (неправильная дробь) остаётся обычным,
@@ -2219,7 +2237,10 @@
 
                 // --- Режим "Дробь от числа": найти значение дроби от целого числа ---
                 if (opKey === 'fracOfNumber') {
-                    const problem = generateFracOfNumberProblem(level);
+                    const problem = generateUniqueProblem(
+                        () => generateFracOfNumberProblem(level),
+                        (p) => `frac|fracOfNumber|${p.fracNum}_${p.fracDen}_${p.N}`
+                    );
                     correctAnswer = problem.answer;
                     const fracHtml = renderFracValue({ num: problem.fracNum, den: problem.fracDen }, false);
                     questionEl.innerHTML = `<span class="compound-question"><span class="task-label">Найди дробь от числа:</span><span class="frac-row">${fracHtml}<span class="frac-op-symbol">от ${problem.N}</span></span></span>`;
@@ -2238,7 +2259,10 @@
 
                 // --- Режим "Найти число": по известной доле восстановить целое число ---
                 if (opKey === 'findWhole') {
-                    const problem = generateFindWholeProblem(level);
+                    const problem = generateUniqueProblem(
+                        () => generateFindWholeProblem(level),
+                        (p) => `frac|findWhole|${p.fracNum}_${p.fracDen}_${p.knownValue}`
+                    );
                     correctAnswer = problem.answer;
                     const fracHtml = renderFracValue({ num: problem.fracNum, den: problem.fracDen }, false);
                     questionEl.innerHTML = `<span class="compound-question"><span class="task-label">Найди число, если известно:</span><span class="frac-row">${fracHtml}<span class="frac-op-symbol">от него = ${problem.knownValue}</span></span></span>`;
@@ -2256,7 +2280,10 @@
                 }
 
                 // --- Обычная арифметика (+, −, ×, ÷) ---
-                const problem = generateFractionProblem(opKey, level, isNegative);
+                const problem = generateUniqueProblem(
+                    () => generateFractionProblem(opKey, level, isNegative),
+                    (p) => `frac|${opKey}|${p.f1.num}_${p.f1.den}|${p.f2.num}_${p.f2.den}`
+                );
                 correctAnswer = problem.answer;
                 questionEl.innerHTML = buildFractionQuestionHtml(problem.f1, problem.f2, opKey, level);
 
@@ -2274,7 +2301,10 @@
 
             // ===== ДЕСЯТИЧНЫЕ ДРОБИ: простой текстовый рендер (как у целых чисел) =====
             if (exampleConfig.category === 'decimal') {
-                const problem = generateDecimalProblem(opKey, level, isNegative);
+                const problem = generateUniqueProblem(
+                    () => generateDecimalProblem(opKey, level, isNegative),
+                    (p) => `dec|${opKey}|${p.d1.intVal}_${p.d1.dp}|${p.d2.intVal}_${p.d2.dp}`
+                );
                 correctAnswer = problem.answer;
                 questionEl.innerText = buildDecimalQuestionText(problem.d1, problem.d2, opKey);
 
@@ -2291,7 +2321,10 @@
             }
 
             // ===== ЦЕЛЫЕ ЧИСЛА: прежняя логика без изменений =====
-            const problem = generateProblem(opKey, level, isNegative);
+            const problem = generateUniqueProblem(
+                () => generateProblem(opKey, level, isNegative),
+                (p) => `int|${opKey}|${p.text}`
+            );
 
             questionEl.innerText = problem.text;
 
@@ -2580,7 +2613,7 @@
 
         document.getElementById('btn-exam').addEventListener('click', () => {
             if (!gameActive) return;
-            const confirmed = confirm('Вы действительно хотите сдать экзамен? Игра завершится.');
+            const confirmed = confirm('Вы действительно хотите завершить испытание? Игра завершится.');
             if (!confirmed) return;
 
             gameActive = false;
