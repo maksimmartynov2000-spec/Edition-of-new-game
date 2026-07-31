@@ -526,6 +526,29 @@
             return `${n1} ${opSymbol} ${n2}`;
         }
 
+        // --- ВЫБОР КОМБИНАЦИИ ЗНАКОВ (отрицательный режим целых чисел) ---
+        // Раньше использовался равномерный "мешок" (все 4 комбинации по 25%). Теперь — взвешенный
+        // выбор: "оба положительных" (++) — редкость, не больше 5% (в режиме "отрицательные числа"
+        // такие примеры выглядят как случайно попавшие туда простые положительные примеры).
+        // Для сложения/вычитания на 5★ дополнительно смещаем в сторону "двойных знаков"
+        // (второй операнд отрицательный — тот случай, где виден перевёрнутый оператор).
+        function pickIntegerSignCombo(opKey, level) {
+            const r = Math.random();
+            if ((opKey === 'add' || opKey === 'sub') && level === 5) {
+                if (r < 0.05) return '++';
+                if (r < 0.20) return '-+';
+                if (r < 0.60) return '+-';
+                return '--';
+            }
+            if (r < 0.05) return '++';
+            if (r < 0.3667) return '+-';
+            if (r < 0.6834) return '-+';
+            return '--';
+        }
+        function comboToSigns(combo) {
+            return [combo[0] === '+' ? 1 : -1, combo[1] === '+' ? 1 : -1];
+        }
+
         // --- ОБЩИЕ ТАБЛИЦЫ СЛОЖНОСТИ (единые для + и - режимов чисел) ---
         const ADD_SUB_RANGE = { 1: 10, 2: 20, 3: 50, 4: 100, 5: 200 };
         const DIVISOR_POOL = {
@@ -536,8 +559,12 @@
             5: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         };
         const QUOTIENT_MAX = { 1: 5, 2: 10, 3: 15, 4: 25, 5: 50 };
-        const DIV_ZERO_CHANCE = 0.10; // фиксированная доля примеров "деление на 0", не зависит от таблиц
-        const MUL_ZERO_CHANCE = 0.08; // управляемая доля "умножения на 0" — не зависит от таблиц/диапазонов
+        const DIV_ZERO_CHANCE = 0.10; // фиксированная доля примеров "деление на 0", не зависит от таблиц (положительный режим)
+        const MUL_ZERO_CHANCE = 0.08; // управляемая доля "умножения на 0" — не зависит от таблиц/диапазонов (положительный режим)
+        // В отрицательном режиме доля примеров с нулём (умножение на 0, деление на/в 0) снижена —
+        // не больше 5% суммарно, как и для остальных "нулевых" случаев
+        const MUL_ZERO_CHANCE_NEG = 0.04;
+        const DIV_ZERO_CHANCE_NEG = 0.04;
         const MUL_TABLE = {
             1: [1, 2, 5, 10],
             2: [1, 2, 3, 4, 5, 10],
@@ -554,12 +581,6 @@
             const token = bag.queue.pop();
             return [token[0] === '+' ? 1 : -1, token[1] === '+' ? 1 : -1];
         }
-        const signBags = {
-            add: createSignBag(),
-            sub: createSignBag(),
-            mul: createSignBag(),
-            div: createSignBag()
-        };
 
         // --- ПОЛОЖИТЕЛЬНЫЕ ЧИСЛА ---
         function genAddPositive(level) {
@@ -620,11 +641,24 @@
         // --- ОТРИЦАТЕЛЬНЫЕ ЧИСЛА ---
         function genAddNegative(level) {
             const range = ADD_SUB_RANGE[level];
-            const [s1, s2] = nextSignPair(signBags.add);
-            const mag1 = randInt(0, range);
-            // при одинаковых знаках вклады складываются по модулю — магнитуду нужно ограничить,
-            // чтобы сумма гарантированно осталась в диапазоне без повторных попыток
-            const mag2 = (s1 === s2) ? randInt(0, range - mag1) : randInt(0, range);
+            const allowZero = Math.random() < 0.05; // нулевой операнд — редкость, не больше ~5%
+            const [s1, s2] = comboToSigns(pickIntegerSignCombo('add', level));
+            let mag1, mag2;
+            if (allowZero) {
+                mag1 = randInt(0, range);
+                mag2 = (s1 === s2) ? randInt(0, range - mag1) : randInt(0, range);
+            } else {
+                // Гарантированно ненулевые магнитуды: при одинаковых знаках оставляем магнитуде-1
+                // хотя бы 1 единицу диапазона про запас для магнитуды-2 (иначе на границе range
+                // остаток вычисляется как 0, и мы бы всё равно получили нулевой операнд)
+                if (s1 === s2) {
+                    mag1 = randInt(1, range - 1);
+                    mag2 = randInt(1, range - mag1);
+                } else {
+                    mag1 = randInt(1, range);
+                    mag2 = randInt(1, range);
+                }
+            }
             const n1 = s1 * mag1;
             const n2 = s2 * mag2;
             return { text: formatAddSubText(n1, '+', n2), answer: n1 + n2, a: n1, b: n2 };
@@ -632,20 +666,30 @@
 
         function genSubNegative(level) {
             const range = ADD_SUB_RANGE[level];
-            const [s1, s2] = nextSignPair(signBags.sub);
-            const mag1 = randInt(0, range);
-            // при разных знаках операндов их вклады в разность складываются по модулю —
-            // магнитуду нужно ограничить, чтобы результат остался в диапазоне
-            const mag2 = (s1 !== s2) ? randInt(0, range - mag1) : randInt(0, range);
+            const allowZero = Math.random() < 0.05;
+            const [s1, s2] = comboToSigns(pickIntegerSignCombo('sub', level));
+            let mag1, mag2;
+            if (allowZero) {
+                mag1 = randInt(0, range);
+                mag2 = (s1 !== s2) ? randInt(0, range - mag1) : randInt(0, range);
+            } else {
+                if (s1 !== s2) {
+                    mag1 = randInt(1, range - 1);
+                    mag2 = randInt(1, range - mag1);
+                } else {
+                    mag1 = randInt(1, range);
+                    mag2 = randInt(1, range);
+                }
+            }
             const n1 = s1 * mag1;
             const n2 = s2 * mag2;
             return { text: formatAddSubText(n1, '-', n2), answer: n1 - n2, a: n1, b: n2 };
         }
 
         function genMulNegative(level) {
-            if (Math.random() < MUL_ZERO_CHANCE) {
+            if (Math.random() < MUL_ZERO_CHANCE_NEG) {
                 // Намеренный, управляемый случай "умножение на 0" — знак ненулевого множителя
-                // берём напрямую (не через мешок знаков), как и в аналогичном случае деления на 0
+                // берём напрямую (не через выбор комбинации), как и в аналогичном случае деления на 0
                 const maxOther = level <= 3 ? 10 : (level === 4 ? 20 : 99);
                 const other = randInt(1, maxOther) * randSign();
                 const zeroFirst = Math.random() < 0.5;
@@ -665,22 +709,23 @@
                 magA = randInt(10, 99);
                 magB = randInt(1, 10);
             }
-            const [s1, s2] = nextSignPair(signBags.mul);
+            const [s1, s2] = comboToSigns(pickIntegerSignCombo('mul', level));
             const a = magA * s1;
             const b = magB * s2;
             return { text: `${a} × ${fmt(b)}`, answer: a * b, a: a, b: b };
         }
 
         function genDivNegative(level) {
-            if (Math.random() < DIV_ZERO_CHANCE) {
+            if (Math.random() < DIV_ZERO_CHANCE_NEG) {
                 const dividendMag = randInt(1, Math.max(10, QUOTIENT_MAX[level] * 2));
                 const dividend = dividendMag * randSign();
                 return { text: `${dividend} ÷ 0`, answer: null, noSolution: true, a: dividend, b: 0 };
             }
             const pool = DIVISOR_POOL[level];
             const divisorMag = pool[randInt(0, pool.length - 1)];
-            const quotientMag = randInt(0, QUOTIENT_MAX[level]);
-            const [s1, s2] = nextSignPair(signBags.div); // s1 — знак делителя, s2 — знак частного
+            const allowZeroQuotient = Math.random() < 0.05; // нулевое частное — редкость, не больше ~5%
+            const quotientMag = allowZeroQuotient ? randInt(0, QUOTIENT_MAX[level]) : randInt(1, QUOTIENT_MAX[level]);
+            const [s1, s2] = comboToSigns(pickIntegerSignCombo('div', level)); // s1 — знак делителя, s2 — знак частного
             const divisor = divisorMag * s1;
             const quotient = quotientMag === 0 ? 0 : quotientMag * s2;
             const dividend = divisor * quotient;
