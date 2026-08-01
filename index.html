@@ -1872,13 +1872,23 @@
         function genDecMul(level, isNegative) {
             let d1, d2;
             if (level === 1) {
-                // Целое (1-4) × десятичное с целой частью (1 знак)
-                d1 = { intVal: randInt(1, 4), dp: 0 };
-                d2 = randDecimalMagnitudeTrueDecimal(1, 4);
+                // Чистая таблица умножения (2-9), сдвигаем запятую РОВНО у одного числа (1-2 знака).
+                // Сам элемент умножения — обычный табличный факт, сложность только в месте запятой.
+                const a = randInt(2, 9);
+                const b = randInt(2, 9);
+                const dp = Math.random() < 0.5 ? 1 : 2;
+                if (Math.random() < 0.5) { d1 = { intVal: a, dp }; d2 = { intVal: b, dp: 0 }; }
+                else { d1 = { intVal: a, dp: 0 }; d2 = { intVal: b, dp }; }
             } else if (level === 2) {
-                // Целое (1-9) × десятичное (1-2 знака), крупнее
-                d1 = { intVal: randInt(1, 9), dp: 0 };
-                d2 = randDecimalMagnitudeTrueDecimal(Math.random() < 0.5 ? 1 : 2, 9);
+                // Та же таблица умножения, но десятичными могут быть 1 ИЛИ 2 числа одновременно —
+                // dp для каждой стороны выбирается независимо (0, 1 или 2 знака)
+                const a = randInt(2, 9);
+                const b = randInt(2, 9);
+                let dpA, dpB, guard2 = 0;
+                do { dpA = randInt(0, 2); dpB = randInt(0, 2); guard2++; } while (dpA === 0 && dpB === 0 && guard2 < 10);
+                if (dpA === 0 && dpB === 0) dpA = 1;
+                d1 = { intVal: a, dp: dpA };
+                d2 = { intVal: b, dp: dpB };
             } else if (level === 3) {
                 // Впервые появляется "чистая дробь" (0.7, 0.08) — если она уже "глубокая" (сотые),
                 // вторую сторону держим совсем простой, чтобы знаки не копились с обеих сторон сразу
@@ -1912,7 +1922,33 @@
         function genDecDiv(level, isNegative) {
             let quotient, divisor, dividend, guard = 0;
             do {
-                if (level <= 4) {
+                if (level === 1) {
+                    // Чистая таблица умножения "наоборот": делитель × частное = делимое.
+                    // Сдвигаем запятую РОВНО у одной стороны (делимое ИЛИ делитель) на 1-2 знака —
+                    // сам факт деления остаётся табличным, сложность только в месте запятой.
+                    const f1 = randInt(2, 9); // делитель-фактор
+                    const f2 = randInt(2, 9); // частное-фактор
+                    const dp = Math.random() < 0.5 ? 1 : 2;
+                    if (Math.random() < 0.5) {
+                        // Сдвигаем "делимое" — делитель целый, частное сдвигается вместе с ним
+                        divisor = { intVal: f1, dp: 0 };
+                        quotient = { intVal: f2, dp };
+                    } else {
+                        // Сдвигаем "делитель" — делимое остаётся целым произведением
+                        divisor = { intVal: f1, dp };
+                        quotient = { intVal: f2 * Math.pow(10, dp), dp: 0 };
+                    }
+                } else if (level === 2) {
+                    // Та же таблица умножения "наоборот", но десятичными могут быть делитель
+                    // И/ИЛИ частное независимо (0, 1 или 2 знака у каждого)
+                    const f1 = randInt(2, 9);
+                    const f2 = randInt(2, 9);
+                    let dpD, dpQ, guard2 = 0;
+                    do { dpD = randInt(0, 2); dpQ = randInt(0, 2); guard2++; } while (dpD === 0 && dpQ === 0 && guard2 < 10);
+                    if (dpD === 0 && dpQ === 0) dpD = 1;
+                    divisor = { intVal: f1, dp: dpD };
+                    quotient = { intVal: f2, dp: dpQ };
+                } else if (level <= 4) {
                     const divisorIsDecimal = Math.random() < 0.25;
                     if (divisorIsDecimal) {
                         // Делитель уже "чистая дробь" — держим частное ПРОСТЫМ (целым), чтобы
