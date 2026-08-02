@@ -1854,60 +1854,102 @@
         // Умножение и деление — числа строятся по принципу "цифра + сдвиг запятой": сама
         // арифметика (перемножаемые/делимые цифры) остаётся простой, а сложность растёт через
         // то, где именно стоит запятая (0.7 / 7 / 70) и насколько "неочевидна" эта позиция.
-        // "Красивые" двузначные числа для 5★ деления/умножения — легко запоминающиеся цифровые
-        // комбинации (связаны с простыми долями: четверть, пятая часть и т.д.), сложность там
-        // должна идти через СДВИГ ЗАПЯТОЙ (25 / 2.5 / 0.25 / 0.025), а не через случайные цифры.
-        const NICE_NUMBERS = [4, 5, 12, 15, 20, 25, 30, 35, 40, 45, 50];
+        // Редкость нуля как значения (не как "деление НА 0" — это осталось бы неопределённым
+        // и потребовало бы отдельного механизма "Нет решения"; здесь именно "0 как результат
+        // умножения на 0" / "0 как делимое") — единая для умножения и деления, ~0.5%.
+        const DEC_ZERO_VALUE_CHANCE = 0.005;
 
-        // Число с одной значащей цифрой (1-9), масштабированное на dp знаков после запятой —
-        // "чистая дробь" вроде 0.7 или 0.08. Сама арифметика (одна цифра) остаётся тривиальной,
-        // сложность — только в правильном определении места запятой.
-        function pureFractionDigit(dp) {
-            return { intVal: randInt(1, 9), dp };
+        // Максимальная цифра разряда, которая при умножении на m НЕ даёт переноса через десяток
+        function noCarryMaxDigit(m) { return Math.max(1, Math.floor(9 / m)); }
+
+        // Строит "многоразрядное" число (2-3 цифры) из цифр 0..maxDigit (первая цифра 1..maxDigit,
+        // чтобы не было ведущего нуля) — используется для конструкции "без переноса через разряд"
+        function buildNoCarryMultiDigit(maxDigit, numDigits) {
+            const digits = [randInt(1, maxDigit)];
+            for (let i = 1; i < numDigits; i++) digits.push(randInt(0, maxDigit));
+            return parseInt(digits.join(''), 10);
         }
-        function niceNumberScaled(dp) {
-            return { intVal: NICE_NUMBERS[randInt(0, NICE_NUMBERS.length - 1)], dp };
+
+        // ===== УМНОЖЕНИЕ: подбор величин по уровням (без учёта знака) =====
+        function pickDecMulMagnitudes(level) {
+            if (level === 1) {
+                // Строго таблица умножения (2-9), у каждого числа 0-1 знак после запятой,
+                // "оба 0 знаков" — редкость (<5%)
+                const a = randInt(2, 9), b = randInt(2, 9);
+                let dpA, dpB, guard = 0;
+                do { dpA = randInt(0, 1); dpB = randInt(0, 1); guard++; }
+                while (dpA === 0 && dpB === 0 && Math.random() < 0.95 && guard < 30);
+                return [{ intVal: a, dp: dpA }, { intVal: b, dp: dpB }];
+            }
+            if (level === 2) {
+                // Та же таблица, один 0-1 знак, другой 0-2 знака (роль случайна),
+                // "оба 0" — большая редкость (<2%)
+                const a = randInt(2, 9), b = randInt(2, 9);
+                let dpNarrow, dpWide, guard = 0;
+                do { dpNarrow = randInt(0, 1); dpWide = randInt(0, 2); guard++; }
+                while (dpNarrow === 0 && dpWide === 0 && Math.random() < 0.98 && guard < 30);
+                return Math.random() < 0.5
+                    ? [{ intVal: a, dp: dpNarrow }, { intVal: b, dp: dpWide }]
+                    : [{ intVal: a, dp: dpWide }, { intVal: b, dp: dpNarrow }];
+            }
+            if (level === 3) {
+                // Один 0-2 знака, другой 1-2 знака (никогда 0) — "оба 0" не встречается вообще
+                const a = randInt(2, 9), b = randInt(2, 9);
+                const dpWide = randInt(0, 2);
+                const dpNarrow = randInt(1, 2);
+                return Math.random() < 0.5
+                    ? [{ intVal: a, dp: dpWide }, { intVal: b, dp: dpNarrow }]
+                    : [{ intVal: a, dp: dpNarrow }, { intVal: b, dp: dpWide }];
+            }
+            if (level === 4) {
+                // "Без переноса через разряд": многоразрядное число (2-3 цифры), каждая цифра
+                // умножается на однозначный множитель без перехода через десяток
+                const multiplier = randInt(2, 9);
+                const maxDigit = noCarryMaxDigit(multiplier);
+                const bigNum = buildNoCarryMultiDigit(maxDigit, randInt(2, 3));
+                const dpBig = randInt(0, 3);
+                const dpMul = randInt(1, 2); // никогда 0
+                return Math.random() < 0.5
+                    ? [{ intVal: bigNum, dp: dpBig }, { intVal: multiplier, dp: dpMul }]
+                    : [{ intVal: multiplier, dp: dpMul }, { intVal: bigNum, dp: dpBig }];
+            }
+            // level 5: как на 4★ (без переноса) ЛИБО двузначное × однозначное С переходом через десяток
+            const dpWide = randInt(0, 3);
+            const dpNarrow = randInt(1, 3); // никогда 0
+            if (Math.random() < 0.5) {
+                const multiplier = randInt(2, 9);
+                const maxDigit = noCarryMaxDigit(multiplier);
+                const bigNum = buildNoCarryMultiDigit(maxDigit, randInt(2, 3));
+                return Math.random() < 0.5
+                    ? [{ intVal: bigNum, dp: dpWide }, { intVal: multiplier, dp: dpNarrow }]
+                    : [{ intVal: multiplier, dp: dpNarrow }, { intVal: bigNum, dp: dpWide }];
+            }
+            const twoDigit = randInt(10, 99);
+            const oneDigit = randInt(2, 9);
+            return Math.random() < 0.5
+                ? [{ intVal: twoDigit, dp: dpWide }, { intVal: oneDigit, dp: dpNarrow }]
+                : [{ intVal: oneDigit, dp: dpNarrow }, { intVal: twoDigit, dp: dpWide }];
         }
 
         function genDecMul(level, isNegative) {
-            let d1, d2;
-            if (level === 1) {
-                // Чистая таблица умножения (2-9), сдвигаем запятую РОВНО у одного числа (1-2 знака).
-                // Сам элемент умножения — обычный табличный факт, сложность только в месте запятой.
-                const a = randInt(2, 9);
-                const b = randInt(2, 9);
-                const dp = Math.random() < 0.5 ? 1 : 2;
-                if (Math.random() < 0.5) { d1 = { intVal: a, dp }; d2 = { intVal: b, dp: 0 }; }
-                else { d1 = { intVal: a, dp: 0 }; d2 = { intVal: b, dp }; }
-            } else if (level === 2) {
-                // Та же таблица умножения, но десятичными могут быть 1 ИЛИ 2 числа одновременно —
-                // dp для каждой стороны выбирается независимо (0, 1 или 2 знака)
-                const a = randInt(2, 9);
-                const b = randInt(2, 9);
-                let dpA, dpB, guard2 = 0;
-                do { dpA = randInt(0, 2); dpB = randInt(0, 2); guard2++; } while (dpA === 0 && dpB === 0 && guard2 < 10);
-                if (dpA === 0 && dpB === 0) dpA = 1;
-                d1 = { intVal: a, dp: dpA };
-                d2 = { intVal: b, dp: dpB };
-            } else if (level === 3) {
-                // Впервые появляется "чистая дробь" (0.7, 0.08) — если она уже "глубокая" (сотые),
-                // вторую сторону держим совсем простой, чтобы знаки не копились с обеих сторон сразу
-                d1 = pureFractionDigit(Math.random() < 0.5 ? 1 : 2);
-                d2 = d1.dp >= 2
-                    ? { intVal: randInt(1, 9), dp: 0 }
-                    : (Math.random() < 0.5
-                        ? { intVal: randInt(1, 9), dp: 0 }
-                        : randDecimalMagnitudeTrueDecimal(1, 4));
-            } else if (level === 4) {
-                // Обе стороны могут быть "чистой дробью" — однозначные цифры с обеих сторон
-                d1 = pureFractionDigit(Math.random() < 0.5 ? 1 : 2);
-                d2 = pureFractionDigit(Math.random() < 0.5 ? 1 : 2);
-            } else {
-                // 5★: одна сторона — "красивое" двузначное число, сдвинутое по запятой
-                d1 = niceNumberScaled(randInt(0, 2));
-                d2 = pureFractionDigit(Math.random() < 0.5 ? 1 : 2);
+            if (Math.random() < DEC_ZERO_VALUE_CHANCE) {
+                // Редкий (~0.5%) случай: один множитель — 0, ответ тоже 0.
+                // Вторая сторона ГАРАНТИРОВАННО десятичная (dp>=1), но не глубже, чем позволяет
+                // сам уровень — иначе на 1★ мог случайно проскочить пример с сотыми.
+                const otherMaxDp = level === 1 ? 1 : 2;
+                const other = { intVal: randInt(1, 9), dp: randInt(1, otherMaxDp) };
+                const zeroFirst = Math.random() < 0.5;
+                let d1 = zeroFirst ? { intVal: 0, dp: 0 } : other;
+                let d2 = zeroFirst ? other : { intVal: 0, dp: 0 };
+                if (isNegative) {
+                    const [s1, s2] = nextSignPair(signBagsDecimal.mul);
+                    d1 = { intVal: d1.intVal * s1, dp: d1.dp };
+                    d2 = { intVal: d2.intVal * s2, dp: d2.dp };
+                }
+                return { isDecimal: true, opKey: 'mul', level, d1, d2, answer: { intVal: 0, dp: 0 } };
             }
 
+            let [d1, d2] = pickDecMulMagnitudes(level);
             if (isNegative) {
                 const [s1, s2] = nextSignPair(signBagsDecimal.mul);
                 d1 = { intVal: d1.intVal * s1, dp: d1.dp };
@@ -1919,81 +1961,136 @@
             return { isDecimal: true, opKey: 'mul', level, d1, d2, answer };
         }
 
-        function genDecDiv(level, isNegative) {
-            let quotient, divisor, dividend, guard = 0;
+        // ===== ДЕЛЕНИЕ: подбор величин по уровням =====
+        // ВАЖНО: знаки после запятой задаются напрямую ДЕЛИМОМУ и ДЕЛИТЕЛЮ — то есть тем двум
+        // числам, которые реально видит ученик в условии (а не внутренней паре делитель/частное).
+        // Частное вычисляется из них так, чтобы деление оставалось точным. Математически: если
+        // делимое = (f1×f2) со сдвигом dpDividend, а делитель = f1 со сдвигом dpDivisor, то
+        // частное = f2 × 10^(dpDivisor − dpDividend) — всегда целочисленно по построению.
+        function buildDivisionPair(f1, f2, dpDividend, dpDivisor) {
+            const dpDiff = dpDivisor - dpDividend;
+            let qIntVal, qDp;
+            if (dpDiff >= 0) { qIntVal = f2 * Math.pow(10, dpDiff); qDp = 0; }
+            else { qIntVal = f2; qDp = -dpDiff; }
+            return {
+                dividend: { intVal: f1 * f2, dp: dpDividend },
+                divisor: { intVal: f1, dp: dpDivisor },
+                quotient: { intVal: qIntVal, dp: qDp }
+            };
+        }
+
+        function pickDecDivMagnitudes(level) {
+            if (level === 1) {
+                const f1 = randInt(2, 9), f2 = randInt(2, 9);
+                let dpDividend, dpDivisor, guard = 0;
+                do { dpDividend = randInt(0, 1); dpDivisor = randInt(0, 1); guard++; }
+                while (dpDividend === 0 && dpDivisor === 0 && Math.random() < 0.95 && guard < 30);
+                return buildDivisionPair(f1, f2, dpDividend, dpDivisor);
+            }
+            if (level === 2) {
+                const f1 = randInt(2, 9), f2 = randInt(2, 9);
+                let dpNarrow, dpWide, guard = 0;
+                do { dpNarrow = randInt(0, 1); dpWide = randInt(0, 2); guard++; }
+                while (dpNarrow === 0 && dpWide === 0 && Math.random() < 0.98 && guard < 30);
+                return Math.random() < 0.5
+                    ? buildDivisionPair(f1, f2, dpNarrow, dpWide)
+                    : buildDivisionPair(f1, f2, dpWide, dpNarrow);
+            }
+            if (level === 3) {
+                const f1 = randInt(2, 9), f2 = randInt(2, 9);
+                const dpWide = randInt(0, 2);
+                const dpNarrow = randInt(1, 2); // никогда 0
+                return Math.random() < 0.5
+                    ? buildDivisionPair(f1, f2, dpWide, dpNarrow)
+                    : buildDivisionPair(f1, f2, dpNarrow, dpWide);
+            }
+            if (level === 4) {
+                // "Без переноса через разряд" — многоразрядный фактор (2-3 цифры) + однозначный.
+                // divisorMag ВСЕГДА играет роль делителя, bigMag ВСЕГДА формирует делимое/частное —
+                // переставляем только то, какой из них получает какой dp (не сами значения),
+                // иначе гарантия "без переноса" перестаёт быть корректной.
+                const divisorMag = randInt(2, 9);
+                const maxDigit = noCarryMaxDigit(divisorMag);
+                const bigMag = buildNoCarryMultiDigit(maxDigit, randInt(2, 3));
+                const dpBig = randInt(0, 3);
+                const dpSmall = randInt(1, 2); // никогда 0
+                return Math.random() < 0.5
+                    ? buildDivisionPair(divisorMag, bigMag, dpBig, dpSmall)
+                    : buildDivisionPair(divisorMag, bigMag, dpSmall, dpBig);
+            }
+            // level 5: как на 4★ ЛИБО "любое двузначное делится на однозначное/двузначное без остатка"
+            const dpWide = randInt(0, 3);
+            const dpNarrow = randInt(1, 3); // никогда 0
+            if (Math.random() < 0.5) {
+                const divisorMag = randInt(2, 9);
+                const maxDigit = noCarryMaxDigit(divisorMag);
+                const bigMag = buildNoCarryMultiDigit(maxDigit, randInt(2, 3));
+                return Math.random() < 0.5
+                    ? buildDivisionPair(divisorMag, bigMag, dpWide, dpNarrow)
+                    : buildDivisionPair(divisorMag, bigMag, dpNarrow, dpWide);
+            }
+            // Подбираем пару так, чтобы их произведение было ровно двузначным (10-99) —
+            // "любое двузначное делится на однозначное или двузначное без остатка"
+            let a, b, product, guard = 0;
             do {
-                if (level === 1) {
-                    // Чистая таблица умножения "наоборот": делитель × частное = делимое.
-                    // Сдвигаем запятую РОВНО у одной стороны (делимое ИЛИ делитель) на 1-2 знака —
-                    // сам факт деления остаётся табличным, сложность только в месте запятой.
-                    const f1 = randInt(2, 9); // делитель-фактор
-                    const f2 = randInt(2, 9); // частное-фактор
-                    const dp = Math.random() < 0.5 ? 1 : 2;
-                    if (Math.random() < 0.5) {
-                        // Сдвигаем "делимое" — делитель целый, частное сдвигается вместе с ним
-                        divisor = { intVal: f1, dp: 0 };
-                        quotient = { intVal: f2, dp };
-                    } else {
-                        // Сдвигаем "делитель" — делимое остаётся целым произведением
-                        divisor = { intVal: f1, dp };
-                        quotient = { intVal: f2 * Math.pow(10, dp), dp: 0 };
-                    }
-                } else if (level === 2) {
-                    // Та же таблица умножения "наоборот", но десятичными могут быть делитель
-                    // И/ИЛИ частное независимо (0, 1 или 2 знака у каждого)
-                    const f1 = randInt(2, 9);
-                    const f2 = randInt(2, 9);
-                    let dpD, dpQ, guard2 = 0;
-                    do { dpD = randInt(0, 2); dpQ = randInt(0, 2); guard2++; } while (dpD === 0 && dpQ === 0 && guard2 < 10);
-                    if (dpD === 0 && dpQ === 0) dpD = 1;
-                    divisor = { intVal: f1, dp: dpD };
-                    quotient = { intVal: f2, dp: dpQ };
-                } else if (level <= 4) {
-                    const divisorIsDecimal = Math.random() < 0.25;
-                    if (divisorIsDecimal) {
-                        // Делитель уже "чистая дробь" — держим частное ПРОСТЫМ (целым), чтобы
-                        // десятичные знаки не копились с обеих сторон одновременно
-                        divisor = pureFractionDigit(level <= 2 ? 1 : (Math.random() < 0.5 ? 1 : 2));
-                        quotient = { intVal: randInt(1, level <= 2 ? 4 : 9), dp: 0 };
-                    } else {
-                        // Делитель целый — тогда десятичные знаки несёт частное (растёт по уровню)
-                        divisor = { intVal: randInt(2, 9), dp: 0 };
-                        const quotDp = level === 1 ? 1 : (level === 2 ? (Math.random() < 0.5 ? 1 : 2) : (level === 3 ? 1 : (Math.random() < 0.5 ? 1 : 2)));
-                        const quotMaxWhole = level <= 2 ? 4 : 9;
-                        quotient = randDecimalMagnitudeTrueDecimal(quotDp, quotMaxWhole);
-                    }
-                } else {
-                    // 5★: классика — делитель "красивое" двузначное число, сдвинутое по запятой,
-                    // ЛИБО простое однозначное десятичное (напр. 3.1) с чистым частным
-                    if (Math.random() < 0.6) {
-                        const divDp = randInt(0, 2); // не глубже сотых — иначе не решить в уме
-                        divisor = niceNumberScaled(divDp);
-                        // частное десятичное — только если делитель не слишком "глубокий"
-                        quotient = divDp >= 2
-                            ? { intVal: randInt(1, 9), dp: 0 }
-                            : (Math.random() < 0.5 ? { intVal: randInt(1, 9), dp: 0 } : pureFractionDigit(1));
-                    } else {
-                        divisor = randDecimalMagnitudeTrueDecimal(1, 4);
-                        quotient = { intVal: randInt(1, 9), dp: 0 };
-                    }
+                const aIsTwoDigit = Math.random() < 0.4;
+                a = aIsTwoDigit ? randInt(10, 20) : randInt(2, 9);
+                b = randInt(2, 9);
+                product = a * b;
+                guard++;
+            } while ((product < 10 || product > 99) && guard < 30);
+            return Math.random() < 0.5
+                ? buildDivisionPair(a, b, dpWide, dpNarrow)
+                : buildDivisionPair(b, a, dpNarrow, dpWide);
+        }
+
+        function genDecDiv(level, isNegative) {
+            if (Math.random() < DEC_ZERO_VALUE_CHANCE) {
+                // Редкий (~0.5%) случай: делимое = 0 (частное тоже 0), делитель — обычное число,
+                // ГАРАНТИРОВАННО десятичное (dp>=1), но не глубже, чем позволяет сам уровень.
+                // НЕ "деление НА 0" (это было бы неопределено) — а "0 разделить на число".
+                const otherMaxDp = level === 1 ? 1 : 2;
+                let divisor = { intVal: randInt(1, 9), dp: randInt(1, otherMaxDp) };
+                if (isNegative) {
+                    const [s1] = nextSignPair(signBagsDecimal.div);
+                    divisor = { intVal: divisor.intVal * s1, dp: divisor.dp };
                 }
+                divisor = stripTrailingZeros(divisor);
+                return { isDecimal: true, opKey: 'div', level, d1: { intVal: 0, dp: 0 }, d2: divisor, answer: { intVal: 0, dp: 0 } };
+            }
+
+            let dividend, divisor, quotient, guard = 0;
+            do {
+                const picked = pickDecDivMagnitudes(level);
+                dividend = picked.dividend;
+                divisor = picked.divisor;
+                quotient = picked.quotient;
 
                 if (divisor.intVal === 0) divisor = { intVal: 1, dp: divisor.dp };
 
                 if (isNegative) {
-                    const [s1, s2] = nextSignPair(signBagsDecimal.div); // s1 — знак делителя, s2 — знак частного
+                    const [s1, s2] = nextSignPair(signBagsDecimal.div); // s1 — знак делителя, s2 — знак делимого
                     divisor = { intVal: divisor.intVal * s1, dp: divisor.dp };
-                    quotient = { intVal: quotient.intVal * s2, dp: quotient.dp };
+                    dividend = { intVal: dividend.intVal * s2, dp: dividend.dp };
+                    quotient = { intVal: quotient.intVal * s1 * s2, dp: quotient.dp };
                 }
 
                 divisor = stripTrailingZeros(divisor);
+                dividend = stripTrailingZeros(dividend);
                 quotient = stripTrailingZeros(quotient);
-                dividend = stripTrailingZeros(decMulRaw(quotient, divisor));
                 guard++;
-                // Гарантия "хотя бы одна настоящая дробь" должна проверяться на том, что РЕАЛЬНО
-                // показывается (делимое и делитель) — делимое как произведение может случайно
-                // стать целым, даже если делитель/частное были выбраны десятичными (напр. 2.5×4=10.0).
-            } while (dividend.dp === 0 && divisor.dp === 0 && guard < 20);
+
+                // ВАЖНО: проверяем "оба 0" ПОСЛЕ сокращения — сокращение лишних нулей может
+                // незаметно обнулить задуманный dp (например, делимое 2×5=10 при dp=1 даёт "1.0",
+                // что сокращается до "1"), поэтому проверять нужно именно итоговый результат.
+                const bothZero = dividend.dp === 0 && divisor.dp === 0;
+                if (!bothZero) break;
+                const acceptRareBothZero = level === 1 ? Math.random() < 0.05
+                    : level === 2 ? Math.random() < 0.02
+                    : false; // 3-5★ — "оба 0" не должно происходить вообще
+                if (acceptRareBothZero) break;
+            } while (guard < 30);
+
             return { isDecimal: true, opKey: 'div', level, d1: dividend, d2: divisor, answer: quotient };
         }
 
