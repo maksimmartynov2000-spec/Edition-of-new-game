@@ -294,7 +294,6 @@
                             <button class="btn-op frac-only-op" data-op="toMixed">🔼 В смешанное число</button>
                             <button class="btn-op frac-only-op" data-op="toImproper">🔽 В неправильную дробь</button>
                             <button class="btn-op frac-only-op" data-op="fracOfNumber">🎯 Дробь от числа</button>
-                            <button class="btn-op frac-only-op" data-op="findWhole">🔎 Найти число</button>
                         </div>
                     </div>
                 </div>
@@ -355,10 +354,10 @@
         const OP_LABELS = {
             add: '➕ Сложение', sub: '➖ Вычитание', mul: '✖️ Умножение', div: '➗ Деление',
             simplify: '➗ Сокращение', toMixed: '🔼 В смешанное число', toImproper: '🔽 В неправильную дробь',
-            fracOfNumber: '🎯 Дробь от числа', findWhole: '🔎 Найти число'
+            fracOfNumber: '🎯 Дробь от числа'
         };
-        const OP_ORDER = ['add', 'sub', 'mul', 'div', 'simplify', 'toMixed', 'toImproper', 'fracOfNumber', 'findWhole'];
-        const FRAC_ONLY_OPS = ['simplify', 'toMixed', 'toImproper', 'fracOfNumber', 'findWhole'];
+        const OP_ORDER = ['add', 'sub', 'mul', 'div', 'simplify', 'toMixed', 'toImproper', 'fracOfNumber'];
+        const FRAC_ONLY_OPS = ['simplify', 'toMixed', 'toImproper', 'fracOfNumber'];
 
         let exampleConfig = {
             category: null,        // 'integer' | 'fraction'
@@ -410,7 +409,7 @@
             });
         });
 
-        // Особые режимы дробей (Сокращение / В смешанное / В неправильную / Дробь от числа / Найти число)
+        // Особые режимы дробей (Сокращение / В смешанное / В неправильную / Дробь от числа)
         // всегда работают только с положительными числами. Если выбраны "Отрицательные числа" —
         // эти кнопки гаснут (как неактивная кнопка "Продолжить") и автоматически снимаются с выбора.
         function updateFracOnlyOpAvailability() {
@@ -1617,36 +1616,6 @@
             return { isFraction: true, opKey: 'fracOfNumber', level, fracNum: num, fracDen: den, N, k, answer };
         }
 
-        // "Найти число" делит ту же пару пулов (denPool/kPool) с "Дробь от числа", но там ответ —
-        // den × k, а не num × k. Поскольку знаменатель правильной дроби всегда БОЛЬШЕ числителя,
-        // финальное умножение здесь систематически тяжелее (например, 36×13) — асимметрия,
-        // которую нужно отдельно ограничивать: не даём знаменателю и k одновременно быть
-        // двузначными, иначе итоговое умножение перестаёт решаться в уме.
-        function pickFindWholeCore(level) {
-            const denPool = FRAC_OF_NUM_DEN_POOL[level];
-            const kPool = FRAC_OF_NUM_K_POOL[level];
-            let den, num, k, guard = 0;
-            do {
-                den = denPool[randInt(0, denPool.length - 1)];
-                num = randFracProper(den);
-                k = kPool[randInt(0, kPool.length - 1)];
-                guard++;
-            } while (den >= 10 && k >= 10 && guard < 30);
-            if (den >= 10 && k >= 10) {
-                // гарантированный фолбэк — принудительно берём однозначное k из пула
-                const smallK = kPool.filter(x => x < 10);
-                k = smallK.length ? smallK[randInt(0, smallK.length - 1)] : 9;
-            }
-            return { num, den, k };
-        }
-
-        function generateFindWholeProblem(level) {
-            const { num, den, k } = pickFindWholeCore(level);
-            const knownValue = num * k;
-            const answer = den * k; // искомое целое число X
-            return { isFraction: true, opKey: 'findWhole', level, fracNum: num, fracDen: den, knownValue, k, answer };
-        }
-
         // Общий помощник сборки числовых (не дробных) дистракторов — с приоритетными
         // "содержательными" кандидатами и случайным фолбэком без выхода за положительные значения
         function buildWholeNumberDistractors(priorityCandidates, answer, count) {
@@ -1687,18 +1656,6 @@
                 N - answer,                      // нашли "остаток" вместо самой доли
                 answer + k,                      // ошиблись на одну "долю" в бОльшую сторону
                 answer - k                       // ошиблись на одну "долю" в меньшую сторону
-            ];
-            return buildWholeNumberDistractors(candidates, answer, count);
-        }
-
-        function buildFindWholeDistractors(problem, count) {
-            const { fracNum, fracDen, knownValue, k, answer } = problem;
-            const candidates = [
-                knownValue,                                     // повторили данное число, забыли что-либо делать
-                k,                                               // взяли "единицу" за весь ответ
-                Math.round(knownValue * fracNum / fracDen),      // перепутали направление (умножили вместо деления)
-                answer + k,
-                answer - k
             ];
             return buildWholeNumberDistractors(candidates, answer, count);
         }
@@ -2382,28 +2339,6 @@
                     questionEl.innerHTML = `<span class="compound-question"><span class="task-label">Найди дробь от числа:</span><span class="frac-row">${fracHtml}<span class="frac-op-symbol">от ${problem.N}</span></span></span>`;
 
                     const fakeNums = buildFracOfNumberDistractors(problem, 3);
-                    const options = shuffleArray([correctAnswer, ...fakeNums]);
-                    options.forEach(opt => {
-                        const btn = document.createElement('button');
-                        btn.className = 'btn-answer';
-                        btn.innerText = opt;
-                        btn.onclick = (e) => checkAnswer(opt, e);
-                        grid.appendChild(btn);
-                    });
-                    return;
-                }
-
-                // --- Режим "Найти число": по известной доле восстановить целое число ---
-                if (opKey === 'findWhole') {
-                    const problem = generateUniqueProblem(
-                        () => generateFindWholeProblem(level),
-                        (p) => `frac|findWhole|${p.fracNum}_${p.fracDen}_${p.knownValue}`
-                    );
-                    correctAnswer = problem.answer;
-                    const fracHtml = renderFracValue({ num: problem.fracNum, den: problem.fracDen }, false);
-                    questionEl.innerHTML = `<span class="compound-question"><span class="task-label">Найди число, если известно:</span><span class="frac-row">${fracHtml}<span class="frac-op-symbol">от него = ${problem.knownValue}</span></span></span>`;
-
-                    const fakeNums = buildFindWholeDistractors(problem, 3);
                     const options = shuffleArray([correctAnswer, ...fakeNums]);
                     options.forEach(opt => {
                         const btn = document.createElement('button');
