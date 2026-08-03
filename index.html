@@ -1939,52 +1939,58 @@
         function pickDecDivMagnitudes(level) {
             if (level === 1) {
                 const f1 = randInt(2, 9), f2 = randInt(2, 9);
-                let dpDividend, dpDivisor, guard = 0;
-                do { dpDividend = randInt(0, 1); dpDivisor = randInt(0, 1); guard++; }
-                while (dpDividend === 0 && dpDivisor === 0 && Math.random() < 0.95 && guard < 30);
-                return buildDivisionPair(f1, f2, dpDividend, dpDivisor);
+                let dpA, dpB, guard = 0;
+                do { dpA = randInt(0, 1); dpB = randInt(0, 1); guard++; }
+                while (dpA === 0 && dpB === 0 && Math.random() < 0.95 && guard < 30);
+                // Частное >= 1 ВСЕГДА: делителю достаётся dp не меньше, чем делимому
+                // (математически это единственное условие, гарантирующее делимое >= делителя)
+                return buildDivisionPair(f1, f2, Math.min(dpA, dpB), Math.max(dpA, dpB));
             }
             if (level === 2) {
                 const f1 = randInt(2, 9), f2 = randInt(2, 9);
                 let dpNarrow, dpWide, guard = 0;
                 do { dpNarrow = randInt(0, 1); dpWide = randInt(0, 2); guard++; }
                 while (dpNarrow === 0 && dpWide === 0 && Math.random() < 0.98 && guard < 30);
-                return Math.random() < 0.5
-                    ? buildDivisionPair(f1, f2, dpNarrow, dpWide)
-                    : buildDivisionPair(f1, f2, dpWide, dpNarrow);
+                return buildDivisionPair(f1, f2, Math.min(dpNarrow, dpWide), Math.max(dpNarrow, dpWide));
             }
             if (level === 3) {
                 const f1 = randInt(2, 9), f2 = randInt(2, 9);
                 const dpWide = randInt(0, 2);
                 const dpNarrow = randInt(1, 2); // никогда 0
-                return Math.random() < 0.5
-                    ? buildDivisionPair(f1, f2, dpWide, dpNarrow)
-                    : buildDivisionPair(f1, f2, dpNarrow, dpWide);
+                return buildDivisionPair(f1, f2, Math.min(dpWide, dpNarrow), Math.max(dpWide, dpNarrow));
             }
             if (level === 4) {
                 // "Без переноса через разряд" — многоразрядный фактор (2-3 цифры) + однозначный.
                 // divisorMag ВСЕГДА играет роль делителя, bigMag ВСЕГДА формирует делимое/частное —
                 // переставляем только то, какой из них получает какой dp (не сами значения),
-                // иначе гарантия "без переноса" перестаёт быть корректной.
+                // иначе гарантия "без переноса" перестаёт быть корректной. Дополнительно делителю
+                // всегда достаётся dp не меньше, чем делимому — гарантия частное >= 1.
                 const divisorMag = randInt(2, 9);
                 const maxDigit = noCarryMaxDigit(divisorMag);
                 const bigMag = buildNoCarryMultiDigit(maxDigit, randInt(2, 3));
                 const dpBig = randInt(0, 3);
                 const dpSmall = randInt(1, 2); // никогда 0
-                return Math.random() < 0.5
-                    ? buildDivisionPair(divisorMag, bigMag, dpBig, dpSmall)
-                    : buildDivisionPair(divisorMag, bigMag, dpSmall, dpBig);
+                return buildDivisionPair(divisorMag, bigMag, Math.min(dpBig, dpSmall), Math.max(dpBig, dpSmall));
             }
-            // level 5: как на 4★ ЛИБО "любое двузначное делится на однозначное/двузначное без остатка"
+            // level 5: как на 4★ ЛИБО "любое двузначное делится на однозначное/двузначное без остатка".
+            // ДОПОЛНИТЕЛЬНО: на 5★ (и только здесь) иногда (~35%) допускаем частное < 1 — как
+            // отдельный, осознанно более сложный элемент (на 1-4★ частное всегда >= 1).
             const dpWide = randInt(0, 3);
             const dpNarrow = randInt(1, 3); // никогда 0
+            let dpDividend, dpDivisor;
+            if (Math.random() < 0.35) {
+                // не сортируем — допускаем делимое < делителя (частное < 1)
+                if (Math.random() < 0.5) { dpDividend = dpWide; dpDivisor = dpNarrow; }
+                else { dpDividend = dpNarrow; dpDivisor = dpWide; }
+            } else {
+                dpDividend = Math.min(dpWide, dpNarrow);
+                dpDivisor = Math.max(dpWide, dpNarrow);
+            }
             if (Math.random() < 0.5) {
                 const divisorMag = randInt(2, 9);
                 const maxDigit = noCarryMaxDigit(divisorMag);
                 const bigMag = buildNoCarryMultiDigit(maxDigit, randInt(2, 3));
-                return Math.random() < 0.5
-                    ? buildDivisionPair(divisorMag, bigMag, dpWide, dpNarrow)
-                    : buildDivisionPair(divisorMag, bigMag, dpNarrow, dpWide);
+                return buildDivisionPair(divisorMag, bigMag, dpDividend, dpDivisor);
             }
             // Подбираем пару так, чтобы их произведение было ровно двузначным (10-99) —
             // "любое двузначное делится на однозначное или двузначное без остатка"
@@ -1997,8 +2003,8 @@
                 guard++;
             } while ((product < 10 || product > 99) && guard < 30);
             return Math.random() < 0.5
-                ? buildDivisionPair(a, b, dpWide, dpNarrow)
-                : buildDivisionPair(b, a, dpNarrow, dpWide);
+                ? buildDivisionPair(a, b, dpDividend, dpDivisor)
+                : buildDivisionPair(b, a, dpDividend, dpDivisor);
         }
 
         function genDecDiv(level, isNegative) {
