@@ -2057,22 +2057,54 @@
             return { isDecimal: true, opKey: 'div', level, d1: dividend, d2: divisor, answer: quotient };
         }
 
-        function genDecAddSub(opKey, level, isNegative) {
-            const pool = ADD_SUB_DECIMAL_POOLS[level];
-            const [dp1, dp2] = pool.dpOptions[randInt(0, pool.dpOptions.length - 1)];
-            let d1 = randDecimalMagnitude(dp1, pool.maxWhole);
-            let d2 = randDecimalMagnitude(dp2, pool.maxWhole);
+        // 3★ сложения/вычитания: конструкция "без переноса/заёма через разряд" — каждый разряд
+        // (целые/десятые/сотые) обрабатывается независимо, без влияния на соседние. Для сложения —
+        // сумма цифр в каждом разряде <= 9; для вычитания — цифра вычитаемого <= цифры уменьшаемого
+        // в каждом разряде. Строится по МОДУЛЮ — знак применяется отдельно, как и на других уровнях.
+        function genDecAddSub3NoCarryBorrow(opKey) {
+            const maxWhole = 1;
+            const wholeA = randInt(0, maxWhole);
+            const tenthsA = randInt(1, 9); // всегда ненулевые десятые — гарантия "настоящей" дроби
+            const hundredthsA = randInt(0, 9);
 
-            // Гарантируем настоящую дробную часть ДО знака/перестановки (иначе можно нарушить
-            // уже принятые решения о знаке/порядке операндов)
-            [d1, d2] = ensureAtLeastOneDecimalMagnitude(d1, d2, dp1, dp2, pool.maxWhole, pool.maxWhole);
+            let wholeB, tenthsB, hundredthsB;
+            if (opKey === 'sub') {
+                wholeB = randInt(0, wholeA);
+                tenthsB = randInt(0, tenthsA);
+                hundredthsB = randInt(0, hundredthsA);
+            } else {
+                wholeB = randInt(0, Math.min(maxWhole, 9 - wholeA));
+                tenthsB = randInt(0, 9 - tenthsA);
+                hundredthsB = randInt(0, 9 - hundredthsA);
+            }
+
+            const intValA = wholeA * 100 + tenthsA * 10 + hundredthsA;
+            const intValB = wholeB * 100 + tenthsB * 10 + hundredthsB;
+            return [{ intVal: intValA, dp: 2 }, { intVal: intValB, dp: 2 }];
+        }
+
+        function genDecAddSub(opKey, level, isNegative) {
+            let d1, d2;
+            if (level === 3) {
+                [d1, d2] = genDecAddSub3NoCarryBorrow(opKey);
+            } else {
+                const pool = ADD_SUB_DECIMAL_POOLS[level];
+                const [dp1, dp2] = pool.dpOptions[randInt(0, pool.dpOptions.length - 1)];
+                d1 = randDecimalMagnitude(dp1, pool.maxWhole);
+                d2 = randDecimalMagnitude(dp2, pool.maxWhole);
+
+                // Гарантируем настоящую дробную часть ДО знака/перестановки (иначе можно нарушить
+                // уже принятые решения о знаке/порядке операндов)
+                [d1, d2] = ensureAtLeastOneDecimalMagnitude(d1, d2, dp1, dp2, pool.maxWhole, pool.maxWhole);
+            }
 
             if (isNegative) {
                 const [s1, s2] = nextSignPair(signBagsDecimal[opKey]);
                 d1 = { intVal: d1.intVal * s1, dp: d1.dp };
                 d2 = { intVal: d2.intVal * s2, dp: d2.dp };
-            } else if (opKey === 'sub') {
-                // гарантируем неотрицательный результат — сравниваем через общий масштаб
+            } else if (opKey === 'sub' && level !== 3) {
+                // На 3★ уже гарантировано d1>=d2 по построению (без заёма) — перестановка не нужна.
+                // На остальных уровнях сравниваем через общий масштаб для неотрицательного результата.
                 const commonDp = Math.max(d1.dp, d2.dp);
                 const v1 = d1.intVal * Math.pow(10, commonDp - d1.dp);
                 const v2 = d2.intVal * Math.pow(10, commonDp - d2.dp);
