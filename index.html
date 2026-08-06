@@ -1801,11 +1801,11 @@
         // Сложение/вычитание — сложность растёт плавно: сначала величина целой части,
         // потом количество знаков после запятой, и только на старших уровнях — их сочетание.
         const ADD_SUB_DECIMAL_POOLS = {
-            1: { dpOptions: [[1, 1]], maxWhole: 9 },
-            2: { dpOptions: [[1, 1]], maxWhole: 20 },
+            1: { dpOptions: [[1, 1]], maxWhole: 4 },
+            2: { dpOptions: [[1, 1]], maxWhole: 9 },
             3: { dpOptions: [[2, 2]], maxWhole: 1 },
             4: { dpOptions: [[1, 2], [2, 1]], maxWhole: 30 },
-            5: { dpOptions: [[1, 2], [2, 1]], maxWhole: 50 }
+            5: { dpOptions: [[1, 2], [2, 1]], maxWhole: 18 }
         };
 
         // Умножение и деление — числа строятся по принципу "цифра + сдвиг запятой": сама
@@ -2057,59 +2057,140 @@
             return { isDecimal: true, opKey: 'div', level, d1: dividend, d2: divisor, answer: quotient };
         }
 
-        // 3★ сложения/вычитания: конструкция "без переноса/заёма через разряд" — каждый разряд
-        // (целые/десятые/сотые) обрабатывается независимо, без влияния на соседние. Для сложения —
-        // сумма цифр в каждом разряде <= 9; для вычитания — цифра вычитаемого <= цифры уменьшаемого
-        // в каждом разряде. Строится по МОДУЛЮ — знак применяется отдельно, как и на других уровнях.
-        function genDecAddSub3NoCarryBorrow(opKey) {
-            const maxWhole = 1;
+        // 1★/2★/3★ сложения/вычитания: конструкция "без переноса/заёма через разряд" — каждый
+        // разряд (целые/десятые/сотые) обрабатывается независимо, без влияния на соседние.
+        // Для сложения — сумма цифр в каждом разряде <= 9; для вычитания — цифра вычитаемого <=
+        // цифры уменьшаемого в каждом разряде. Строится по МОДУЛЮ — знак применяется отдельно.
+        // dp=1 (только десятые) для 1★/2★, dp=2 (сотые) для 3★ — величина целой части задаётся maxWhole.
+        function genDecAddSubNoCarryBorrow(opKey, dp, maxWhole) {
             const wholeA = randInt(0, maxWhole);
-            const tenthsA = randInt(1, 9); // всегда ненулевые десятые — гарантия "настоящей" дроби
-            const hundredthsA = randInt(0, 9);
+            const digitsA = [randInt(1, 9)]; // десятые всегда ненулевые — гарантия "настоящей" дроби
+            for (let i = 1; i < dp; i++) digitsA.push(randInt(0, 9));
 
-            let wholeB, tenthsB, hundredthsB;
+            let wholeB;
+            const digitsB = [];
             if (opKey === 'sub') {
                 wholeB = randInt(0, wholeA);
-                tenthsB = randInt(0, tenthsA);
-                hundredthsB = randInt(0, hundredthsA);
+                for (const d of digitsA) digitsB.push(randInt(0, d));
             } else {
                 wholeB = randInt(0, Math.min(maxWhole, 9 - wholeA));
-                tenthsB = randInt(0, 9 - tenthsA);
-                hundredthsB = randInt(0, 9 - hundredthsA);
+                for (const d of digitsA) digitsB.push(randInt(0, 9 - d));
             }
 
-            const intValA = wholeA * 100 + tenthsA * 10 + hundredthsA;
-            const intValB = wholeB * 100 + tenthsB * 10 + hundredthsB;
-            return [{ intVal: intValA, dp: 2 }, { intVal: intValB, dp: 2 }];
+            const scale = Math.pow(10, dp);
+            const fracA = parseInt(digitsA.join(''), 10);
+            const fracB = parseInt(digitsB.join(''), 10);
+            return [
+                { intVal: wholeA * scale + fracA, dp },
+                { intVal: wholeB * scale + fracB, dp }
+            ];
+        }
+
+        // 4★/5★ сложения/вычитания: разное число знаков после запятой (выравнивание) — главная
+        // тема уровня. Перенос/заём — управляемая вероятность (pNoCarryBorrow — доля "без"),
+        // и эта гарантия теперь распространяется НА ВСЕ разряды целиком (десятки/единицы тоже,
+        // не только дробную часть) — иначе "безопасный" по дроби пример мог споткнуться на
+        // переносе внутри целой части (напр. 23-8, где 3<8 в разряде единиц).
+        // Для ВЫЧИТАНИЯ, если заём есть, он возникает ИМЕННО из-за того, что у вычитаемого знаков
+        // после запятой больше, чем у уменьшаемого (а не из случайных цифр в совпадающих разрядах) —
+        // единственная и понятная причина, а не мешанина из нескольких заёмов подряд.
+        function genDecAddSub45(opKey, maxWhole, pNoCarryBorrow) {
+            const noCarryBorrow = Math.random() < pNoCarryBorrow;
+            const tensMax = Math.floor(maxWhole / 10);
+
+            if (opKey === 'sub') {
+                const dpMinuend = noCarryBorrow ? 2 : 1;
+                const dpSubtrahend = noCarryBorrow ? 1 : 2;
+
+                let wholeMinuend, wholeSubtrahend;
+                if (noCarryBorrow) {
+                    // Целая часть тоже безопасна по разрядам (десятки/единицы) — как и дробная
+                    const tensM = randInt(0, tensMax);
+                    const maxOnesM = (tensM === tensMax) ? Math.max(0, maxWhole - tensM * 10) : 9;
+                    const onesM = randInt(0, maxOnesM);
+                    const tensS = randInt(0, tensM);
+                    const onesS = randInt(0, onesM);
+                    wholeMinuend = tensM * 10 + onesM;
+                    wholeSubtrahend = tensS * 10 + onesS;
+                } else {
+                    wholeMinuend = randInt(0, maxWhole);
+                    wholeSubtrahend = randInt(0, wholeMinuend);
+                }
+                const tenthsMinuend = randInt(1, 9);
+
+                let intValMinuend, intValSubtrahend;
+                if (dpMinuend === 2) {
+                    // Уменьшаемому достаётся "лишняя" сотая — общий (десятые) разряд безопасен
+                    const tenthsSubtrahend = randInt(0, tenthsMinuend);
+                    const hundredthsMinuend = randInt(0, 9);
+                    intValMinuend = wholeMinuend * 100 + tenthsMinuend * 10 + hundredthsMinuend;
+                    intValSubtrahend = wholeSubtrahend * 10 + tenthsSubtrahend;
+                } else {
+                    // Вычитаемому достаётся "лишняя" сотая — это и есть причина заёма. Важно:
+                    // десятые вычитаемого берём СТРОГО МЕНЬШЕ (не <=), иначе на границе, когда
+                    // целая часть и десятые совпадают, "лишняя" сотая вычитаемого могла бы сделать
+                    // его больше уменьшаемого — некорректный отрицательный результат в позитивном режиме.
+                    const tenthsSubtrahend = randInt(0, tenthsMinuend - 1);
+                    const hundredthsSubtrahend = randInt(1, 9); // ненулевая — гарантирует сам заём
+                    intValMinuend = wholeMinuend * 10 + tenthsMinuend;
+                    intValSubtrahend = wholeSubtrahend * 100 + tenthsSubtrahend * 10 + hundredthsSubtrahend;
+                }
+                return [{ intVal: intValMinuend, dp: dpMinuend }, { intVal: intValSubtrahend, dp: dpSubtrahend }];
+            }
+
+            // Сложение: перенос не привязан к тому, у кого больше знаков — просто управляемая вероятность
+            const dp1 = Math.random() < 0.5 ? 1 : 2;
+            const dp2 = dp1 === 1 ? 2 : 1;
+
+            let whole1, whole2;
+            if (noCarryBorrow) {
+                const tens1 = randInt(0, tensMax);
+                const maxOnes1 = (tens1 === tensMax) ? Math.max(0, maxWhole - tens1 * 10) : 9;
+                const ones1 = randInt(0, maxOnes1);
+                whole1 = tens1 * 10 + ones1;
+                // Второе слагаемое: цифры одновременно НЕ дают переноса с первым И НЕ выходят
+                // за maxWhole само по себе (иначе оно могло стать куда крупнее заявленного уровня)
+                const tens2Max = Math.min(9 - tens1, tensMax);
+                const tens2 = randInt(0, tens2Max);
+                const maxOnes2 = Math.min(9 - ones1, (tens2 === tensMax) ? Math.max(0, maxWhole - tens2 * 10) : 9);
+                const ones2 = randInt(0, maxOnes2);
+                whole2 = tens2 * 10 + ones2;
+            } else {
+                whole1 = randInt(0, maxWhole);
+                whole2 = randInt(0, maxWhole);
+            }
+            const tenths1 = randInt(1, 9);
+            const tenths2 = noCarryBorrow ? randInt(0, 9 - tenths1) : randInt(0, 9);
+
+            let intVal1, intVal2;
+            if (dp1 === 2) {
+                const hundredths1 = randInt(0, 9);
+                intVal1 = whole1 * 100 + tenths1 * 10 + hundredths1;
+                intVal2 = whole2 * 10 + tenths2;
+            } else {
+                const hundredths2 = randInt(1, 9); // ненулевая — гарантия "настоящей" дроби у 2dp-стороны
+                intVal1 = whole1 * 10 + tenths1;
+                intVal2 = whole2 * 100 + tenths2 * 10 + hundredths2;
+            }
+            return [{ intVal: intVal1, dp: dp1 }, { intVal: intVal2, dp: dp2 }];
         }
 
         function genDecAddSub(opKey, level, isNegative) {
             let d1, d2;
-            if (level === 3) {
-                [d1, d2] = genDecAddSub3NoCarryBorrow(opKey);
-            } else {
-                const pool = ADD_SUB_DECIMAL_POOLS[level];
-                const [dp1, dp2] = pool.dpOptions[randInt(0, pool.dpOptions.length - 1)];
-                d1 = randDecimalMagnitude(dp1, pool.maxWhole);
-                d2 = randDecimalMagnitude(dp2, pool.maxWhole);
-
-                // Гарантируем настоящую дробную часть ДО знака/перестановки (иначе можно нарушить
-                // уже принятые решения о знаке/порядке операндов)
-                [d1, d2] = ensureAtLeastOneDecimalMagnitude(d1, d2, dp1, dp2, pool.maxWhole, pool.maxWhole);
-            }
+            if (level === 1) [d1, d2] = genDecAddSubNoCarryBorrow(opKey, 1, ADD_SUB_DECIMAL_POOLS[1].maxWhole);
+            else if (level === 2) [d1, d2] = genDecAddSubNoCarryBorrow(opKey, 1, ADD_SUB_DECIMAL_POOLS[2].maxWhole);
+            else if (level === 3) [d1, d2] = genDecAddSubNoCarryBorrow(opKey, 2, ADD_SUB_DECIMAL_POOLS[3].maxWhole);
+            else if (level === 4) [d1, d2] = genDecAddSub45(opKey, ADD_SUB_DECIMAL_POOLS[4].maxWhole, 0.62);
+            else [d1, d2] = genDecAddSub45(opKey, ADD_SUB_DECIMAL_POOLS[5].maxWhole, 0.32);
 
             if (isNegative) {
                 const [s1, s2] = nextSignPair(signBagsDecimal[opKey]);
                 d1 = { intVal: d1.intVal * s1, dp: d1.dp };
                 d2 = { intVal: d2.intVal * s2, dp: d2.dp };
-            } else if (opKey === 'sub' && level !== 3) {
-                // На 3★ уже гарантировано d1>=d2 по построению (без заёма) — перестановка не нужна.
-                // На остальных уровнях сравниваем через общий масштаб для неотрицательного результата.
-                const commonDp = Math.max(d1.dp, d2.dp);
-                const v1 = d1.intVal * Math.pow(10, commonDp - d1.dp);
-                const v2 = d2.intVal * Math.pow(10, commonDp - d2.dp);
-                if (v1 < v2) { const t = d1; d1 = d2; d2 = t; }
             }
+            // Во всех ветках выше (1-5★) неотрицательный результат для позитивного режима уже
+            // гарантирован самой конструкцией (уменьшаемое >= вычитаемого по построению) —
+            // отдельная перестановка операндов больше не требуется ни на одном уровне.
 
             d1 = stripTrailingZeros(d1);
             d2 = stripTrailingZeros(d2);
