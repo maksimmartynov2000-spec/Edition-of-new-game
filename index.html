@@ -1,563 +1,958 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Обществознание 10 — тренажёр</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Общество">
+<meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAALM0lEQVR42u2da6wdVRXH19p75sycc+77IX1AX0pFsKUWEBpooDw0ITwVPiABFCEmfvBBiCAxEg2ExBeIH4yaQEya+CA0SOojBpNGsLXYFNqKpb3UtpeWtpbbe3rPa+bM7L38cFro7b00bTRn5s78f7mf+qW9u/9Z+7/WXmtvvvvO/QTAdCgsAYA4AMQB/n84jDUAiBzgjCMHiWAVACIHgOcAiBwA4gBJGlIsAvhAzwF1AGwrAOIAEAdAnQMgWwGpFAfUAeA5ADwHQOQAEAdAtgJwtgKwrQCIA0AcIL+eA5YDIHIAnK0AlM8BthUAcQCUzwE8B0C2AuA5AMQBADwHQLYCsK0AZCsAngOkLHIkAyvLjKsMjyMswjCkxMqKVa16SYwmFiIEL3G8ULuRiErVJt/pyMFsW42S6wfnfOK1Ym/FGodz3ovGYo0+tP1j1cPDhWKT2Kbna+mo52AlUeCfvXTrinufGVy4W+tYiPPtiJlISFSj0vf685994w/XM3MesxVW0qqX5l645cbHvyVGR81iS5jRwkpERK4fXHnfT0r94+t/cZ/XMyFW5WlbYbFGucXminufbSuDtZn6jVib/TjCiqZGB2tVrTa85KYX92y85OC/LnBLjTTow+lU9JQo8M9Zvnlwwe4o9FmbqbJQmkpdorMrj/YOGrY4Cknpk6yYiFWOGy66fP07Wy/M12gCM1Gsir0V5UQUFGny32oNlbolqPPrfy1UxpTOaGVOhLQj5y2PhmfbRoNFJocQFiEuD4wzCUsqVsDp5IcjsTPViltDPd2y7kX/V0+WDo46rYA4o7mtCClNfcP2yluCex6uG0PGnPzL2tihnKayU8KUtVQqy0tr/Ke+3qMU+SXxixl3Hc0a//bpcrWivvx4lU9jifKQrbwXKN9fELHkebR/t/7pI90FX1yXjMl+YqI1Dc2xf/xl8SNLo5vuaVarfIL/4OMLlYp9RTFRp35Org+LUMGVjX/2GlV2C7lQRvu3tjGVumX9770gYKWm2X47+J9yqh+n04Fjyh+PbHGUytchiwg5Bdm/yzk6zr0DEscnOI8UBY4U9HP4pTxWvUTI9Ug7hGafU7FsZcsY4jx1HSlNYYPPXdYaGLJRK73ZWYfOVni60yRWFDT5oqtaiz4e733T6emXOMqFMuKYlKZP3RHIlDNp/oC1ykO2IidVxoyhYpf95s+OfvfzfXu2O+UeUUok08f4wQRrTV97cmL5ylatNo0hTY/pcDrc0jI1eIQhz5pvvrO6svaZ4uuvFCaOKJXpCuknr42vu6P5gcoQzl+zjxAJKR1PE2YVNRvcf5b90qPVyoQKGswqs+crrGhw2FqiaZUhwuzE6clWOtXPIey4cWXvvCjwSVkSPrEUqBTFEVVC5bjUMyAZLpEKUa3KxDStMjTHY7sWsTDnq3wu7Hjh2K6FezdctnjVS42jA+xMOrJnIq3IWrJZL4Udk4WcdMCk3VJj4vCsf69b6fhhSvpJnU5+NKzNP565q3/+3qFFb8WRb41mnlT9ymU3KTNJoVyPAv/vP7934sBsr7uakmYf/sotOzu3CsqalusUWktvXzN/xated80alfP+YiaxRh/esXjLb24b27XQLdfFpqWnhb/aOXEQCbESa1VUL/m9E44fiDB6z0W4MTaonMjxw5TEjGRGE8Qyk3g9EyZy4rAHymivSqFcI2ExCkNNJEYzCzsxdHH8m1GYeEtvwQdgVhZgyh7g8hZAuLwFwHMARA4AcQC8DgmQrQBsKwBAHACpLEDkADhbAchWADwHTXOTGiwQndABJMlePuCkpP+aiIK6tQZx7H3cgir4ylrJrziYyVqKI1m8rLz0iu7eIYck1yGkHS5Gdwbb1lcP7g2LZZ2UPvjBG7YnPLMhFIX2zm/MveTaXkSLE4la8tzTB/62dryrz0kkpjqc4LbGxMRRaO96eO5FV/diT5k0zSLkFvhzD84xkWx6qVLs0p1fHyfR+8i4WY8/urz7oqt7TSxaMx5QoEkzkqI033j/h7a9MmGNdP6WeJXs92ENLV3Zfey6Vijj5Gte2FrpGXAWLS2HTcuKc1chHZzlIoE9xYygUtw37Jj2AxP5qXO0g8WRgxHeazpVcLVy9HDsOMwdl4dK/LPY8nL12HtekMhUz6G4eiTetbXu+Ups5w1pcp+tNeKX1Fuv1Tb/pbL8mj5kKyfdWKE1E9GLPz/UappEqh2JF8HELfDqJ/ZZSxdf1wdNTK5z2Od/fODVPyVW5+CHrn8jJRXSDy8tLbmip3fIfa+gntcKKRHR6JvNN9ZPJFshddKwFqyo4PHIa/Udm2oIGHTC2UqCykjLwRsJCVGxrAhJ7eRT2QSVka5+DmsIGQthbgUQekgBxAEgDoAeUgDQfQ4wtwLgOQA8B0DkABAHQLZCp3NwrxTHsYjNjkHWDrNiMTO1DTIVZytKcdSyjYbtHnBcT2dGHPWjcatpiz1aEcsMVIiThgb8oG4GZhcu/8zQeZf1dPU7GWj2abfEHtoTbF1X2fC7MaVEaZ5x8nCSnqznVtMOne3d/4NF/bMKGduzFywpL1hSnnd++dePj7Ii4hlWVHISbhA04pXUF7+3sH9WwUSispVZi5A1suyavkY1XvPDfaUeZ2Y1UTssSVqNZi1edsPg4BzPxKJdzt7Tfswsli7+9MC61f+pV2LtzKTNJflUdvGlx8chKaNPP4q4vlq4pBwGCYw0zuizFSn4irPejsZMrs9iU/PW9OlOuh8fS0zmR+jt7XXKbvOoEDGTieXASLPgMYkkvOBn8pPkttKOt9vWVawR1mxtBsVhI2HF+95s7N/ZLPhaLLKV0229p4KnDu8J13z/7dsenteemM1ShVRp1i6PH2w998SodnjGhceEy+fWiN+lN74wZmK5+u5Zw/M81tmxpiaSPdtqL/xo37ujoZ/E1Tz/q1X69nVbkv9HaA5qxiuq+UvKXf1OBpKX9q9waHfwzkhTaXY9Ze3Meyg1FZ1gYqRYVtbIyKsTWZq1dwrKKyoiEmt5ZrYJpsO4WSEmr6yydMmkWJGZfDGNk7LVbI/NArQJAmQrAG2CAHMrAJ4DAGwrAIYUIHIAeA6AbAWgfE75fgNQRNLZBJSWe0iVZmskrOXxDUCluVBU7RVI1aMzSY4mTBp6q5pCSZ17aU+5z8nP9dbtI9t6JR7dWgurxu9OV0NQKsYh6+Px8hsGr/rC7KF5fj5393dHg3XPHti8dqzcn6LBJyfxEeqgZi65dejWRxa0v6Qs9ZCe/kzo0Dz/tkcXapc3rx3zE73vPC3ZCituhWZ4gXfzQ/NFSESU4iz1kNKZ9Dox880PzX/7n7WxfaHrqTR8JEnOrSimOLAXrOpXmsWIUvmtuSjFYkRpvmBVfxxYxamYW0m0fC7ETOecXz724Bvl/Tk3Ijrn/DJzWubiVOJJbCuweADwveSlFVgSnK0cZ2TDxLEHAHOvDGYa2TCBs5W2DRO/rHe8PH5k/+yBuV727uc4g5WIRbt8ZH+44+Vxv6wpHUMuSWYrIqQ0h3Wz+oGddz+1uG+2l9uwoV2uHAhXP7AzrBvXVynJ5/mxVZsSN+phw/TN8S69/axzV/R29bs58qdCRFQbj0Y2HN343KHKO6FXSkuRg4j4sas2UQoSubhlw4bpGnBdX5HkSRxMUWBrRyKvpJ2CsmmqAaZikxcrjstuv2siicM4hxXSrn5XrEjK5mmd9Hh1McKKclgKE6J0nkU7aVsnlDzQCQbQQwowmgAIowkA4gAAngMgWwEwpACeA8BzAEQOAHEAvA4JkK0AbCsA4gAAqSxA5AA4WwHIVgA8B4DnABAHgDhApvkvAXrE2i0lhiIAAAAASUVORK5CYII=">
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<title>Общество · планы</title>
 <style>
-:root {
-  --bg: #f4f6fa; --card: #ffffff; --ink: #1c2433; --muted: #5f6b7d; --line: #d9e0ea;
-  --accent: #2f6db3; --accent-soft: #e6effa; --ok: #1f8a46; --ok-soft: #e3f4e9;
-  --bad: #c0392b; --bad-soft: #fbe8e6; --warn-soft: #fff4dc; --shadow: 0 2px 10px rgba(20,40,80,.08);
+:root{
+  --bg:#f2f2f7; --card:#fff; --card2:#f7f7fa; --text:#000; --sub:#6b6b73; --sep:rgba(60,60,67,.14);
+  --accent:#5e5ce6; --accent-soft:rgba(94,92,230,.12); --green:#30c759; --red:#ff3b30; --orange:#ff9500;
+  --hl:rgba(196,245,60,.75); --bar:rgba(249,249,251,.82); --shadow:0 1px 2px rgba(0,0,0,.04),0 6px 20px rgba(0,0,0,.05);
+  --r:18px; --safe-b:env(safe-area-inset-bottom); --safe-t:env(safe-area-inset-top);
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #12161d; --card: #1b212b; --ink: #e8edf5; --muted: #9aa6b8; --line: #2c3544;
-    --accent: #6ea8ff; --accent-soft: #1f2e45; --ok: #4cc27a; --ok-soft: #173325;
-    --bad: #ff7b6e; --bad-soft: #3a1f1c; --warn-soft: #3a3120; --shadow: none;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #12161d; --card: #1b212b; --ink: #e8edf5; --muted: #9aa6b8; --line: #2c3544;
-  --accent: #6ea8ff; --accent-soft: #1f2e45; --ok: #4cc27a; --ok-soft: #173325;
-  --bad: #ff7b6e; --bad-soft: #3a1f1c; --warn-soft: #3a3120; --shadow: none;
-}
-* { box-sizing: border-box; }
-html, body { margin: 0; background: var(--bg); color: var(--ink); }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 17px; line-height: 1.45; }
-.wrap { max-width: 760px; margin: 0 auto; padding: 16px 16px 60px; }
-header h1 { font-size: 22px; margin: 4px 0 2px; }
-header p { margin: 0 0 12px; color: var(--muted); font-size: 14px; }
-.tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
-.tabs button { padding: 10px 4px; font-size: 14px; }
-button { font: inherit; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 10px; padding: 10px 14px; cursor: pointer; }
-button:hover { border-color: var(--accent); }
-button.on, button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-button:disabled { opacity: .45; cursor: default; }
-.opt:disabled, .pool button:disabled { opacity: 1; }
-.opt:disabled:not(.ok):not(.bad), .pool button:disabled:not(.ok):not(.bad):not(.miss) { color: var(--muted); }
-.topics { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 6px; margin: 0 -16px 14px; padding: 2px 16px 6px; scrollbar-width: thin; }
-.topics .chip { flex: 0 0 auto; }
-.chip { font-size: 13px; padding: 6px 10px; border-radius: 999px; }
-.panel { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; box-shadow: var(--shadow); }
-.meta { color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-.row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-.row > button { flex: 1 1 auto; }
-.flash { min-height: 220px; display: flex; flex-direction: column; justify-content: center; text-align: center; cursor: pointer; user-select: none; }
-.flash .q { font-size: 21px; font-weight: 650; }
-.flash .a { white-space: pre-line; text-align: left; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line); }
-.hint { color: var(--muted); font-size: 13px; margin-top: 12px; }
-.tag { display: inline-block; font-size: 12px; color: var(--accent); background: var(--accent-soft); border-radius: 6px; padding: 1px 7px; }
-.opt { display: block; width: 100%; text-align: left; margin: 8px 0; }
-.opt.ok { background: var(--ok-soft); border-color: var(--ok); color: var(--ink); }
-.opt.bad { background: var(--bad-soft); border-color: var(--bad); color: var(--ink); }
-.explain { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: var(--accent-soft); font-size: 15px; }
-.qtext { font-size: 19px; font-weight: 600; }
-.pool { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-.pool button { font-size: 15px; text-align: left; }
-.pool button.sel { background: var(--accent-soft); border-color: var(--accent); }
-.pool button.ok { background: var(--ok-soft); border-color: var(--ok); }
-.pool button.bad { background: var(--bad-soft); border-color: var(--bad); }
-.pool button.miss { background: var(--warn-soft); border-color: #d9a21b; border-style: dashed; }
-.legend { font-size: 13px; color: var(--muted); margin-top: 10px; }
-.item { font-size: 20px; font-weight: 600; text-align: center; padding: 22px 8px; border: 2px dashed var(--line); border-radius: 12px; margin: 6px 0 4px; }
-.item.ok { border-color: var(--ok); background: var(--ok-soft); }
-.item.bad { border-color: var(--bad); background: var(--bad-soft); }
-.buckets { display: grid; gap: 8px; margin-top: 10px; }
-.buckets.b2 { grid-template-columns: 1fr 1fr; }
-.buckets.b3 { grid-template-columns: 1fr 1fr 1fr; }
-.buckets.b4, .buckets.b5 { grid-template-columns: 1fr 1fr; }
-.buckets button { padding: 14px 6px; font-weight: 600; font-size: 15px; }
-.bar { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; margin-bottom: 12px; }
-.bar i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .2s; }
-.result h2 { margin: 0 0 6px; }
-.big { font-size: 40px; font-weight: 700; color: var(--accent); }
-.list { padding-left: 18px; }
-.list li { margin: 6px 0; }
-table.sum { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 10px; }
-table.sum th, table.sum td { border: 1px solid var(--line); padding: 6px; vertical-align: top; text-align: left; }
-table.sum th { background: var(--accent-soft); }
-select { font: inherit; padding: 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--ink); width: 100%; }
-.theme { float: right; font-size: 13px; padding: 6px 10px; }
-footer { color: var(--muted); font-size: 12px; text-align: center; margin-top: 24px; }
-@media (max-width: 420px) { .tabs button { font-size: 12.5px; } .buckets.b3 { grid-template-columns: 1fr; } }
+@media (prefers-color-scheme:dark){:root{
+  --bg:#000; --card:#1c1c1e; --card2:#2c2c2e; --text:#fff; --sub:#98989f; --sep:rgba(84,84,88,.5);
+  --accent:#7d7aff; --accent-soft:rgba(125,122,255,.18); --hl:rgba(170,220,30,.45); --bar:rgba(22,22,24,.82); --shadow:none;
+}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.35;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+body{overflow:hidden;user-select:none;-webkit-user-select:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+textarea{font:inherit;user-select:text;-webkit-user-select:text}
+mark{background:linear-gradient(transparent 12%,var(--hl) 12%,var(--hl) 88%,transparent 88%);color:inherit;padding:0 .15em;border-radius:3px}
+
+/* ---------- splash ---------- */
+#splash{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);transition:opacity .45s ease, transform .45s ease}
+#splash.hide{opacity:0;transform:scale(1.08);pointer-events:none}
+#splash .ic{width:112px;height:112px;border-radius:26px;box-shadow:0 18px 40px rgba(94,92,230,.35);animation:pop .7s cubic-bezier(.2,1.4,.4,1) both}
+#splash h1{margin-top:22px;font-size:28px;font-weight:700;letter-spacing:-.5px;animation:up .6s .15s both}
+#splash p{color:var(--sub);margin-top:4px;font-size:15px;animation:up .6s .25s both}
+#splash .ld{margin-top:34px;width:120px;height:4px;border-radius:2px;background:var(--sep);overflow:hidden;animation:up .6s .3s both}
+#splash .ld i{display:block;height:100%;width:0;background:var(--accent);border-radius:2px;animation:load 1.3s .35s ease-in-out forwards}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes up{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
+@keyframes load{to{width:100%}}
+
+/* ---------- layout ---------- */
+#tabs{position:fixed;inset:0;}
+.tab{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:calc(var(--safe-t) + 14px) 16px calc(var(--safe-b) + 96px);display:none}
+.tab.on{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:.4}to{opacity:1}}
+.large{font-size:34px;font-weight:800;letter-spacing:-.8px;margin:18px 4px 4px}
+.subtle{color:var(--sub);font-size:15px;margin:0 4px 18px}
+.sec{font-size:13px;text-transform:uppercase;letter-spacing:.3px;color:var(--sub);margin:26px 16px 8px}
+.group{background:var(--card);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.row{display:flex;align-items:center;gap:12px;padding:13px 16px;position:relative;width:100%;text-align:left}
+.row+.row:before{content:"";position:absolute;top:0;left:60px;right:0;height:.5px;background:var(--sep)}
+.row.nl+.row.nl:before{left:16px}
+.row:active{background:var(--card2)}
+.row .num{flex:none;width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:15px;color:#fff;background:var(--accent)}
+.row .tx{flex:1;min-width:0}
+.row .tx b{display:block;font-weight:600;font-size:16px}
+.row .tx small{display:block;color:var(--sub);font-size:13px;margin-top:2px}
+.chev{flex:none;width:8px;height:14px;opacity:.35}
+.mini{height:4px;border-radius:2px;background:var(--sep);margin-top:7px;overflow:hidden}
+.mini i{display:block;height:100%;background:var(--green);border-radius:2px;transition:width .5s}
+
+/* tab bar */
+#bar{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:space-around;padding:7px 6px calc(var(--safe-b) + 6px);background:var(--bar);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-top:.5px solid var(--sep)}
+#bar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10.5px;font-weight:500;color:var(--sub);padding:2px 0}
+#bar button svg{width:26px;height:26px}
+#bar button.on{color:var(--accent)}
+
+/* home */
+.hero{background:linear-gradient(135deg,#5e5ce6,#8c3cc8);color:#fff;border-radius:24px;padding:20px;display:flex;align-items:center;gap:18px;box-shadow:0 14px 30px rgba(94,92,230,.28)}
+.hero .ring{flex:none;width:92px;height:92px;position:relative}
+.hero .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.hero .ring span{position:absolute;inset:0;display:grid;place-items:center;font-size:22px;font-weight:800}
+.hero h2{font-size:20px;font-weight:700;letter-spacing:-.3px}
+.hero p{opacity:.85;font-size:14px;margin-top:4px}
+.big{display:block;width:100%;margin-top:14px;padding:16px;border-radius:16px;background:var(--accent);color:#fff;font-weight:700;font-size:17px;text-align:center;box-shadow:0 8px 18px rgba(94,92,230,.3);transition:transform .12s}
+.big:active,.tile:active,.btn:active{transform:scale(.97)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{background:var(--card);border-radius:var(--r);padding:16px;text-align:left;box-shadow:var(--shadow);transition:transform .12s;display:flex;flex-direction:column;gap:10px;min-height:128px}
+.tile .ti{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:20px}
+.tile b{font-size:16px;font-weight:700}
+.tile small{color:var(--sub);font-size:13px;line-height:1.3;margin-top:-6px}
+.tile.wide{flex-direction:row;align-items:center;min-height:0;width:100%;margin-top:12px;gap:14px}
+.tile.wide>div:nth-child(2){flex:1;display:flex;flex-direction:column;gap:8px}
+.timer{font-variant-numeric:tabular-nums;font-weight:700;font-size:15px;padding:5px 11px;border-radius:20px;background:var(--accent-soft);color:var(--accent);min-width:64px;text-align:center;transition:all .3s}
+.timer.warn{background:rgba(255,59,48,.14);color:var(--red);animation:pulse 1s infinite}
+@keyframes pulse{50%{transform:scale(1.07)}}
+textarea.exam{min-height:52vh}
+.grade{display:flex;align-items:center;gap:16px;background:var(--card);border-radius:20px;padding:16px;box-shadow:var(--shadow);margin:6px 0 14px}
+.grade .g{flex:none;width:72px;height:72px;border-radius:20px;display:grid;place-items:center;font-size:40px;font-weight:800;color:#fff}
+.grade b{font-size:18px;display:block}
+.grade small{color:var(--sub);font-size:14px;display:block;margin-top:3px}
+.res .subl{display:block;padding:0;background:none;margin:-3px 0 9px 26px}
+.res .subl div{padding:7px 10px;font-size:14.5px;margin-bottom:5px}
+.badge{font-size:12px;font-weight:700;padding:2px 8px;border-radius:8px;color:#fff;margin-left:6px;vertical-align:2px}
+.step .num{background:var(--card2);color:var(--sub)}
+.step.cur .num{background:var(--accent);color:#fff;box-shadow:0 0 0 4px var(--accent-soft)}
+.step.ok .num{background:var(--green);color:#fff}
+.step.ok b{color:var(--sub);text-decoration:line-through;text-decoration-color:var(--sep)}
+#splash.fast .ld i{animation-duration:.5s}
+#toast{position:fixed;left:50%;top:calc(var(--safe-t) + 12px);z-index:200;transform:translate(-50%,-140%);background:rgba(30,30,32,.92);color:#fff;padding:11px 18px;border-radius:22px;font-size:14.5px;font-weight:500;transition:transform .35s cubic-bezier(.3,.9,.3,1);max-width:90vw;text-align:center;backdrop-filter:blur(10px)}
+#toast.on{transform:translate(-50%,0)}
+.link{color:var(--accent);font-size:15px;padding:14px;display:block;margin:10px auto 0;text-align:center}
+.link.danger{color:var(--red)}
+
+/* pages (push) */
+.page{position:fixed;inset:0;z-index:30;background:var(--bg);overflow-y:auto;padding:calc(var(--safe-t) + 54px) 16px calc(var(--safe-b) + 40px);transform:translateX(100%);transition:transform .38s cubic-bezier(.3,.9,.3,1)}
+.page.in{transform:none}
+.nav{position:fixed;top:0;left:0;right:0;z-index:31;display:flex;align-items:center;justify-content:space-between;padding:calc(var(--safe-t) + 8px) 10px 8px;background:var(--bar);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:.5px solid var(--sep);transform:translateX(100%);transition:transform .38s cubic-bezier(.3,.9,.3,1)}
+.nav.in{transform:none}
+.nav .back{color:var(--accent);display:flex;align-items:center;gap:4px;font-size:17px;padding:6px}
+.nav .ttl{font-weight:600;font-size:16px;position:absolute;left:90px;right:90px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+.nav .act{color:var(--accent);font-size:15px;padding:6px}
+.pt{padding:14px 16px}
+.pt+.pt{border-top:.5px solid var(--sep)}
+.pt>b{display:flex;gap:8px;font-weight:600}
+.pt>b em{font-style:normal;color:var(--accent);flex:none}
+.pt ul{list-style:none;margin:8px 0 0 22px;transition:filter .25s,opacity .25s}
+.pt li{padding:3px 0;color:var(--text);font-size:15.5px;display:flex;gap:6px}
+.pt li em{font-style:normal;color:var(--sub);flex:none}
+.hidden-sub .pt ul{filter:blur(7px);opacity:.55}
+.hidden-sub .pt.open ul{filter:none;opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.btn{padding:11px 14px;border-radius:13px;background:var(--accent-soft);color:var(--accent);font-weight:600;font-size:15px;transition:transform .12s}
+.btn.solid{background:var(--accent);color:#fff}
+
+/* notes */
+.note{background:var(--card);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);margin-bottom:12px}
+.note .dt{font-size:12px;color:var(--sub);font-weight:600;letter-spacing:.3px}
+.note h3{font-size:19px;margin:2px 0 10px;letter-spacing:-.2px}
+.note .def{margin:8px 0;font-size:15.5px}
+.note .lst{margin:10px 0}
+.note .lst b{font-size:14px;color:var(--sub);font-weight:600;display:block;margin-bottom:3px}
+.note .lst div{font-size:15.5px;padding:2px 0 2px 14px;position:relative}
+.note .lst div:before{content:"";position:absolute;left:2px;top:.62em;width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.note .tip{margin-top:10px;font-size:14px;color:var(--sub);background:var(--card2);padding:10px 12px;border-radius:12px}
+.formula{display:flex;align-items:center;gap:10px;justify-content:center;font-weight:700;margin:12px 0;font-size:17px}
+.frac{display:inline-flex;flex-direction:column;align-items:center}
+.frac span:first-child{border-bottom:2px solid currentColor;padding:0 6px 2px}
+.frac span:last-child{padding:2px 6px 0}
+
+/* sheet */
+#dim{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .3s}
+#dim.on{opacity:1;pointer-events:auto}
+#sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--bg);border-radius:22px 22px 0 0;padding:8px 16px calc(var(--safe-b) + 18px);transform:translateY(105%);transition:transform .4s cubic-bezier(.3,.9,.3,1);max-height:88vh;overflow-y:auto}
+#sheet.on{transform:none}
+#sheet .grab{width:38px;height:5px;border-radius:3px;background:var(--sep);margin:0 auto 12px}
+#sheet h3{font-size:22px;font-weight:700;margin:4px 4px 2px}
+.tog{padding:10px 14px;border-radius:12px;background:var(--card);font-size:15px;font-weight:500;border:1.5px solid transparent;transition:all .15s}
+.tog.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.seg{display:flex;background:var(--card2);border-radius:10px;padding:2px}
+.seg button{flex:1;padding:7px;border-radius:8px;font-size:14px;font-weight:600;color:var(--sub)}
+.seg button.on{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+
+/* trainer */
+#tr{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;transform:translateY(100%);transition:transform .42s cubic-bezier(.3,.9,.3,1)}
+#tr.on{transform:none}
+.trh{display:flex;align-items:center;gap:12px;padding:calc(var(--safe-t) + 10px) 16px 10px}
+.x{width:32px;height:32px;border-radius:50%;background:var(--card2);display:grid;place-items:center;flex:none}
+.prog{flex:1;height:8px;border-radius:4px;background:var(--sep);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--green);border-radius:4px;transition:width .4s}
+.cnt{font-size:14px;color:var(--sub);font-variant-numeric:tabular-nums;min-width:44px;text-align:right}
+.trb{flex:1;overflow-y:auto;padding:8px 16px 16px;display:flex;flex-direction:column}
+.trf{padding:10px 16px calc(var(--safe-b) + 14px);display:flex;gap:10px}
+.trf .big{margin:0}
+.kind{font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--accent);margin:6px 2px 6px}
+.q{font-size:22px;font-weight:700;letter-spacing:-.3px;line-height:1.25;margin:0 2px 4px}
+.qs{color:var(--sub);font-size:15px;margin:0 2px 16px}
+.anim{animation:slide .35s cubic-bezier(.3,.9,.3,1)}
+@keyframes slide{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+
+/* flashcard */
+.fc{perspective:1200px;flex:1;min-height:340px;display:flex}
+.fc-in{position:relative;flex:1;transition:transform .55s cubic-bezier(.3,.9,.3,1);transform-style:preserve-3d}
+.fc.flip .fc-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;background:var(--card);border-radius:24px;box-shadow:0 10px 30px rgba(0,0,0,.08);padding:24px 22px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;overflow-y:auto}
+.face.back{transform:rotateY(180deg)}
+.face .q{font-size:24px}
+.face .hint{margin-top:auto;color:var(--sub);font-size:14px;text-align:center;padding-top:16px}
+.ans div{padding:7px 0;border-bottom:.5px solid var(--sep);font-size:16px;display:flex;gap:8px}
+.ans div:last-child{border:0}
+.ans em{font-style:normal;color:var(--accent);font-weight:700;flex:none;min-width:18px}
+.no{background:rgba(255,59,48,.12)!important;color:var(--red)!important;box-shadow:none!important}
+.yes{background:var(--green)!important;color:#fff!important;box-shadow:0 8px 18px rgba(48,199,89,.3)!important}
+
+/* assemble */
+.slots{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.slot{min-height:50px;border-radius:14px;border:1.5px dashed var(--sep);display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:15.5px;color:var(--sub);transition:all .2s}
+.slot.f{border:1.5px solid transparent;background:var(--card);color:var(--text);box-shadow:var(--shadow)}
+.slot em{font-style:normal;font-weight:700;color:var(--accent);flex:none}
+.slot.ok{background:rgba(48,199,89,.14);color:var(--text)}
+.slot.bad{background:rgba(255,59,48,.12)}
+.slot .fix{display:block;font-size:13px;color:var(--green);margin-top:3px}
+.pool{display:flex;flex-direction:column;gap:8px}
+.chip{padding:12px 14px;border-radius:14px;background:var(--card);box-shadow:var(--shadow);font-size:15.5px;text-align:left;transition:transform .12s,opacity .2s,background .2s;width:100%}
+.chip:active{transform:scale(.98)}
+.chip.used{opacity:.25;pointer-events:none}
+.chip.sel{background:var(--accent);color:#fff}
+.chip.ok{background:rgba(48,199,89,.16)}
+.chip.bad{background:rgba(255,59,48,.14)}
+.chip.miss{outline:2px solid var(--green);outline-offset:-2px}
+
+/* memory */
+textarea.mem{width:100%;min-height:190px;border:0;border-radius:16px;background:var(--card);color:var(--text);padding:14px;font-size:16px;line-height:1.5;resize:none;outline:none;box-shadow:var(--shadow)}
+textarea.mem:focus{box-shadow:0 0 0 2px var(--accent)}
+.res div{padding:10px 12px;border-radius:12px;margin-bottom:7px;font-size:15.5px;display:flex;gap:10px;align-items:flex-start}
+.res .ok{background:rgba(48,199,89,.14)}
+.res .bad{background:rgba(255,59,48,.10)}
+.res i{font-style:normal;flex:none;font-weight:700}
+.res small{display:block;color:var(--sub);font-size:13px;margin-top:2px}
+.res button{margin-left:auto;font-size:13px;color:var(--accent);font-weight:600;flex:none}
+
+/* toast / result */
+.done{text-align:center;padding:30px 10px}
+.done .em{font-size:64px;animation:pop .6s both}
+.done h2{font-size:26px;margin-top:10px}
+.done p{color:var(--sub);margin-top:6px}
+.fb{border-radius:14px;padding:12px 14px;margin-top:14px;font-weight:600;font-size:15px;animation:up .3s}
+.fb.ok{background:rgba(48,199,89,.14);color:#1f9e45}
+.fb.bad{background:rgba(255,59,48,.1);color:var(--red)}
+@media (prefers-color-scheme:dark){.fb.ok{color:#5be080}}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <button class="theme" id="themeBtn" title="Тема">◐ Тема</button>
-    <h1>Обществознание · 10</h1>
-    <p>Общество, прогресс, типы обществ, глобализация. ★ — дополнение, в тетради нет.</p>
-  </header>
 
-  <nav class="tabs" id="tabs">
-    <button data-mode="cards" class="on">Карточки</button>
-    <button data-mode="quiz">Тест</button>
-    <button data-mode="collect">Собери</button>
-    <button data-mode="sort">Сортировка</button>
-  </nav>
-
-  <div class="topics" id="topics"></div>
-  <main id="main"></main>
-  <footer>Темы сверху листаются вбок; выбор тем действует во всех режимах.</footer>
+<div id="splash">
+  <img class="ic" src="data:image/png;base64,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" alt="">
+  <h1>Обществознание</h1>
+  <p>Планы · признаки · конспект</p>
+  <div class="ld"><i></i></div>
 </div>
 
+<div id="tabs">
+  <section class="tab on" id="t-home"></section>
+  <section class="tab" id="t-plans"></section>
+  <section class="tab" id="t-signs"></section>
+  <section class="tab" id="t-notes"></section>
+</div>
+
+<nav id="bar">
+  <button data-t="home" class="on"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2 3 10.4V20a1 1 0 0 0 1 1h5.5v-6h5v6H20a1 1 0 0 0 1-1v-9.6z"/></svg>Сегодня</button>
+  <button data-t="plans"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h11l4 4v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm3 6v1.8h8V9zm0 4v1.8h8V13zm0 4v1.8h5V17z"/></svg>Планы</button>
+  <button data-t="signs"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 5h3v3H4zm5 .6h11v1.8H9zM4 10.5h3v3H4zm5 .6h11v1.8H9zM4 16h3v3H4zm5 .6h11v1.8H9z"/></svg>Признаки</button>
+  <button data-t="notes"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h11a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm2 4v2h8V6zm0 4v2h8v-2zm0 4v2h5v-2z"/></svg>Конспект</button>
+</nav>
+
+<div id="dim"></div>
+<div id="sheet"></div>
+<div id="tr"></div>
+
 <script>
-const TOPICS = [
-  { id: "soc", name: "Общество" },
-  { id: "sys", name: "Общество как система" },
-  { id: "nat", name: "Общество и природа" },
-  { id: "inst", name: "Социальные институты" },
-  { id: "dev", name: "Реформа и революция" },
-  { id: "prog", name: "Прогресс" },
-  { id: "types", name: "Типы обществ" },
-  { id: "glob", name: "Глобализация" },
-  { id: "gp", name: "Глобальные проблемы" }
+/* ===================== ДАННЫЕ ===================== */
+const PLANS = [
+ {n:1,t:'Человек как биосоциальное существо',p:[
+  ['Человек как результат биологической и социокультурной эволюции',[]],
+  ['Проявление биологической природы человека',['функционирование внутренних органов и систем','первичные (физиологические) потребности — в пище, воде, отдыхе','генотип человека и механизмы наследственности']],
+  ['Проявления социальной природы человека / отличие человека от животных',['социальные потребности и интересы','наличие сознания и самосознания','владение членораздельной речью','использование сложных орудий труда','мировоззрение']],
+  ['Виды потребностей человека',['биологические (в пище, воздухе, воде, жилище, одежде, сне, отдыхе)','социальные (в труде, общении, признании, успехе)','духовные / идеальные (в познании, творчестве, самосовершенствовании, красоте)']],
+  ['Единство биологического и социального в человеке',['влияние биологического (наследственного) на физические данные и психические свойства человека','возможности современного общества в борьбе с наследственными заболеваниями','удовлетворение биологических потребностей в рамках социальных норм','развитие природных задатков в процессе деятельности']]
+ ]},
+ {n:2,t:'Роль потребностей в деятельности человека',p:[
+  ['Структура деятельности',['субъект','объект','мотив','цель','средства','результат']],
+  ['Мотивы деятельности',['потребности','интересы','убеждения']],
+  ['Виды потребностей',['биологические (в пище, воздухе, воде, жилище, одежде, сне, отдыхе)','социальные (в труде, общении, признании, успехе)','идеальные (в познании, творчестве, самосовершенствовании, красоте)']]
+ ]},
+ {n:3,t:'Мировоззрение и его роль в жизни человека',s:'(Мировоззрение, его виды и формы)',p:[
+  ['Структура мировоззрения',['знания','принципы','убеждения','духовные ценности']],
+  ['Пути формирования мировоззрения',['стихийный','осознанный (целенаправленный)']],
+  ['Основные виды мировоззрения',['обыденное','религиозное','научное']],
+  ['Уровни мировоззрения',['обыденно-практический','теоретический']],
+  ['Функции мировоззрения',['ценностно-ориентационная (даёт ориентиры в деятельности)','познавательная (даёт методы познания)','практическая (даёт методы деятельности)']]
+ ]},
+ {n:4,t:'Деятельность как форма взаимодействия человека с окружающим миром',p:[
+  ['Особенности (характеристики) деятельности',['преобразовательная','направленность на получение результата','социальный характер','осознанная']],
+  ['Структура деятельности',['субъект','объект','мотив','цель','средства','результат']],
+  ['Мотивы деятельности',['потребности','интересы','убеждения']],
+  ['Различные классификации видов деятельности',['практическая и духовная','труд, игра, учение, общение','созидательная и разрушительная','экономическая, социальная, политическая','творческая и репродуктивная']],
+  ['Основные направления деятельности, её результаты',['материальное производство','создание духовных ценностей','поддержание социальных отношений']]
+ ]},
+ {n:5,t:'Общение как форма (вид) деятельности',p:[
+  ['Структура общения',['субъект','мотивы общения','цель','средства достижения цели','результат']],
+  ['Цели общения',['обмен информацией','гармонизация личности','налаживание контактов между людьми']],
+  ['Средства общения',['невербальные','вербальные']],
+  ['Виды общения',['по связям: личное и деловое','по субъектам: межличностное и групповое','по направленности: прямое и опосредованное','по времени: кратковременное и длительное']],
+  ['Коммуникативные качества личности',['внимательность к собеседнику, умение слушать','понимание другого','управление собственными эмоциями','грамотная устная и письменная речь']]
+ ]},
+ {n:6,t:'Познавательная деятельность',p:[
+  ['Структура познавательной деятельности',['объект познания','субъект познания','средства познания','результат познания (знания)']],
+  ['Этапы (ступени) познания',['чувственное (ощущение, восприятие, представление)','рациональное (понятие, суждение, умозаключение)']],
+  ['Основные виды ненаучного познания мира',['мифологическое познание','обыденное познание','искусство','паранаука']],
+  ['Научное познание мира и его особенности',['эмпирический и теоретический уровни','стремление к объективности','доказательность','системность']],
+  ['Особенности социального познания',['совпадение субъекта и объекта познания','уникальность и неповторимость социальных явлений','высокая доля субъективизма, связь с интересами субъекта']]
+ ]},
+ {n:7,t:'Проблема познаваемости мира',p:[
+  ['Основные виды познания мира',['мифологическое познание','обыденное познание','искусство','паранаука']],
+  ['Этапы (ступени) познания',['чувственное (ощущение, восприятие, представление)','рациональное (понятие, суждение, умозаключение)']],
+  ['Философские теории о познаваемости мира',['оптимизм','скептицизм','агностицизм']],
+  ['Причины, по которым полное познание невозможно',['безграничность мира','несовершенство органов чувств и инструментов познания','динамичность мира']]
+ ]},
+ {n:8,t:'Понятие истины и её критерии',p:[
+  ['Истина как цель и результат познания',[]],
+  ['Свойства истины',['объективность','конкретность']],
+  ['Виды истины',['относительная','абсолютная']],
+  ['Критерии истины',['практика','соответствие законам логики','соответствие ранее открытым законам науки']]
+ ]}
 ];
 
-/* ---------- КАРТОЧКИ: q — вопрос/термин, a — ответ ---------- */
-const CARDS = [
-  { t: "soc", q: "Общество (определение)", a: "Обособившаяся от природы, но тесно с ней связанная часть материального мира, которая включает в себя формы объединения людей и способы их взаимодействия." },
-  { t: "soc", q: "Общественные отношения", a: "Относительно устойчивые, во многом безличные связи, затрагивающие разные стороны общественной жизни." },
-  { t: "soc", q: "4 значения понятия «общество»", a: "1) Совокупность людей с общими интересами\n2) Этап исторического развития\n3) Совокупность жителей конкретного государства\n4) Всё человечество в целом — в прошлом, настоящем и будущем" },
-  { t: "soc", q: "Общность и общество: характер отношений", a: "Общность — неформальные отношения.\nОбщество — формальные отношения." },
-  { t: "soc", q: "Общность и общество: что лежит в основе", a: "Общность — эмоциональная составляющая, традиции и обычаи.\nОбщество — рациональность; определяется местом человека в структуре общества." },
-  { t: "soc", q: "Почему общественные отношения «безличные»?", a: "Связь существует между ролями, а не между конкретными людьми (покупатель — продавец). Сменится продавец — отношение останется." },
-
-  { t: "sys", q: "4 сферы общества", a: "Экономическая (деньги, рынок, производство)\nПолитическая (власть, выборы, государство)\nСоциальная (семья, социальные группы)\nДуховная (религия, искусство, наука, образование)" },
-  { t: "sys", q: "8 свойств общества как системы", a: "1) Сложная\n2) Динамичность\n3) Открытая система\n4) Саморегулирующаяся система\n5) Нелинейность\n6) Целостность\n7) Функциональность\n8) Устойчивость" },
-  { t: "sys", q: "Открытая система — что значит?", a: "Общество взаимодействует с внешней средой: с природой и с другими обществами." },
-  { t: "sys", q: "Нелинейность развития общества", a: "Развитие идёт не по прямой: бывают скачки, откаты, повороты; у разных обществ — разные пути." },
-  { t: "sys", q: "Саморегулирующаяся система", a: "Общество само поддерживает порядок и равновесие — через нормы, институты, управление." },
-  { t: "sys", q: "4 функции общества", a: "1) Производство материальных благ\n2) Регламентация и управление деятельностью людей\n3) Воспроизводство и социализация человека\n4) Производство духовных ценностей" },
-  { t: "sys", q: "К какой сфере относится образование?", a: "К духовной: это передача знаний и ценностей (в тетради перенесено стрелкой из социальной в духовную)." },
-
-  { t: "nat", q: "Роль природы в жизни человека (3)", a: "1) Естественная среда обитания\n2) Источник ресурсов для производственной деятельности\n3) Источник вдохновения" },
-  { t: "nat", q: "Влияние природы на общество (3)", a: "1) Определяет темпы и направление общественного развития\n2) Определяет экономическую специализацию стран\n3) Определяет менталитет людей" },
-  { t: "nat", q: "Положительное влияние общества на природу", a: "Заповедники и нацпарки; сортировка и утилизация мусора; экологический кодекс и наказания; расширение популяций флоры и фауны; замена ресурсов." },
-  { t: "nat", q: "Отрицательное влияние общества на природу", a: "Загрязнение окружающей среды; нерациональное использование ресурсов; истребление редких видов животных и растений." },
-
-  { t: "inst", q: "Социальный институт (определение)", a: "Исторически сложившаяся устойчивая форма организации совместной деятельности людей, направленная на выполнение общественно значимой функции." },
-  { t: "inst", q: "4 признака социального института", a: "1) Направленность на удовлетворение базовых потребностей общества\n2) Содержит установки и правила поведения\n3) Наличие культурных символов и знаков\n4) Наличие системы учреждений и неформальных структур" },
-  { t: "inst", q: "3 функции социальных институтов", a: "1) Социализирующая (передача социального опыта и норм из поколения в поколение)\n2) Закрепление и воспроизводство общественных отношений\n3) Регламентация поведения людей" },
-  { t: "inst", q: "Примеры институтов по сферам", a: "Экон.: собственность, хозяйственные отношения, рынок\nПолит.: парламентаризм, местное самоуправление\nСоц.: семья, отцовство/материнство\nДух.: религия, искусство, образование" },
-  { t: "inst", q: "Семья — институт? Докажи по признакам", a: "Потребность — продолжение рода; правила — Семейный кодекс, обычаи; символы — обручальные кольца; учреждения — ЗАГС. Все 4 признака есть." },
-
-  { t: "dev", q: "Реформа — 4 черты", a: "Постепенные изменения; проводят властные органы; целенаправленный характер; меняется одна из сторон жизни общества." },
-  { t: "dev", q: "Революция — 4 черты", a: "Резкие, кардинальные изменения; проводят народные массы; стихийный характер; меняет общество в целом." },
-  { t: "dev", q: "3 формы (направления) изменений", a: "Прогресс, регресс, стагнация." },
-  { t: "dev", q: "Регресс ★", a: "Движение от более совершенного к менее совершенному, упадок." },
-  { t: "dev", q: "Стагнация ★", a: "Застой, отсутствие развития." },
-
-  { t: "prog", q: "Прогресс (определение)", a: "Направление развития от простого к сложному, от менее совершенного к более совершенному." },
-  { t: "prog", q: "Свойства прогресса", a: "1) Противоречивость\n2) Относительность\n3) Применим ко всему обществу и к отдельным его элементам\n4) Направленность (заложена в определении)" },
-  { t: "prog", q: "Противоречивость прогресса", a: "Одно и то же явление может нести как положительные, так и отрицательные последствия. Пример: атомная энергия — АЭС и ядерное оружие." },
-  { t: "prog", q: "Критерии прогресса (6)", a: "1) Уровень развития науки и технологий\n2) Степень свободы\n3) Уровень нравственности\n4) Уровень образования\n5) Степень социальной защищённости граждан\n6) Гуманизм — универсальный критерий" },
-  { t: "prog", q: "Универсальный критерий прогресса", a: "Гуманизм. Он спрашивает главное: стало ли лучше человеку — его жизни, свободе, достоинству. Остальные критерии частные (наука может служить и войне)." },
-
-  { t: "types", q: "3 типа общества", a: "Аграрное (традиционное) → индустриальное → постиндустриальное (информационное)." },
-  { t: "types", q: "Основной фактор производства в каждом типе", a: "Аграрное — земля\nИндустриальное — капитал\nПостиндустриальное — информация" },
-  { t: "types", q: "Политическая сфера традиционного общества", a: "Деспотическая власть; народ отстранён от власти; сакрализация власти." },
-  { t: "types", q: "Политическая сфера индустриального общества", a: "Демократизация; народ включается во властные отношения; власть теряет свою сакральность." },
-  { t: "types", q: "Политическая сфера постиндустриального общества", a: "Становление правового государства и гражданского общества." },
-  { t: "types", q: "Социальная сфера: традиционное vs индустриальное", a: "Традиционное: сословная структура, закрытое общество, низкая социальная мобильность.\nИндустриальное: классовая структура, открытое общество, высокая мобильность, урбанизация." },
-  { t: "types", q: "Духовная сфера традиционного общества", a: "Господство религии; слабое развитие науки; низкий уровень образования; большая роль традиций и обычаев." },
-  { t: "types", q: "Духовная сфера индустриального общества", a: "Наука — основной институт; формируется светское сознание; растёт уровень образования; появляется массовая культура." },
-  { t: "types", q: "Духовная сфера постиндустриального общества", a: "Возрастание роли науки; непрерывность образования." },
-  { t: "types", q: "Натуральное vs товарное хозяйство", a: "Натуральное — производят для себя.\nТоварное — производят на продажу." },
-  { t: "types", q: "Экстенсивный vs интенсивный путь", a: "Экстенсивный — рост «вширь» (больше земли, работников).\nИнтенсивный — рост «вглубь» (техника, технологии, организация)." },
-  { t: "types", q: "Сакрализация власти", a: "Власть считается священной, данной Богом." },
-  { t: "types", q: "Социальная мобильность", a: "Перемещение человека между социальными группами и положениями." },
-  { t: "types", q: "Многовариантность развития ★", a: "Общества развиваются разными путями и с разной скоростью; единого сценария нет. Факторы: природа, история, культура и религия, личности, случайность." },
-  { t: "types", q: "Формационный vs цивилизационный подход ★", a: "Формационный (Маркс): все проходят одни ступени-формации, главное — экономика.\nЦивилизационный (Данилевский, Шпенглер, Тойнби): каждая цивилизация уникальна, главное — культура." },
-
-  { t: "glob", q: "Глобализация (определение)", a: "Процесс усиления взаимосвязи и взаимозависимости между странами и народами." },
-  { t: "glob", q: "4 причины глобализации", a: "1) Развитие коммуникаций, средств связи, интернета\n2) Возможность перемещаться, транспортная инфраструктура\n3) Развитие международной торговли\n4) Объединение усилий для решения глобальных проблем" },
-  { t: "glob", q: "4 формы глобализации и проявления", a: "Экономическая — мировые кризисы, ТНК\nКультурная — массовая культура, языковой обмен, мода\nПолитическая — альянсы и союзы\nСоциальная — миграция, международные организации" },
-  { t: "glob", q: "Положительные последствия глобализации", a: "Обмен знаниями и технологиями; рост толерантности; снижение конфликтов; эффективнее решаются глобальные проблемы; более равномерный экономический рост; политическая стабильность." },
-  { t: "glob", q: "Отрицательные последствия глобализации", a: "Усиление разрыва между богатыми и бедными странами; потеря народной уникальности; навязывание стандартов производства и потребления." },
-
-  { t: "gp", q: "3 признака глобальных проблем", a: "1) Охватывают всё человечество в целом\n2) Угрожают жизни всего человечества\n3) Решение зависит от усилий всего человечества" },
-  { t: "gp", q: "5 типов глобальных проблем", a: "1) Экологическая\n2) Угроза войны / терроризма\n3) Проблема «Север — Юг»\n4) Демографическая\n5) Продовольственная" },
-  { t: "gp", q: "Пути решения глобальных проблем", a: "а) Контроль за состоянием глобальных процессов\nб) Изучение причин возникновения проблем\nв) Формирование нового планетарного мышления\nг) Информирование людей о глобальных проблемах" },
-  { t: "gp", q: "Проблема «Север — Юг»", a: "Разрыв в уровне жизни между развитыми странами (в основном Северного полушария) и развивающимися (в основном Южного)." },
-  { t: "gp", q: "Планетарное мышление", a: "Понимание, что человечество — единое целое на одной планете; интересы всего человечества выше интересов отдельных стран." },
-  { t: "gp", q: "Экологические проблемы — перечисли ★", a: "Загрязнение атмосферы и Мирового океана; изменение климата; разрушение озонового слоя; вырубка лесов; опустынивание; истощение ресурсов; сокращение биоразнообразия; отходы." },
-  { t: "gp", q: "Устойчивое развитие ★", a: "Развитие, которое удовлетворяет потребности нынешнего поколения, не лишая будущие поколения возможности удовлетворять свои. Концепция принята на конференции ООН в Рио-де-Жанейро (1992)." },
-  { t: "gp", q: "Международные экологические договорённости ★", a: "Римский клуб (1968), доклад «Пределы роста» (1972); Стокгольм-1972 (ЮНЕП); Рио-1992 (устойчивое развитие); Киотский протокол (1997); Парижское соглашение (2015)." }
+const SIGNS = [
+ ['Человек как биосоциальное существо',['обладает сознанием, мышлением и членораздельной речью','способен создавать сложные орудия труда','способен к целенаправленной, в том числе творческой деятельности','наличие духовных потребностей']],
+ ['Личность',['совокупность социально значимых качеств человека','формируется в процессе усвоения социальных норм, образцов, культуры общества','формируется и развивается на протяжении всей жизни','субъект социальных отношений и сознательной деятельности']],
+ ['Способности человека',['качества, обеспечивающие успешность выполнения определённого рода деятельности','основаны на генетически предопределённых задатках','развиваются постепенно в процессе обучения и освоения деятельности','их развитие зависит от активности и целеустремлённости самого человека']],
+ ['Потребность',['нужда в чём-либо необходимом для существования и развития человека','безграничность','переживается и осознаётся человеком','лежит в основе мотивов поведения (побуждает к деятельности)']],
+ ['Мировоззрение',['система взглядов, оценок, норм, установок, ценностей, чувств, убеждений','определяет отношение человека к природе, обществу и самому себе','создаёт определённую картину мира','является ориентиром для жизни и деятельности']],
+ ['Общение как вид деятельности',['обмен информацией, мыслями, чувствами между людьми','установление и развитие взаимных отношений, контактов','предполагает наличие партнёра']],
+ ['Учение как вид деятельности',['направленность на получение знаний, умений и навыков','требует специальных средств (учебников) и специальных лиц (преподавателей)']],
+ ['Игра как вид деятельности',['направленность на удовольствие от самого процесса','совершается по определённым правилам','происходит в условной воображаемой ситуации']],
+ ['Деятельность',['целенаправленность (целевой характер)','осознанность (осознанный характер)','преобразующий характер','продуктивный характер','осуществляется в обществе (общественный характер)']],
+ ['Свобода человека',['подразумевает возможность выбора','ограничена объективными рамками законов природы и общества','подразумевает ответственность личности за результаты выбора']],
+ ['Ответственность',['осознание и учёт возможных последствий своих действий','готовность следовать нормам и принимать санкции за их нарушение','подразумевает выполнение своего нравственного долга']],
+ ['Социальное познание',['связано с приобретением знания о человеке и обществе','субъект и объект познания совпадают','социальное знание связано с интересами субъектов, имеет ценностный характер','ограниченная возможность применения эксперимента']],
+ ['Мышление',['опосредованный характер — проникает в скрытые свойства и связи предметов','обобщённо отражает действительность (общее и существенное)','тесно связано с языком','результаты закрепляются в форме понятий, суждений, умозаключений']],
+ ['Истина',['соответствие действительности, свойствам познаваемого предмета','объективность','конкретность']],
+ ['Абсолютная истина',['знание, которое не меняется в процессе познания (не может быть опровергнуто)','полнота, точность, исчерпывающий характер']],
+ ['Относительная истина',['зависит от условий и инструментов познания (уровня развития познания)','ограниченно верное, недостаточно полное знание']]
 ];
 
-/* ---------- ТЕСТ: o — варианты, c — индекс верного, e — пояснение ---------- */
-const QUIZ = [
-  { t: "soc", q: "Что из перечисленного — НЕ значение понятия «общество» из конспекта?", o: ["Этап исторического развития", "Всё человечество в целом", "Совокупность всех живых организмов планеты", "Совокупность жителей конкретного государства"], c: 2, e: "Живые организмы — это природа (биосфера), а не общество." },
-  { t: "soc", q: "Общество в широком смысле — это часть материального мира, которая…", o: ["полностью независима от природы", "обособилась от природы, но тесно с ней связана", "является частью живой природы", "существует только внутри государства"], c: 1, e: "Ключевые слова определения: «обособившаяся» и «тесно связанная»." },
-  { t: "soc", q: "Для общности (в отличие от общества) характерны…", o: ["формальные отношения", "рациональность", "эмоции, традиции и обычаи", "место человека в структуре"], c: 2, e: "Общность держится на чувствах и традициях, общество — на рациональности и формальных правилах." },
-  { t: "soc", q: "Какой пример — общность, а не общество?", o: ["Сотрудники банка", "Граждане страны", "Компания друзей детства", "Депутаты парламента"], c: 2, e: "Отношения друзей неформальные, основаны на эмоциях." },
-
-  { t: "sys", q: "Цены, налоги на бизнес, биржа — это сфера…", o: ["политическая", "экономическая", "социальная", "духовная"], c: 1, e: "Деньги, рынок, производство — экономическая сфера." },
-  { t: "sys", q: "Школа и университет относятся к сфере…", o: ["социальной", "политической", "духовной", "экономической"], c: 2, e: "Образование — передача знаний, поэтому духовная сфера (так и в тетради)." },
-  { t: "sys", q: "Какое свойство НЕ входит в 8 свойств общества как системы?", o: ["Нелинейность", "Замкнутость", "Целостность", "Саморегулирование"], c: 1, e: "Общество — ОТКРЫТАЯ система, а не замкнутая." },
-  { t: "sys", q: "Общество обменивается ресурсами с природой и другими странами. Какое свойство это иллюстрирует?", o: ["Открытость", "Устойчивость", "Функциональность", "Сложность"], c: 0, e: "Открытая система взаимодействует с внешней средой." },
-  { t: "sys", q: "Кризис в экономике вызвал протесты и смену правительства. Какое свойство это показывает лучше всего?", o: ["Целостность (связь частей)", "Устойчивость", "Открытость", "Сложность"], c: 0, e: "Изменение в одной сфере повлекло изменения в других — части связаны в целое." },
-  { t: "sys", q: "Функция «воспроизводство и социализация человека» соответствует прежде всего сфере…", o: ["экономической", "политической", "социальной", "духовной"], c: 2, e: "Рождение и воспитание новых поколений — социальная сфера (семья)." },
-
-  { t: "nat", q: "Какое утверждение — о ВЛИЯНИИ природы на общество (а не о роли природы)?", o: ["Природа — среда обитания", "Природа определяет экономическую специализацию стран", "Природа — источник вдохновения", "Природа — источник ресурсов"], c: 1, e: "Влияние: темпы развития, специализация, менталитет. Остальное — роль природы." },
-  { t: "nat", q: "Что относится к положительному влиянию общества на природу?", o: ["Нерациональное использование ресурсов", "Создание национальных парков", "Истребление редких видов", "Загрязнение среды"], c: 1, e: "Заповедники и нацпарки — «плюс» в тетради." },
-
-  { t: "inst", q: "Социальный институт — это…", o: ["любая группа людей", "исторически сложившаяся устойчивая форма организации совместной деятельности", "государственное учреждение", "временное объединение по интересам"], c: 1, e: "Ключевое: исторически сложившаяся, устойчивая, выполняет общественно значимую функцию." },
-  { t: "inst", q: "Что является ФУНКЦИЕЙ, а не признаком социального института?", o: ["Наличие культурных символов", "Наличие учреждений", "Регламентация поведения людей", "Установки и правила поведения"], c: 2, e: "Функции: социализирующая, закрепление отношений, регламентация поведения." },
-  { t: "inst", q: "Парламентаризм — институт какой сферы?", o: ["Экономической", "Политической", "Социальной", "Духовной"], c: 1, e: "Парламентаризм и местное самоуправление — политические институты." },
-  { t: "inst", q: "Передача опыта и норм от поколения к поколению — это функция…", o: ["регламентирующая", "социализирующая", "закрепление отношений", "экономическая"], c: 1, e: "Социализирующая функция." },
-
-  { t: "dev", q: "Что характерно для реформы?", o: ["Проводят народные массы", "Стихийный характер", "Постепенные изменения по инициативе власти", "Меняет всё общество сразу"], c: 2, e: "Реформа: постепенно, сверху, целенаправленно, меняет одну сторону жизни." },
-  { t: "dev", q: "Что характерно для революции?", o: ["Целенаправленность", "Проводится властью", "Затрагивает одну сферу", "Коренное изменение всего общества"], c: 3, e: "Революция — резкие кардинальные изменения общества в целом, силами масс, стихийно." },
-  { t: "dev", q: "Отмена крепостного права в России (1861) — пример…", o: ["революции", "реформы", "регресса", "стагнации"], c: 1, e: "Проведена властью, по плану, изменила одну сторону жизни." },
-  { t: "dev", q: "Застой, отсутствие развития называется…", o: ["регресс", "стагнация", "эволюция", "реформа"], c: 1, e: "Стагнация — застой. Регресс — движение назад." },
-
-  { t: "prog", q: "Прогресс — это направление развития…", o: ["от сложного к простому", "от простого к сложному, от менее к более совершенному", "по кругу", "без изменений"], c: 1, e: "Это определение, и из него же — 4-е свойство (направленность)." },
-  { t: "prog", q: "Изобретение интернета дало доступ к знаниям, но породило фейки и зависимость. Какое свойство прогресса это иллюстрирует?", o: ["Противоречивость", "Универсальность", "Необратимость", "Стихийность"], c: 0, e: "Одно явление — и плюсы, и минусы." },
-  { t: "prog", q: "Универсальный критерий прогресса —", o: ["уровень развития науки", "уровень образования", "гуманизм", "степень свободы"], c: 2, e: "Гуманизм — главный: учитывает благо человека." },
-  { t: "prog", q: "Что НЕ является критерием прогресса по конспекту?", o: ["Уровень нравственности", "Численность армии", "Степень соцзащищённости граждан", "Уровень развития технологий"], c: 1, e: "Численности армии среди критериев нет." },
-
-  { t: "types", q: "Основной фактор производства в индустриальном обществе —", o: ["земля", "капитал", "информация", "ручной труд"], c: 1, e: "Земля — аграрное, капитал — индустриальное, информация — постиндустриальное." },
-  { t: "types", q: "Сословная структура и закрытость характерны для общества…", o: ["традиционного", "индустриального", "постиндустриального", "всех трёх"], c: 0, e: "В индустриальном — классы и открытое общество." },
-  { t: "types", q: "Преобладание сферы услуг — признак общества…", o: ["аграрного", "индустриального", "постиндустриального", "традиционного"], c: 2, e: "В постиндустриальном больше всего людей занято в услугах." },
-  { t: "types", q: "Урбанизация характерна для общества…", o: ["традиционного", "индустриального", "аграрного", "ни одного"], c: 1, e: "Промышленность собирает людей в города." },
-  { t: "types", q: "Сакрализация власти — признак…", o: ["традиционного общества", "индустриального", "постиндустриального", "гражданского общества"], c: 0, e: "В индустриальном власть теряет сакральность." },
-  { t: "types", q: "Появление массовой культуры связано с обществом…", o: ["аграрным", "индустриальным", "традиционным", "первобытным"], c: 1, e: "Духовная сфера индустриального: наука, светское сознание, рост образования, массовая культура." },
-  { t: "types", q: "«Учиться всю жизнь» — непрерывность образования — черта общества…", o: ["традиционного", "индустриального", "постиндустриального", "аграрного"], c: 2, e: "В информационном обществе знания быстро устаревают." },
-  { t: "types", q: "Экстенсивный путь развития означает рост…", o: ["за счёт технологий", "«вширь» — за счёт новых земель и работников", "за счёт науки", "за счёт информации"], c: 1, e: "Экстенсивный — вширь (аграрное общество); интенсивный — вглубь." },
-  { t: "types", q: "Цивилизационный подход (★) подчёркивает…", o: ["единые для всех ступени развития", "решающую роль экономики", "уникальность каждой цивилизации", "классовую борьбу"], c: 2, e: "Единые ступени и экономика — это формационный подход Маркса." },
-
-  { t: "glob", q: "Глобализация — это процесс…", o: ["отделения стран друг от друга", "усиления взаимосвязи и взаимозависимости стран и народов", "создания единого государства", "распада империй"], c: 1, e: "Определение из тетради." },
-  { t: "glob", q: "Создание транснациональных корпораций — проявление глобализации…", o: ["культурной", "политической", "экономической", "социальной"], c: 2, e: "ТНК и мировые кризисы — экономическая глобализация." },
-  { t: "glob", q: "Распространение модных тенденций и языковой обмен — это глобализация…", o: ["экономическая", "культурная", "политическая", "социальная"], c: 1, e: "Культурная: массовая культура, языки, мода." },
-  { t: "glob", q: "Что из перечисленного — ОТРИЦАТЕЛЬНОЕ последствие глобализации?", o: ["Обмен технологиями", "Рост толерантности", "Потеря народной уникальности", "Снижение конфликтов"], c: 2, e: "Минусы: разрыв богатых и бедных, потеря уникальности, навязывание стандартов." },
-  { t: "glob", q: "Что НЕ является причиной глобализации?", o: ["Развитие интернета", "Развитие транспорта", "Развитие международной торговли", "Натуральное хозяйство"], c: 3, e: "Натуральное хозяйство — производство для себя, наоборот изолирует." },
-
-  { t: "gp", q: "Какой признак НЕ относится к глобальным проблемам?", o: ["Охватывают всё человечество", "Угрожают жизни всего человечества", "Решаются силами одного государства", "Решение зависит от усилий всего человечества"], c: 2, e: "Глобальные проблемы решаются только общими усилиями." },
-  { t: "gp", q: "Разрыв в уровне жизни развитых и развивающихся стран — это проблема…", o: ["демографическая", "«Север — Юг»", "продовольственная", "экологическая"], c: 1, e: "Развитые страны в основном на Севере, развивающиеся — на Юге." },
-  { t: "gp", q: "Какой путь решения глобальных проблем указан в тетради?", o: ["Закрытие границ", "Формирование нового планетарного мышления", "Отказ от науки", "Сокращение торговли"], c: 1, e: "Пути: контроль, изучение причин, планетарное мышление, информирование." },
-  { t: "gp", q: "Парниковый эффект и глобальное потепление связаны прежде всего с…", o: ["ростом выбросов CO₂ и метана", "разрушением озонового слоя фреонами", "разливами нефти в океане", "опустыниванием"], c: 0, e: "Парниковые газы удерживают тепло у поверхности Земли. Фреоны разрушают озоновый слой — это другая проблема." },
-  { t: "gp", q: "Концепция устойчивого развития принята на конференции ООН…", o: ["в Стокгольме (1972)", "в Рио-де-Жанейро (1992)", "в Киото (1997)", "в Париже (2015)"], c: 1, e: "Рио-1992. Стокгольм-1972 — ЮНЕП; Киото и Париж — выбросы." },
-  { t: "gp", q: "Пробки в одном городе — глобальная проблема?", o: ["Да, их много", "Нет: не охватывает всё человечество и решается местными силами", "Да, они загрязняют воздух", "Да, если город большой"], c: 1, e: "Нужны все 3 признака одновременно." }
+/* блоки конспекта: d = определение, l = список, f = формула, n = заметка */
+const NOTES = [
+ {dt:'09.10',t:'Человек и общество',b:[
+  {d:'Социализация',x:'процесс усвоения человеком правил, по которым живёт общество'},
+  {l:'Агенты социализации',i:['первичной: семья, друзья','вторичной: коллеги, одноклассники']},
+  {d:'Индивид',x:'единичный представитель людского рода (БИО)'},
+  {d:'Индивидуальность',x:'отличительные особенности человека (БИО + СОЦ)'},
+  {d:'Личность',x:'человек с социально обусловленными и индивидуально выраженными характеристиками (СОЦ)'}
+ ]},
+ {dt:'13.10',t:'Деятельность человека',b:[
+  {d:'Деятельность',x:'активность человека, направленная на преобразование окружающей среды и самого человека'},
+  {l:'Особенности деятельности',i:['сознательный характер','орудийная','преобразовательный характер','общественный характер','целесообразная']},
+  {l:'Структура деятельности',o:1,i:['субъект','объект','цель (осознанный образ результата)','средства','мотив (побуждает человека к действию: интересы, потребности)','результат']},
+  {d:'Потребность',x:'нужда человека в чём-либо'},
+  {l:'Виды потребностей',i:['биологические','социальные','духовные']},
+  {l:'Пирамида потребностей (снизу вверх)',o:1,i:['физиологические','экзистенциальные','общение (социальные)','престижные','духовные']},
+  {l:'Виды деятельности',i:['игра (воображение, процесс, условный характер)','учение','труд (направлен на получение практически полезного результата)']},
+  {l:'Классификации деятельности',i:['практическая (материально-производственная) / духовная (познавательная, прогностическая)','индивидуальная / коллективная','законная / незаконная','созидательная / разрушительная']}
+ ]},
+ {dt:'Октябрь',t:'Мировоззрение',b:[
+  {d:'Мировоззрение',x:'система взглядов человека на мир'},
+  {l:'Пути формирования мировоззрения',i:['стихийное','организованное']},
+  {l:'Типы мировоззрения',i:['научное','религиозное','обыденное']},
+  {l:'Мировоззрение включает в себя',i:['знания','убеждения','идеалы','ценности']}
+ ]},
+ {dt:'Октябрь',t:'Способности',b:[
+  {d:'Способности',x:'свойства личности, позволяющие более успешно справляться с той или иной деятельностью'},
+  {l:'Виды способностей',i:['общие (красноречие, память и т.д.)','специальные (спортивные, математические и т.д.)']},
+  {l:'Ступени развития способностей (снизу вверх)',o:1,i:['задатки','одарённость','талант','гениальность']}
+ ]},
+ {dt:'Октябрь',t:'Мышление',b:[
+  {d:'Мышление',x:'активный процесс отражения окружающей действительности в понятиях, суждениях, теориях'},
+  {l:'Особенности мышления',i:['опосредованный характер','неразрывно связано с языком, речью','социальная природа','требует наличия проблемной ситуации','возникает на основе практической деятельности']},
+  {l:'Виды мышления',i:['наглядно-действенное (дети)','наглядно-образное (гуманитарии)','словесно-логическое (технари)']},
+  {l:'Мыслительные операции',i:['анализ и синтез','индукция и дедукция','сравнение','аналогия','абстрагирование']},
+  {d:'Индукция',x:'рассуждение от частного к общему'},
+  {d:'Дедукция',x:'рассуждение от общего к частному'},
+  {d:'Сравнение',x:'процесс поиска сходства и различий предметов, явлений'},
+  {d:'Аналогия',x:'установление сходства в каких-либо отношениях между явлениями, предметами'},
+  {d:'Абстрагирование',x:'отвлечение от несущественных признаков и мысленное выделение существенных особенностей предмета'}
+ ]},
+ {dt:'19.10',t:'Свобода человека',b:[
+  {d:'Свобода',x:'способность выбирать; осознанная необходимость'},
+  {l:'Понятия, связанные со свободой',i:['независимость','неподчинение','выбор','необходимость','активность','альтернатива','возможности']},
+  {l:'Проявления свободы (по сферам)',i:['социальная','экономическая','политическая','духовная']},
+  {n:'Любая свобода сопряжена с ответственностью.'}
+ ]},
+ {dt:'02.11',t:'Познавательная деятельность',b:[
+  {d:'Гносеология',x:'раздел философии, изучающий вопросы познания'},
+  {l:'Чувственное познание',o:1,i:['ощущение','восприятие','представление']},
+  {l:'Рациональное познание',o:1,i:['понятие','суждение','умозаключение']},
+  {n:'Обе формы познания ведут к истине. В тетради — подсказки «ПВО» и «СУП».'},
+  {d:'Истина',x:'соответствие наших знаний о предмете самому предмету познания'},
+  {d:'Агностицизм',x:'система взглядов, основанная на невозможности познать мир до конца'},
+  {d:'Абсолютная истина',x:'полное, исчерпывающее знание о предмете, не меняющееся со временем'},
+  {d:'Относительная истина',x:'неполное знание, которое со временем может измениться'},
+  {n:'И абсолютная, и относительная истина — объективны.'},
+  {l:'Критерии истины',i:['соответствие законам логики','соответствие ранее открытым научным законам','практика (универсальный критерий)']},
+  {d:'Практика',x:'активная деятельность людей, направленная на преобразование'},
+  {l:'Свойства истины',i:['объективность','конкретность']},
+  {l:'Под практикой понимают',i:['эксперимент','социальные действия (реформы)','материальное производство']}
+ ]},
+ {dt:'10.11',t:'Научное познание',b:[
+  {l:'Особенности научного познания',i:['доказуемость и обоснованность','выявление / открытие нового знания для человечества','системность','выработка специфических методов (наблюдение, эксперимент)','особый понятийный аппарат','непротиворечивость','объективность']},
+  {d:'Эмпирический уровень',x:'основывается на опытных данных; главная задача — описание внешних свойств объекта'},
+  {l:'Методы эмпирического уровня',i:['эксперимент','наблюдение','измерение','описание']},
+  {d:'Теоретический уровень',x:'факты и законы; даёт представление о внутренних связях; главная задача — ответить на вопрос «почему»'},
+  {l:'Методы теоретического уровня',i:['синтез','анализ','классификация']},
+  {l:'Особенности социального познания',i:['социальное знание всегда связано с интересами индивидов','социальное знание всегда нагружено оценкой','совпадение субъекта и объекта','ограниченность использования эксперимента']}
+ ]},
+ {dt:'11.11',t:'Ненаучное познание',b:[
+  {l:'Формы ненаучного познания',i:['жизненный опыт','народная мудрость (противоречивость)','околонаучные / паранаучные знания','искусство','мифология']}
+ ]},
+ {dt:'13.11',t:'Самопознание',b:[
+  {d:'Самопознание',x:'изучение личностью собственных психических и физических особенностей, осмысление самого себя'},
+  {l:'Методы самопознания',i:['наблюдение','самосравнение','самоанализ']},
+  {l:'Средства самопознания',i:['самоотчёт и самоисповедь','самопоставление','изучение психологической литературы','консультации психологов','участие в тестированиях','участие в социально-психологических тренингах']},
+  {d:'Самооценка',x:'результат самопознания'},
+  {l:'Что влияет на самооценку (3 фактора)',i:['сопоставление «реального Я» с «идеальным»','оценивание себя так, как оценивают тебя другие','отношение к собственным успехам и неудачам']},
+  {f:1}
+ ]}
 ];
 
-/* ---------- СОБЕРИ СПИСОК: ok — верные пункты, bad — лишние ---------- */
-const COLLECT = [
-  { t: "soc", title: "Значения понятия «общество»", ok: ["Совокупность людей с общими интересами", "Этап исторического развития", "Совокупность жителей конкретного государства", "Всё человечество в прошлом, настоящем, будущем"], bad: ["Вся живая природа", "Совокупность государственных органов"] },
-  { t: "sys", title: "Свойства общества как системы (8)", ok: ["Сложная", "Динамичность", "Открытая система", "Саморегулирующаяся", "Нелинейность", "Целостность", "Функциональность", "Устойчивость"], bad: ["Замкнутость", "Противоречивость", "Неизменность"] },
-  { t: "sys", title: "Функции общества (4)", ok: ["Производство материальных благ", "Регламентация и управление деятельностью людей", "Воспроизводство и социализация человека", "Производство духовных ценностей"], bad: ["Закрепление общественных отношений", "Источник вдохновения"] },
-  { t: "nat", title: "Роль природы в жизни человека (3)", ok: ["Естественная среда обитания", "Источник ресурсов для производства", "Источник вдохновения"], bad: ["Определяет менталитет людей", "Определяет экономическую специализацию"] },
-  { t: "nat", title: "Влияние природы на общество (3)", ok: ["Определяет темпы и направление развития", "Определяет экономическую специализацию стран", "Определяет менталитет людей"], bad: ["Источник вдохновения", "Естественная среда обитания"] },
-  { t: "inst", title: "Признаки социального института (4)", ok: ["Направленность на удовлетворение базовых потребностей", "Установки и правила поведения", "Культурные символы и знаки", "Система учреждений и неформальных структур"], bad: ["Регламентация поведения людей", "Социализирующая функция", "Стихийный характер"] },
-  { t: "inst", title: "Функции социальных институтов (3)", ok: ["Социализирующая", "Закрепление и воспроизводство общественных отношений", "Регламентация поведения людей"], bad: ["Наличие культурных символов", "Производство материальных благ"] },
-  { t: "dev", title: "Черты реформы (4)", ok: ["Постепенные изменения", "Проводят властные органы", "Целенаправленный характер", "Меняется одна из сторон жизни"], bad: ["Стихийный характер", "Проводят народные массы", "Меняет общество в целом"] },
-  { t: "prog", title: "Свойства прогресса (4)", ok: ["Противоречивость", "Относительность", "Применим к обществу и к его элементам", "Направленность от простого к сложному"], bad: ["Гуманизм", "Устойчивость", "Стихийность"] },
-  { t: "prog", title: "Критерии прогресса (6)", ok: ["Уровень развития науки и технологий", "Степень свободы", "Уровень нравственности", "Уровень образования", "Степень соцзащищённости граждан", "Гуманизм"], bad: ["Противоречивость", "Численность населения", "Размер территории"] },
-  { t: "types", title: "Признаки традиционного (аграрного) общества", ok: ["Основной фактор — земля", "Натуральное хозяйство", "Сакрализация власти", "Сословная структура", "Низкая социальная мобильность", "Большая роль традиций и обычаев"], bad: ["Урбанизация", "Товарное хозяйство", "Светское сознание", "Преобладание сферы услуг"] },
-  { t: "types", title: "Признаки постиндустриального общества", ok: ["Основной фактор — информация", "Роботизированное производство", "Наукоёмкое производство", "Преобладание сферы услуг", "Правовое государство и гражданское общество", "Непрерывность образования"], bad: ["Основной фактор — капитал", "Сословная структура", "Деспотическая власть"] },
-  { t: "glob", title: "Причины глобализации (4)", ok: ["Развитие коммуникаций, связи, интернета", "Развитие транспорта", "Развитие международной торговли", "Объединение усилий против глобальных проблем"], bad: ["Натуральное хозяйство", "Потеря народной уникальности"] },
-  { t: "glob", title: "Положительные последствия глобализации", ok: ["Обмен знаниями и технологиями", "Рост толерантности", "Снижение конфликтов", "Эффективное решение глобальных проблем", "Более равномерный экономический рост", "Политическая стабильность"], bad: ["Навязывание стандартов потребления", "Разрыв богатых и бедных стран"] },
-  { t: "gp", title: "Признаки глобальных проблем (3)", ok: ["Охватывают всё человечество", "Угрожают жизни всего человечества", "Решение зависит от усилий всего человечества"], bad: ["Решаются силами одной страны", "Касаются только развитых стран"] },
-  { t: "gp", title: "Типы глобальных проблем (5)", ok: ["Экологическая", "Угроза войны / терроризма", "Проблема «Север — Юг»", "Демографическая", "Продовольственная"], bad: ["Урбанизация", "Сакрализация власти"] },
-  { t: "gp", title: "Пути решения глобальных проблем (4)", ok: ["Контроль за состоянием глобальных процессов", "Изучение причин возникновения", "Формирование планетарного мышления", "Информирование людей"], bad: ["Закрытие границ", "Отказ от международной торговли"] }
-];
+/* ===================== ПОСТРОЕНИЕ ВОПРОСОВ ===================== */
+// group: {id, src:'plan'|'sign'|'note', key (фильтр), title, ctx, items, ordered}
+const G = []; const DEFS = [];
+PLANS.forEach(pl=>{
+  G.push({id:'p'+pl.n, src:'plan', key:'p'+pl.n, title:pl.t, ctx:'План '+pl.n, items:pl.p.map(x=>x[0]), ordered:true, top:true});
+  pl.p.forEach((x,i)=>{ if(x[1].length>=2) G.push({id:'p'+pl.n+'.'+(i+1), src:'plan', key:'p'+pl.n, title:x[0], ctx:'План '+pl.n+' · пункт '+(i+1), items:x[1], ordered:false}); });
+});
+SIGNS.forEach((s,i)=>G.push({id:'s'+i, src:'sign', key:'sign', title:s[0], ctx:'Признаки', items:s[1], ordered:false}));
+NOTES.forEach((nt,ni)=>nt.b.forEach((b,bi)=>{
+  if(b.l) G.push({id:'n'+ni+'.'+bi, src:'note', key:'note', title:b.l, ctx:'Конспект · '+nt.t, items:b.i, ordered:!!b.o});
+  if(b.d) DEFS.push({id:'d'+ni+'.'+bi, src:'note', key:'note', term:b.d, x:b.x, ctx:'Конспект · '+nt.t});
+}));
+DEFS.push({id:'dform', src:'note', key:'note', term:'Формула самооценки', x:'Самооценка = Успех / Притязания', ctx:'Конспект · Самопознание'});
 
-/* ---------- КЛАССИФИКАЦИЯ: b — корзины, items: [текст, индекс корзины] ---------- */
-const SORT = [
-  { t: "types", title: "Тип общества", b: ["Традиционное", "Индустриальное", "Постиндустриальное"], items: [
-    ["Основной фактор — земля", 0], ["Ручной труд и простые механизмы", 0], ["Натуральное хозяйство", 0], ["Экстенсивный путь развития", 0], ["Низкая производительность труда", 0],
-    ["Деспотическая власть", 0], ["Народ отстранён от власти", 0], ["Сакрализация власти", 0], ["Сословная структура", 0], ["Закрытое общество", 0], ["Слабое развитие науки", 0], ["Большая роль традиций и обычаев", 0],
-    ["Основной фактор — капитал", 1], ["Машинный труд", 1], ["Товарное хозяйство", 1], ["Демократизация", 1], ["Власть теряет сакральность", 1], ["Классовая структура", 1], ["Урбанизация", 1], ["Наука — основной институт", 1], ["Формируется светское сознание", 1], ["Появление массовой культуры", 1],
-    ["Основной фактор — информация", 2], ["Роботизированное производство", 2], ["Наукоёмкое производство", 2], ["Преобладание сферы услуг", 2], ["Становление правового государства", 2], ["Непрерывность образования", 2]
-  ]},
-  { t: "dev", title: "Реформа или революция", b: ["Реформа", "Революция"], items: [
-    ["Постепенные изменения", 0], ["Проводят властные органы", 0], ["Целенаправленный характер", 0], ["Меняется одна из сторон жизни", 0], ["Отмена крепостного права (1861)", 0],
-    ["Резкие, кардинальные изменения", 1], ["Проводят народные массы", 1], ["Стихийный характер", 1], ["Меняет общество в целом", 1], ["Великая французская революция (1789)", 1]
-  ]},
-  { t: "sys", title: "Сфера общества", b: ["Экономическая", "Политическая", "Социальная", "Духовная"], items: [
-    ["Деньги", 0], ["Рынок", 0], ["Производство", 0], ["Собственность", 0],
-    ["Власть", 1], ["Выборы", 1], ["Государство", 1], ["Парламентаризм", 1], ["Местное самоуправление", 1],
-    ["Семья", 2], ["Социальные группы", 2], ["Отцовство и материнство", 2],
-    ["Религия", 3], ["Искусство", 3], ["Наука", 3], ["Образование", 3]
-  ]},
-  { t: "soc", title: "Общность или общество", b: ["Общность", "Общество"], items: [
-    ["Неформальные отношения", 0], ["Эмоции, традиции, обычаи", 0], ["Компания друзей", 0], ["Соседи в деревне", 0],
-    ["Формальные отношения", 1], ["Рациональность", 1], ["Место человека в структуре", 1], ["Коллектив фирмы", 1]
-  ]},
-  { t: "nat", title: "Влияние общества на природу", b: ["Плюс (+)", "Минус (−)"], items: [
-    ["Заповедники и нацпарки", 0], ["Сортировка и утилизация мусора", 0], ["Экологический кодекс и наказания", 0], ["Расширение популяций флоры и фауны", 0], ["Замена ресурсов", 0],
-    ["Загрязнение окружающей среды", 1], ["Нерациональное использование ресурсов", 1], ["Истребление редких видов", 1]
-  ]},
-  { t: "inst", title: "Признак или функция соц. института", b: ["Признак", "Функция"], items: [
-    ["Удовлетворение базовых потребностей", 0], ["Установки и правила поведения", 0], ["Культурные символы и знаки", 0], ["Учреждения и неформальные структуры", 0],
-    ["Социализирующая", 1], ["Закрепление и воспроизводство отношений", 1], ["Регламентация поведения людей", 1]
-  ]},
-  { t: "prog", title: "Свойство или критерий прогресса", b: ["Свойство", "Критерий"], items: [
-    ["Противоречивость", 0], ["Относительность", 0], ["Применим к обществу и к элементам", 0], ["Направленность", 0],
-    ["Уровень науки и технологий", 1], ["Степень свободы", 1], ["Уровень нравственности", 1], ["Уровень образования", 1], ["Соцзащищённость граждан", 1], ["Гуманизм", 1]
-  ]},
-  { t: "glob", title: "Форма глобализации", b: ["Экономическая", "Культурная", "Политическая", "Социальная"], items: [
-    ["Мировые экономические кризисы", 0], ["Транснациональные корпорации", 0],
-    ["Массовая культура", 1], ["Языковой обмен", 1], ["Модные тенденции", 1],
-    ["Политические альянсы", 2], ["Политические союзы", 2],
-    ["Возможность мигрировать", 3], ["Расширение международных организаций", 3]
-  ]},
-  { t: "glob", title: "Последствия глобализации", b: ["Плюс (+)", "Минус (−)"], items: [
-    ["Обмен знаниями и технологиями", 0], ["Рост толерантности", 0], ["Снижение конфликтов", 0], ["Эффективнее решаются глобальные проблемы", 0], ["Более равномерный экономический рост", 0], ["Политическая стабильность", 0],
-    ["Разрыв между богатыми и бедными странами", 1], ["Потеря народной уникальности", 1], ["Навязывание стандартов производства и потребления", 1]
-  ]},
-  { t: "nat", title: "Роль природы или влияние природы на общество", b: ["Роль природы", "Влияние на общество"], items: [
-    ["Естественная среда обитания", 0], ["Источник ресурсов", 0], ["Источник вдохновения", 0],
-    ["Темпы и направление развития", 1], ["Экономическая специализация стран", 1], ["Менталитет людей", 1]
-  ]},
-  { t: "gp", title: "Тип глобальной проблемы", b: ["Экологическая", "Война / терроризм", "«Север — Юг»", "Демографическая", "Продовольственная"], items: [
-    ["Таяние ледников и подъём уровня океана", 0], ["Кислотные дожди", 0], ["Вырубка тропических лесов", 0], ["Исчезновение редких видов", 0],
-    ["Распространение ядерного оружия", 1], ["Международный терроризм", 1],
-    ["Огромный разрыв в доходах развитых и развивающихся стран", 2], ["Долги бедных стран перед богатыми", 2],
-    ["Старение населения развитых стран", 3], ["Очень быстрый рост населения в развивающихся странах", 3],
-    ["Голод и недоедание в ряде регионов", 4], ["Нехватка продовольствия при росте населения", 4]
-  ]}
-];
+/* ===================== ХРАНИЛИЩЕ ===================== */
+const LS='obsch-v1';
+let S={box:{}, seen:0, streak:0};
+try{ const r=localStorage.getItem(LS); if(r) S=Object.assign(S,JSON.parse(r)); }catch(e){}
+function save(){ try{ localStorage.setItem(LS,JSON.stringify(S)); }catch(e){} }
+function mark(id,ok){ const b=S.box[id]||0; S.box[id]= ok? Math.min(3,b+1) : 0; S.seen++; save(); }
+function mastery(ids){ if(!ids.length) return 0; let s=0; ids.forEach(id=>s+=(S.box[id]||0)); return s/(3*ids.length); }
+const allIds=()=>G.map(g=>g.id).concat(DEFS.map(d=>d.id));
+const planIds=n=>G.filter(g=>g.key==='p'+n).map(g=>g.id);
 
+/* ===================== УТИЛИТЫ ===================== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.random()*a.length|0];
+const norm=s=>s.toLowerCase().replace(/ё/g,'е').replace(/\([^)]*\)/g,' ').replace(/[^a-zа-я0-9\s-]/g,' ').replace(/\s+/g,' ').trim();
+const STOP=new Set('и в во с со на по к ко от для а о об как т д др его ее их это то что из за при над под между же или не'.split(' '));
+const stem=w=>w.length>=7?w.slice(0,5):w.slice(0,Math.max(3,w.length-2));
+const stems=s=>norm(s).split(/[\s-]+/).filter(w=>w.length>2&&!STOP.has(w)).map(stem);
+const same=(a,b)=>a.startsWith(b)||b.startsWith(a);
+const hasStem=(arr,s)=>arr.some(x=>same(x,s));
+// похожесть двух пунктов: доля общих основ от меньшего
+function sim(a,b){ const A=[...new Set(stems(a))],B=[...new Set(stems(b))]; if(!A.length||!B.length) return 0; const k=A.filter(x=>hasStem(B,x)).length; return k/Math.min(A.length,B.length); }
+const buzz=n=>{try{navigator.vibrate&&navigator.vibrate(n)}catch(e){}};
+const CHEV='<svg class="chev" viewBox="0 0 8 14"><path d="M1 1l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
+const LETTERS='абвгдеж';
 
-const $ = (s, el = document) => el.querySelector(s);
-const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-const topicName = id => (TOPICS.find(t => t.id === id) || {}).name || "";
+/* ===================== ЭКРАНЫ ===================== */
+function renderHome(){
+  const ids=allIds(), m=mastery(ids), pct=Math.round(m*100);
+  const weak=ids.filter(id=>id in S.box && S.box[id]===0).length;
+  const ex=S.exam||{}, five=PLANS.filter(p=>ex[p.n]&&ex[p.n].g===5).length, good=PLANS.filter(p=>ex[p.n]&&ex[p.n].g>=4).length;
+  const read=Object.keys(S.read||{}).length;
+  const pm=mastery(G.filter(g=>g.src==='plan').map(g=>g.id));
+  const steps=[
+    {ok:read>=8, t:'Прочитать все 8 планов', s:`открыто ${read} из 8`, a:"goTab('plans')"},
+    {ok:pm>=.6, t:'Потренировать планы', s:`выучено ${Math.round(pm*100)}% — цель 60%`, a:"openSetup('mix')"},
+    {ok:good>=8, t:'Сдать экзамен по всем планам на 4–5', s:`сдано ${good} из 8`, a:"openExamSetup()"}
+  ];
+  const cur=steps.findIndex(x=>!x.ok);
+  const C=2*Math.PI*40;
+  $('#t-home').innerHTML=`
+   <div class="large">Сегодня</div>
+   <div class="subtle">Тест по обществознанию · планы</div>
+   <div class="hero">
+     <div class="ring"><svg viewBox="0 0 92 92"><circle cx="46" cy="46" r="40" stroke="rgba(255,255,255,.25)" stroke-width="9" fill="none"/>
+       <circle cx="46" cy="46" r="40" stroke="#c4f53c" stroke-width="9" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-m)}" style="transition:stroke-dashoffset 1s"/></svg><span>${pct}%</span></div>
+     <div><h2>${cur<0?'Ты готов! 🎉':pct<30?'Начнём с планов':pct<70?'Хороший темп':'Почти готово!'}</h2><p>Готовность к тесту${five?` · на «5» сдано ${five} из 8`:''}</p></div>
+   </div>
+   <div class="sec">Как готовиться</div>
+   <div class="group">${steps.map((x,i)=>`<button class="row step ${x.ok?'ok':''} ${i===cur?'cur':''}" onclick="${x.a}"><div class="num">${x.ok?'✓':i+1}</div><div class="tx"><b>${x.t}</b><small>${x.s}</small></div>${CHEV}</button>`).join('')}</div>
+   ${weak?`<button class="big" style="background:var(--orange);box-shadow:0 8px 18px rgba(255,149,0,.3)" onclick="startWeak()">↻ Повторить ошибки (${weak})</button>`:''}
+   <div class="sec">Тренировка</div>
+   <button class="tile wide" style="margin-top:0;margin-bottom:12px" onclick="openSetup('mix')"><div class="ti" style="background:rgba(94,92,230,.14)">⚡️</div><div><b>Быстрая тренировка</b><small>Все режимы вперемешку</small></div>${CHEV}</button>
+   <div class="grid">
+     ${tile('cards','🃏','Карточки','Вспомни, переверни, оцени себя','rgba(94,92,230,.14)')}
+     ${tile('build','🧩','Собрать план','Расставь пункты по порядку','rgba(255,149,0,.16)')}
+     ${tile('mem','✍️','По памяти','Напиши пункты — проверю','rgba(48,199,89,.16)')}
+     ${tile('odd','🔍','Лишний пункт','Найди то, что не отсюда','rgba(255,59,48,.13)')}
+   </div>
+   <button class="tile wide" onclick="openExamSetup()"><div class="ti" style="background:rgba(140,60,200,.15)">⏱</div><div><b>Экзамен</b><small>План целиком по памяти, на время, с оценкой</small></div>${CHEV}</button>
+   <button class="link danger" id="rst" onclick="resetP(this)">Сбросить прогресс</button>`;
+}
+function goTab(t){ document.querySelector(`#bar button[data-t="${t}"]`).click(); }
+function tile(mode,ic,t,s,bg){return `<button class="tile" onclick="openSetup('${mode}')"><div class="ti" style="background:${bg}">${ic}</div><b>${t}</b><small>${s}</small></button>`}
+function planRow(pl){
+  const m=mastery(planIds(pl.n));
+  return `<button class="row" onclick="openPlan(${pl.n})"><div class="num" style="background:${m>=.67?'var(--green)':m>0?'var(--orange)':'var(--accent)'}">${pl.n}</div>
+   <div class="tx"><b>${esc(pl.t)}${S.exam&&S.exam[pl.n]?`<span class="badge" style="background:${GC[S.exam[pl.n].g]}">${S.exam[pl.n].g}</span>`:''}</b><div class="mini"><i style="width:${Math.round(m*100)}%"></i></div></div>${CHEV}</button>`;
+}
+function exText(n){ return S.exam&&S.exam[n]?'Лучшая оценка: '+S.exam[n].g+' ('+S.exam[n].p+'%) · 5 минут':'5 минут, весь план по памяти'; }
+let rstT=0;
+function resetP(el){ if(Date.now()-rstT<2500){ S={box:{},seen:0,streak:0,exam:{},read:{}}; save(); renderAll(); toast('Прогресс сброшен'); } else { rstT=Date.now(); el.textContent='Нажмите ещё раз для сброса'; setTimeout(()=>{ if(el.isConnected) el.textContent='Сбросить прогресс'; },2500);} }
 
-let mode = "cards";
-let active = new Set(TOPICS.map(t => t.id));
-const inTopics = arr => arr.filter(x => active.has(x.t));
+function renderPlans(){
+  $('#t-plans').innerHTML=`<div class="large">Планы</div><div class="subtle">Полоска — насколько выучен план, значок — лучшая оценка на экзамене.</div>
+   <div class="group">${PLANS.map(planRow).join('')}</div>
+   <button class="big" onclick="openSetup('mix',{plans:true})">Тренировать все планы</button>
+   <button class="link" onclick="openExamSetup()">⏱ Экзамен по планам →</button>`;
+}
+function renderSigns(){
+  $('#t-signs').innerHTML=`<div class="large">Признаки</div><div class="subtle">Нажмите на понятие, чтобы увидеть признаки.</div>
+   <div class="group">${SIGNS.map((s,i)=>`<button class="row nl" onclick="toggleSign(this,${i})" style="flex-wrap:wrap">
+     <div class="tx"><b>${esc(s[0])}</b><small>${s[1].length} ${s[1].length>4?'признаков':'признака'}</small></div>${CHEV}
+     <div class="ans" style="display:none;width:100%;margin-top:6px">${s[1].map((x,j)=>`<div><em>${j+1}</em>${esc(x)}</div>`).join('')}</div></button>`).join('')}</div>
+   <button class="big" onclick="startSession('cards',{sign:true})">Карточки по признакам</button>
+   <button class="link" onclick="openSetup('mix',{sign:true})">Другие режимы →</button>`;
+}
+function toggleSign(el){ const a=el.querySelector('.ans'), o=a.style.display==='none'; a.style.display=o?'block':'none'; el.querySelector('.chev').style.transform=o?'rotate(90deg)':''; }
+function renderNotes(){
+  $('#t-notes').innerHTML=`<div class="large">Конспект</div><div class="subtle">Тетрадь, переписанная начисто.</div>
+   ${NOTES.map(nt=>`<div class="note"><div class="dt">${esc(nt.dt)}</div><h3>${esc(nt.t)}</h3>${nt.b.map(b=>{
+     if(b.d) return `<div class="def"><mark>${esc(b.d)}</mark> — ${esc(b.x)}</div>`;
+     if(b.l) return `<div class="lst"><b>${esc(b.l)}</b>${b.i.map(x=>`<div>${esc(x)}</div>`).join('')}</div>`;
+     if(b.n) return `<div class="tip">${esc(b.n)}</div>`;
+     if(b.f) return `<div class="formula">Самооценка = <span class="frac"><span>Успех</span><span>Притязания</span></span></div>`;
+     return '';}).join('')}</div>`).join('')}
+   <button class="big" onclick="startSession('cards',{note:true})">Карточки по конспекту</button>
+   <button class="link" onclick="openSetup('mix',{note:true})">Другие режимы →</button>`;
+}
+function renderAll(){ renderHome(); renderPlans(); renderSigns(); renderNotes();
+  document.querySelectorAll('.page[data-plan]').forEach(p=>{ const e=p.querySelector('#exs'); if(e) e.textContent=exText(+p.dataset.plan); }); }
 
-/* ---------- тема оформления ---------- */
-$("#themeBtn").onclick = () => {
-  const r = document.documentElement;
-  const dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-  r.dataset.theme = dark ? "light" : "dark";
-};
+/* tabs */
+document.querySelectorAll('#bar button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#bar button').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.id==='t-'+b.dataset.t));
+  $('#t-'+b.dataset.t).scrollTop=0; buzz(5);
+});
 
-/* ---------- фильтр тем ---------- */
-function renderTopics() {
-  const box = $("#topics");
-  const all = active.size === TOPICS.length;
-  box.innerHTML = `<button class="chip ${all ? "on" : ""}" data-t="*">Все темы</button>` +
-    TOPICS.map(t => `<button class="chip ${active.has(t.id) && !all ? "on" : ""}" data-t="${t.id}">${esc(t.name)}</button>`).join("");
-  box.querySelectorAll("button").forEach(b => b.onclick = () => {
-    const id = b.dataset.t;
-    if (id === "*") active = new Set(TOPICS.map(t => t.id));
-    else if (active.size === TOPICS.length) active = new Set([id]);
-    else if (active.has(id)) { active.delete(id); if (!active.size) active = new Set(TOPICS.map(t => t.id)); }
-    else active.add(id);
-    renderTopics(); start();
+/* ===================== СТРАНИЦА ПЛАНА ===================== */
+function openPlan(n){
+  const pl=PLANS[n-1];
+  S.read=S.read||{}; if(!S.read[n]){ S.read[n]=1; save(); renderHome(); }
+  const nav=document.createElement('div'); nav.className='nav';
+  nav.innerHTML=`<button class="back"><svg width="12" height="20" viewBox="0 0 12 20"><path d="M10 2 2 10l8 8" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Назад</button><div class="ttl">План ${n}</div><button class="act">Скрыть</button>`;
+  const pg=document.createElement('div'); pg.className='page';
+  pg.innerHTML=`<div class="kind" style="margin-top:6px">План ${n}</div><div class="q" style="font-size:26px">${esc(pl.t)}</div>${pl.s?`<div class="qs">${esc(pl.s)}</div>`:'<div style="height:14px"></div>'}
+   <div class="group" id="pbody">${pl.p.map((x,i)=>`<div class="pt"><b><em>${i+1}.</em>${esc(x[0])}</b>${x[1].length?`<ul>${x[1].map((y,j)=>`<li><em>${LETTERS[j]})</em>${esc(y)}</li>`).join('')}</ul>`:''}</div>`).join('')}</div>
+   <div class="sec">Учить этот план</div>
+   <div class="grid">
+     <button class="tile" data-m="cards"><div class="ti" style="background:rgba(94,92,230,.14)">🃏</div><b>Карточки</b></button>
+     <button class="tile" data-m="build"><div class="ti" style="background:rgba(255,149,0,.16)">🧩</div><b>Собрать</b></button>
+     <button class="tile" data-m="mem"><div class="ti" style="background:rgba(48,199,89,.16)">✍️</div><b>По памяти</b></button>
+     <button class="tile" data-m="odd"><div class="ti" style="background:rgba(255,59,48,.13)">🔍</div><b>Лишний</b></button>
+   </div>
+   <button class="tile wide" id="exb"><div class="ti" style="background:rgba(140,60,200,.15)">⏱</div><div><b>Экзамен по этому плану</b><small id="exs">${exText(n)}</small></div>${CHEV}</button>`;
+  document.body.append(pg,nav);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{pg.classList.add('in');nav.classList.add('in')}));
+  const close=()=>{pg.classList.remove('in');nav.classList.remove('in');setTimeout(()=>{pg.remove();nav.remove()},400)};
+  nav.querySelector('.back').onclick=close;
+  const act=nav.querySelector('.act'), body=pg.querySelector('#pbody');
+  act.onclick=()=>{ const h=body.classList.toggle('hidden-sub'); act.textContent=h?'Показать':'Скрыть'; body.querySelectorAll('.pt').forEach(p=>p.classList.remove('open')); };
+  body.querySelectorAll('.pt').forEach(p=>p.onclick=()=>p.classList.toggle('open'));
+  pg.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>startSession(b.dataset.m,{plans:[n]}));
+  pg.querySelector('#exb').onclick=()=>runExam([n],300);
+  pg.dataset.plan=n;
+  // свайп назад от левого края
+  let sx=null; pg.addEventListener('touchstart',e=>{const x=e.touches[0].clientX; sx=x<30?x:null},{passive:true});
+  pg.addEventListener('touchend',e=>{ if(sx!==null && e.changedTouches[0].clientX-sx>80) close(); sx=null; });
+}
+
+/* ===================== НАСТРОЙКА СЕССИИ (шторка) ===================== */
+const MODE_NAMES={mix:'Быстрая тренировка',cards:'Карточки',build:'Собрать план',odd:'Лишний пункт',mem:'По памяти'};
+function openSetup(mode,pre){
+  pre=pre||{};
+  let sel={plans:new Set(), sign:false, note:false};
+  if(pre.plans===true||(!pre.sign&&!pre.note&&!pre.plans)) PLANS.forEach(p=>sel.plans.add(p.n));
+  else if(Array.isArray(pre.plans)) pre.plans.forEach(n=>sel.plans.add(n));
+  if(pre.sign) sel.sign=true; if(pre.note) sel.note=true;
+  let len=mode==='cards'?20:12;
+  const sh=$('#sheet');
+  const draw=()=>{
+    sh.innerHTML=`<div class="grab"></div><h3>${MODE_NAMES[mode]}</h3><div class="subtle" style="margin-bottom:14px">${mode==='mix'?'Все режимы вперемешку — как будто не знаешь формат теста':'Что тренируем?'}</div>
+     <div class="sec" style="margin-top:4px">Планы <button style="float:right;color:var(--accent);text-transform:none;font-size:13px" id="allp">${sel.plans.size===8?'Снять все':'Выбрать все'}</button></div>
+     <div class="chips">${PLANS.map(p=>`<button class="tog ${sel.plans.has(p.n)?'on':''}" data-p="${p.n}">${p.n}. ${esc(p.t.length>22?p.t.slice(0,21)+'…':p.t)}</button>`).join('')}</div>
+     <div class="sec">Ещё</div>
+     <div class="chips"><button class="tog ${sel.sign?'on':''}" data-x="sign">Признаки</button><button class="tog ${sel.note?'on':''}" data-x="note">Конспект</button></div>
+     <div class="sec">Сколько вопросов</div><div class="seg">${[8,12,20,0].map(v=>`<button data-l="${v}" class="${len===v?'on':''}">${v||'Все'}</button>`).join('')}</div>
+     <button class="big" id="go" style="margin-top:22px">Начать</button>`;
+    sh.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const n=+b.dataset.p; sel.plans.has(n)?sel.plans.delete(n):sel.plans.add(n); buzz(5); draw();});
+    sh.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{sel[b.dataset.x]=!sel[b.dataset.x]; buzz(5); draw();});
+    sh.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{len=+b.dataset.l; draw();});
+    sh.querySelector('#allp').onclick=()=>{ if(sel.plans.size===8) sel.plans.clear(); else PLANS.forEach(p=>sel.plans.add(p.n)); draw(); };
+    sh.querySelector('#go').onclick=()=>{
+      if(!sel.plans.size&&!sel.sign&&!sel.note){ sh.querySelector('#go').classList.add('shake'); setTimeout(()=>sh.querySelector('#go')&&sh.querySelector('#go').classList.remove('shake'),400); return; }
+      closeSheet(); startSession(mode,{plans:[...sel.plans],sign:sel.sign,note:sel.note,len});
+    };
+  };
+  draw(); $('#dim').classList.add('on'); sh.classList.add('on');
+}
+function closeSheet(){ $('#dim').classList.remove('on'); $('#sheet').classList.remove('on'); }
+$('#dim').onclick=closeSheet;
+(()=>{let sy=null;const sh=$('#sheet');sh.addEventListener('touchstart',e=>{sy=sh.scrollTop<=0?e.touches[0].clientY:null},{passive:true});sh.addEventListener('touchend',e=>{if(sy!==null&&e.changedTouches[0].clientY-sy>90)closeSheet();sy=null});})();
+
+/* ===================== ГЕНЕРАЦИЯ ЗАДАНИЙ ===================== */
+function poolFor(f){
+  const keys=new Set((f.plans||[]).map(n=>'p'+n)); if(f.sign) keys.add('sign'); if(f.note) keys.add('note');
+  return {groups:G.filter(g=>keys.has(g.key)), defs:DEFS.filter(d=>keys.has(d.key))};
+}
+function intruderFor(g,avoid){
+  avoid=avoid||[];
+  const src=G.filter(x=>x.src===g.src && x.id!==g.id && x.title!==g.title && !!x.top===!!g.top);
+  const pool=(src.length?src:G.filter(x=>x.id!==g.id)).flatMap(x=>x.items);
+  const okc=c=>!g.items.some(it=>sim(it,c)>=.5) && !avoid.includes(c) && !sim(g.title,c);
+  const cands=shuffle(pool).filter(okc);
+  if(cands.length) return cands[0];
+  return shuffle(G.flatMap(x=>x.items)).find(okc)||'классовая борьба';
+}
+function makeTask(mode,obj){
+  if(obj.term) return {mode:'cards',def:obj,id:obj.id};
+  const g=obj;
+  if(mode==='odd'){
+    const shown=shuffle(g.items).slice(0,Math.min(4,g.items.length));
+    const extra=intruderFor(g);
+    return {mode,g,id:g.id,opts:shuffle(shown.concat([extra])),extra};
+  }
+  if(mode==='build'){
+    if(g.ordered) return {mode,g,id:g.id,kind:'order',opts:shuffle(g.items)};
+    const ds=[]; ds.push(intruderFor(g)); ds.push(intruderFor(g,ds));
+    return {mode,g,id:g.id,kind:'pick',opts:shuffle(g.items.concat(ds)),ds};
+  }
+  return {mode,g,id:g.id};
+}
+function modeFits(mode,o){
+  if(o.term) return mode==='cards';
+  if(mode==='odd') return o.items.length>=2;
+  if(mode==='build') return o.items.length>=2;
+  return true;
+}
+function startSession(mode,f){
+  f=f||{}; if(!f.plans&&!f.sign&&!f.note) f.plans=PLANS.map(p=>p.n);
+  const {groups,defs}=poolFor(f);
+  let tasks=[];
+  if(mode==='cards'){
+    let objs=groups.concat(defs);
+    // слабые и новые — вперёд
+    objs=shuffle(objs).sort((a,b)=>(S.box[a.id]||0)-(S.box[b.id]||0));
+    tasks=objs.map(o=>makeTask('cards',o));
+    if(f.len) tasks=tasks.slice(0,f.len);
+  } else {
+    const modes=mode==='mix'?['cards','build','mem','odd']:[mode];
+    let objs=shuffle(mode==='mix'?groups.concat(defs):groups).sort((a,b)=>(S.box[a.id]||0)-(S.box[b.id]||0)+(Math.random()-.5)*1.2);
+    // планы целиком — в приоритете
+    objs.sort((a,b)=>(b.top?1:0)-(a.top?1:0)+(Math.random()-.5)*1.4);
+    for(const o of objs){
+      const ms=modes.filter(m=>modeFits(m,o)); if(!ms.length) continue;
+      tasks.push(makeTask(pick(ms),o));
+    }
+    if(f.len) tasks=tasks.slice(0,f.len);
+  }
+  if(!tasks.length){ return; }
+  runSession(tasks, mode);
+}
+function startWeak(){
+  const ids=new Set(allIds().filter(id=>id in S.box && S.box[id]===0));
+  const objs=G.filter(g=>ids.has(g.id)).concat(DEFS.filter(d=>ids.has(d.id)));
+  const tasks=shuffle(objs).map(o=>{ const ms=['cards','build','mem','odd'].filter(m=>modeFits(m,o)); return makeTask(pick(ms),o); });
+  if(tasks.length) runSession(tasks,'weak');
+}
+
+/* ===================== ТРЕНАЖЁР ===================== */
+let SES=null;
+function runSession(tasks,mode){
+  SES={tasks,i:0,ok:0,mode};
+  const tr=$('#tr');
+  tr.innerHTML=`<div class="trh"><button class="x" id="trx"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M1 1l10 10M11 1 1 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><div class="prog"><i id="pg"></i></div><div class="cnt" id="cnt"></div></div><div class="trb" id="trb"></div><div class="trf" id="trf"></div>`;
+  tr.classList.add('on');
+  $('#trx').onclick=safeClose;
+  showTask();
+}
+let xT=0;
+function safeClose(){ if(EX&&EX.writing&&$('#ta')&&$('#ta').value.trim()&&Date.now()-xT>2500){ xT=Date.now(); toast('Ответ не сдан. Нажмите ✕ ещё раз, чтобы выйти'); return; } endSession(); }
+function endSession(){ clearInterval(EXT); $('#tr').classList.remove('on'); SES=null; EX=null; renderAll(); }
+function progress(){ $('#pg').style.width=(SES.i/SES.tasks.length*100)+'%'; $('#cnt').textContent=Math.min(SES.i+1,SES.tasks.length)+' / '+SES.tasks.length; }
+function next(ok){
+  const t=SES.tasks[SES.i]; mark(t.id,ok); if(ok) SES.ok++;
+  SES.i++; if(SES.i>=SES.tasks.length) return finish(); showTask();
+}
+function finish(){
+  $('#pg').style.width='100%'; $('#cnt').textContent='';
+  const r=SES.ok/SES.tasks.length;
+  $('#trb').innerHTML=`<div class="done anim"><div class="em">${r>=.85?'🏆':r>=.6?'💪':'📚'}</div><h2>${SES.ok} из ${SES.tasks.length}</h2>
+   <p>${r>=.85?'Отлично! Этот материал ты знаешь.':r>=.6?'Неплохо. Ошибки попадут в «Повторить ошибки».':'Ничего страшного — повтори ошибки ещё раз, станет легче.'}</p></div>`;
+  $('#trf').innerHTML=`<button class="big" style="background:var(--card2);color:var(--text);box-shadow:none" onclick="endSession()">Готово</button>`+
+   (SES.ok<SES.tasks.length?`<button class="big" onclick="redoWrong()">Ещё раз ошибки</button>`:'');
+  buzz([10,40,10]);
+}
+function redoWrong(){
+  const wrong=SES.tasks.filter(t=>(S.box[t.id]||0)===0);
+  const fresh=wrong.map(t=>{ const o=t.def||t.g; return makeTask(t.mode,o); });
+  if(fresh.length) runSession(fresh,SES.mode); else endSession();
+}
+function head(t,kind,q,qs){ return `<div class="kind">${kind}</div><div class="q">${esc(q)}</div><div class="qs">${qs}</div>`; }
+function showTask(){
+  progress();
+  const t=SES.tasks[SES.i], b=$('#trb'), f=$('#trf');
+  b.scrollTop=0; b.innerHTML=''; f.innerHTML='';
+  ({cards:taskCard,build:taskBuild,mem:taskMem,odd:taskOdd})[t.mode](t,b,f);
+  b.firstElementChild&&b.firstElementChild.classList.add('anim');
+}
+
+/* --- карточки --- */
+function taskCard(t,b,f){
+  let front,back,ctx;
+  if(t.def){ ctx=t.def.ctx; front=`<div class="q">${esc(t.def.term)}</div><div class="qs">Дай определение</div>`;
+    back=`<div class="kind">${esc(t.def.term)}</div><div style="font-size:19px;line-height:1.4">${esc(t.def.x)}</div>`; }
+  else { const g=t.g; ctx=g.ctx;
+    front=`<div class="q">${esc(g.title)}</div><div class="qs">${g.top?'Назови пункты плана':g.src==='sign'?'Назови признаки':'Перечисли'} · ${g.items.length} шт.</div>`;
+    back=`<div class="kind">${esc(g.title)}</div><div class="ans">${g.items.map((x,i)=>`<div><em>${g.top?(i+1)+'.':LETTERS[i]+')'}</em>${esc(x)}</div>`).join('')}</div>`; }
+  b.innerHTML=`<div><div class="kind">${esc(ctx)}</div></div><div class="fc" id="fc"><div class="fc-in"><div class="face">${front}<div class="hint">Вспомни ответ вслух и нажми на карточку</div></div><div class="face back">${back}</div></div></div>`;
+  const fc=$('#fc'); let flipped=false;
+  const flip=()=>{ if(flipped) return; flipped=true; fc.classList.add('flip'); buzz(8);
+    f.innerHTML=`<button class="big no" id="n">Не знал</button><button class="big yes" id="y">Знал</button>`;
+    $('#n').onclick=()=>next(false); $('#y').onclick=()=>next(true); };
+  fc.onclick=flip;
+  f.innerHTML=`<button class="big" id="sh">Показать ответ</button>`; $('#sh').onclick=flip;
+}
+
+/* --- собрать --- */
+function taskBuild(t,b,f){
+  const g=t.g;
+  if(t.kind==='order'){
+    const placed=[];
+    b.innerHTML=`<div>${head(t,esc(g.ctx),g.title,'Нажимай на пункты в правильном порядке. Нажми на заполненный слот, чтобы вернуть пункт.')}</div>
+      <div class="slots" id="sl"></div><div class="pool" id="pl"></div>`;
+    const draw=()=>{
+      $('#sl').innerHTML=g.items.map((_,i)=>`<div class="slot ${placed[i]!=null?'f':''}" data-i="${i}"><em>${i+1}.</em><span>${placed[i]!=null?esc(t.opts[placed[i]]):''}</span></div>`).join('');
+      $('#pl').innerHTML=t.opts.map((x,i)=>`<button class="chip ${placed.includes(i)?'used':''}" data-o="${i}">${esc(x)}</button>`).join('');
+      $('#sl').querySelectorAll('.slot.f').forEach(s=>s.onclick=()=>{ placed.splice(+s.dataset.i,1); draw(); });
+      $('#pl').querySelectorAll('.chip').forEach(c=>c.onclick=()=>{ placed.push(+c.dataset.o); buzz(5); draw(); if(placed.length===g.items.length) check(); });
+    };
+    const check=()=>{
+      let ok=true;
+      $('#sl').querySelectorAll('.slot').forEach((s,i)=>{ const good=t.opts[placed[i]]===g.items[i]; if(!good){ok=false; s.querySelector('span').innerHTML+=`<span class="fix">✓ ${esc(g.items[i])}</span>`;} s.classList.add(good?'ok':'bad'); s.onclick=null; });
+      $('#pl').style.display='none';
+      f.innerHTML=`<button class="big ${ok?'yes':''}" id="nx">${ok?'Верно! Дальше':'Понятно, дальше'}</button>`;
+      if(!ok){ b.insertAdjacentHTML('beforeend',`<div class="fb bad">Порядок важен: на тесте пункты плана пишут в логичной последовательности.</div>`); buzz(30);} else buzz(10);
+      $('#nx').onclick=()=>next(ok);
+    };
+    draw();
+  } else {
+    const chosen=new Set();
+    b.innerHTML=`<div>${head(t,esc(g.ctx),g.title,`Выбери все верные подпункты (их ${g.items.length}). Есть 2 лишних.`)}</div><div class="pool" id="pl"></div>`;
+    const draw=()=>{ $('#pl').innerHTML=t.opts.map((x,i)=>`<button class="chip ${chosen.has(i)?'sel':''}" data-o="${i}">${esc(x)}</button>`).join('');
+      $('#pl').querySelectorAll('.chip').forEach(c=>c.onclick=()=>{const i=+c.dataset.o; chosen.has(i)?chosen.delete(i):chosen.add(i); buzz(5); draw(); upd();}); };
+    const upd=()=>{ f.innerHTML=`<button class="big" id="ck" ${chosen.size?'':'style="opacity:.4"'}>Проверить</button>`; $('#ck').onclick=()=>chosen.size&&check(); };
+    const check=()=>{
+      let ok=true;
+      $('#pl').querySelectorAll('.chip').forEach((c,i)=>{ const isRight=g.items.includes(t.opts[i]); c.classList.remove('sel'); c.onclick=null;
+        if(chosen.has(i)&&isRight) c.classList.add('ok'); else if(chosen.has(i)&&!isRight){c.classList.add('bad');ok=false;} else if(isRight){c.classList.add('miss');ok=false;} else c.style.opacity='.35'; });
+      b.insertAdjacentHTML('beforeend',`<div class="fb ${ok?'ok':'bad'}">${ok?'Всё верно!':'Зелёная рамка — пропущенный верный пункт, красный — лишний.'}</div>`);
+      f.innerHTML=`<button class="big ${ok?'yes':''}" id="nx">Дальше</button>`; $('#nx').onclick=()=>next(ok); buzz(ok?10:30);
+    };
+    draw(); upd();
+  }
+}
+
+/* --- лишний --- */
+function taskOdd(t,b,f){
+  const g=t.g;
+  b.innerHTML=`<div>${head(t,esc(g.ctx),g.title,'Какой пункт сюда <b>не относится</b>?')}</div><div class="pool" id="pl">${t.opts.map((x,i)=>`<button class="chip" data-o="${i}">${esc(x)}</button>`).join('')}</div>`;
+  $('#pl').querySelectorAll('.chip').forEach(c=>c.onclick=()=>{
+    const ok=t.opts[+c.dataset.o]===t.extra;
+    $('#pl').querySelectorAll('.chip').forEach((d,i)=>{ d.onclick=null; if(t.opts[i]===t.extra) d.classList.add(ok?'ok':'miss'); else if(d===c) d.classList.add('bad'); else d.style.opacity='.45'; });
+    const from=G.find(x=>x.id!==g.id&&x.items.includes(t.extra));
+    b.insertAdjacentHTML('beforeend',`<div class="fb ${ok?'ok':'bad'}">${ok?'Верно!':'Лишний — «'+esc(t.extra)+'».'}${from?`<div style="font-weight:400;margin-top:4px;opacity:.85">Он из: ${esc(from.title)}</div>`:''}</div>`);
+    f.innerHTML=`<button class="big ${ok?'yes':''}" id="nx">Дальше</button>`; $('#nx').onclick=()=>next(ok); buzz(ok?10:30);
   });
 }
 
-/* ---------- режимы ---------- */
-$("#tabs").querySelectorAll("button").forEach(b => b.onclick = () => {
-  mode = b.dataset.mode;
-  $("#tabs").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
-  start();
-});
-
-function start() {
-  ({ cards: startCards, quiz: startQuiz, collect: startCollect, sort: startSort })[mode]();
+/* --- по памяти --- */
+function matchItems(items,text){
+  const lines=text.split(/\n|;|,(?![^()]*\))/).map(s=>s.trim()).filter(Boolean);
+  const ls=lines.map(stems), all=stems(text);
+  return items.map(it=>{
+    const k=[...new Set(stems(it))]; if(!k.length) return {it,ok:true};
+    let best=0;
+    ls.forEach(l=>{ best=Math.max(best,k.filter(s=>hasStem(l,s)).length); });
+    const need=k.length<=2?1:Math.ceil(k.length*.5);
+    if(best<need && k.length===1 && hasStem(all,k[0])) best=1;
+    return {it,ok:best>=need};
+  });
 }
-const empty = () => { $("#main").innerHTML = `<div class="panel">В выбранных темах нет заданий этого типа. Выбери другие темы.</div>`; };
-
-/* ===== КАРТОЧКИ ===== */
-let C = {};
-function startCards() {
-  const deck = shuffle(inTopics(CARDS));
-  if (!deck.length) return empty();
-  C = { queue: deck, known: 0, againSet: 0, total: deck.length, open: false };
-  drawCard();
-}
-function drawCard() {
-  const m = $("#main");
-  if (!C.queue.length) {
-    m.innerHTML = `<div class="panel result"><h2>Колода пройдена</h2>
-      <p>Карточек: ${C.total}. С первого раза знал: <b>${C.total - C.againSet}</b>.</p>
-      <div class="row"><button class="primary" id="re">Ещё раз</button></div></div>`;
-    $("#re").onclick = startCards; return;
-  }
-  const c = C.queue[0];
-  m.innerHTML = `
-    <div class="bar"><i style="width:${Math.round(100 * C.known / C.total)}%"></i></div>
-    <div class="meta"><span><span class="tag">${esc(topicName(c.t))}</span></span><span>Выучено ${C.known} из ${C.total} · в очереди ${C.queue.length}</span></div>
-    <div class="panel flash" id="fc">
-      <div class="q">${esc(c.q)}</div>
-      ${C.open ? `<div class="a">${esc(c.a)}</div>` : `<div class="hint">Вспомни ответ вслух, потом нажми, чтобы проверить</div>`}
-    </div>
-    <div class="row">
-      <button id="again" ${C.open ? "" : "disabled"}>↻ Повторить позже</button>
-      <button id="know" class="primary" ${C.open ? "" : "disabled"}>✓ Знаю</button>
-    </div>`;
-  $("#fc").onclick = () => { C.open = !C.open; drawCard(); };
-  $("#know").onclick = () => { C.queue.shift(); C.known++; C.open = false; drawCard(); };
-  $("#again").onclick = () => {
-    const x = C.queue.shift();
-    if (!x._again) { x._again = true; C.againSet++; }
-    const pos = Math.min(C.queue.length, 3 + Math.floor(Math.random() * 3));
-    C.queue.splice(pos, 0, x); C.open = false; drawCard();
+function taskMem(t,b,f){
+  const g=t.g;
+  b.innerHTML=`<div>${head(t,esc(g.ctx),g.title,`Напиши ${g.top?'пункты плана':'все пункты'} (${g.items.length}) — каждый с новой строки. Можно кратко, ключевыми словами.`)}</div>
+   <textarea class="mem" id="ta" placeholder="1. …&#10;2. …" autocapitalize="sentences"></textarea>`;
+  f.innerHTML=`<button class="big" id="ck">Проверить</button>`;
+  $('#ck').onclick=()=>{
+    const v=$('#ta').value; if(!v.trim()){ $('#ta').classList.add('shake'); setTimeout(()=>$('#ta')&&$('#ta').classList.remove('shake'),400); return; }
+    const res=matchItems(g.items,v);
+    const box=document.createElement('div'); box.className='res'; box.style.marginTop='16px';
+    const draw=()=>{
+      const n=res.filter(r=>r.ok).length;
+      box.innerHTML=`<div class="kind" style="padding:0;background:none">Совпало ${n} из ${res.length}</div>`+res.map((r,i)=>`<div class="${r.ok?'ok':'bad'}"><i>${r.ok?'✓':'✗'}</i><span>${esc(r.it)}</span>${r.ok?'':`<button data-a="${i}">Засчитать</button>`}</div>`).join('');
+      box.querySelectorAll('[data-a]').forEach(x=>x.onclick=()=>{res[+x.dataset.a].ok=true; draw(); foot();});
+    };
+    const foot=()=>{ const ok=res.every(r=>r.ok); f.innerHTML=`<button class="big ${ok?'yes':''}" id="nx">${ok?'Отлично! Дальше':'Дальше'}</button>`; $('#nx').onclick=()=>next(ok); };
+    $('#ta').readOnly=true; $('#ta').style.minHeight='0'; $('#ta').style.opacity='.7';
+    b.append(box); draw(); foot();
+    b.insertAdjacentHTML('beforeend',`<div class="qs" style="margin-top:4px">Проверка по ключевым словам. Если написал верно другими словами — жми «Засчитать».</div>`);
+    setTimeout(()=>box.scrollIntoView({behavior:'smooth',block:'start'}),50);
   };
 }
 
-/* ===== ТЕСТ ===== */
-let Q = {};
-function startQuiz() {
-  const pool = shuffle(inTopics(QUIZ));
-  if (!pool.length) return empty();
-  const qs = pool.slice(0, Math.min(15, pool.length)).map(q => {
-    const order = shuffle(q.o.map((_, i) => i));
-    return { ...q, order };
-  });
-  Q = { qs, i: 0, score: 0, wrong: [], answered: false, pick: -1 };
-  drawQuiz();
-}
-function drawQuiz() {
-  const m = $("#main");
-  if (Q.i >= Q.qs.length) {
-    const pct = Math.round(100 * Q.score / Q.qs.length);
-    m.innerHTML = `<div class="panel result"><h2>Результат</h2>
-      <div class="big">${Q.score} / ${Q.qs.length}</div><p>${pct >= 85 ? "Отлично, тема усвоена." : pct >= 60 ? "Неплохо — повтори ошибки ниже." : "Стоит перечитать конспект и пройти ещё раз."}</p>
-      ${Q.wrong.length ? `<h3>Ошибки</h3><ol class="list">${Q.wrong.map(w => `<li><b>${esc(w.q)}</b><br>Верно: ${esc(w.o[w.c])}<br><span style="color:var(--muted)">${esc(w.e)}</span></li>`).join("")}</ol>` : ""}
-      <div class="row"><button class="primary" id="re">Новый тест</button></div></div>`;
-    $("#re").onclick = startQuiz; return;
-  }
-  const q = Q.qs[Q.i];
-  m.innerHTML = `
-    <div class="bar"><i style="width:${Math.round(100 * Q.i / Q.qs.length)}%"></i></div>
-    <div class="meta"><span><span class="tag">${esc(topicName(q.t))}</span></span><span>Вопрос ${Q.i + 1} из ${Q.qs.length} · верно ${Q.score}</span></div>
-    <div class="panel">
-      <div class="qtext">${esc(q.q)}</div>
-      <div id="opts">${q.order.map(k => {
-        let cls = "";
-        if (Q.answered) { if (k === q.c) cls = "ok"; else if (k === Q.pick) cls = "bad"; }
-        return `<button class="opt ${cls}" data-k="${k}" ${Q.answered ? "disabled" : ""}>${esc(q.o[k])}</button>`;
-      }).join("")}</div>
-      ${Q.answered ? `<div class="explain">${Q.pick === q.c ? "✓ Верно. " : "✗ Неверно. "}${esc(q.e)}</div>
-      <div class="row"><button class="primary" id="next">Дальше →</button></div>` : ""}
-    </div>`;
-  m.querySelectorAll(".opt").forEach(b => b.onclick = () => {
-    Q.pick = +b.dataset.k; Q.answered = true;
-    if (Q.pick === q.c) Q.score++; else Q.wrong.push(q);
-    drawQuiz();
-  });
-  if (Q.answered) $("#next").onclick = () => { Q.i++; Q.answered = false; Q.pick = -1; drawQuiz(); };
-}
-
-/* ===== СОБЕРИ СПИСОК ===== */
-let L = {};
-function startCollect() {
-  const tasks = shuffle(inTopics(COLLECT));
-  if (!tasks.length) return empty();
-  L = { tasks, i: 0, perfect: 0 };
-  newCollect();
-}
-function newCollect() {
-  const t = L.tasks[L.i];
-  L.items = shuffle([...t.ok.map(x => ({ x, ok: true })), ...t.bad.map(x => ({ x, ok: false }))]);
-  L.sel = new Set(); L.checked = false;
-  drawCollect();
-}
-function drawCollect() {
-  const m = $("#main");
-  if (L.i >= L.tasks.length) {
-    m.innerHTML = `<div class="panel result"><h2>Все списки пройдены</h2>
-      <p>Без единой ошибки: <b>${L.perfect}</b> из ${L.tasks.length}.</p>
-      <div class="row"><button class="primary" id="re">Ещё раз</button></div></div>`;
-    $("#re").onclick = startCollect; return;
-  }
-  const t = L.tasks[L.i];
-  m.innerHTML = `
-    <div class="bar"><i style="width:${Math.round(100 * L.i / L.tasks.length)}%"></i></div>
-    <div class="meta"><span><span class="tag">${esc(topicName(t.t))}</span></span><span>Список ${L.i + 1} из ${L.tasks.length}</span></div>
-    <div class="panel">
-      <div class="qtext">${esc(t.title)}</div>
-      <div class="hint" style="margin-top:4px">Выбери все пункты, которые входят в список. Есть лишние.</div>
-      <div class="pool">${L.items.map((it, k) => {
-        let cls = L.sel.has(k) ? "sel" : "";
-        if (L.checked) cls = it.ok ? (L.sel.has(k) ? "ok" : "miss") : (L.sel.has(k) ? "bad" : "");
-        return `<button data-k="${k}" class="${cls}" ${L.checked ? "disabled" : ""}>${esc(it.x)}</button>`;
-      }).join("")}</div>
-      ${L.checked ? `<div class="legend">Зелёный — верно выбрано · красный — лишнее · жёлтый пунктир — пропущено</div>
-        <div class="explain"><b>Правильный список:</b><ol class="list">${t.ok.map(x => `<li>${esc(x)}</li>`).join("")}</ol></div>
-        <div class="row"><button id="retry">Заново этот</button><button class="primary" id="next">Дальше →</button></div>`
-      : `<div class="row"><button class="primary" id="check">Проверить (выбрано ${L.sel.size})</button></div>`}
-    </div>`;
-  if (!L.checked) {
-    m.querySelectorAll(".pool button").forEach(b => b.onclick = () => {
-      const k = +b.dataset.k; L.sel.has(k) ? L.sel.delete(k) : L.sel.add(k); drawCollect();
-    });
-    $("#check").onclick = () => {
-      L.checked = true;
-      const perfect = L.items.every((it, k) => it.ok === L.sel.has(k));
-      if (perfect) L.perfect++;
-      drawCollect();
+/* ===================== ЭКЗАМЕН ===================== */
+const GC={5:'#30c759',4:'#5e5ce6',3:'#ff9500',2:'#ff3b30'};
+let EX=null, EXT=0;
+const gradeOf=p=>p>=85?5:p>=65?4:p>=45?3:2;
+const fmt=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+function openExamSetup(){
+  const sel=new Set(PLANS.map(p=>p.n)); let cnt=1, tm=300;
+  const sh=$('#sheet');
+  const draw=()=>{
+    sh.innerHTML=`<div class="grab"></div><h3>Экзамен</h3><div class="subtle" style="margin-bottom:14px">Случайный план → пишешь его целиком: пункты и подпункты. По таймеру — автосдача.</div>
+     <div class="sec" style="margin-top:4px">Из каких планов тянуть</div>
+     <div class="chips">${PLANS.map(p=>`<button class="tog ${sel.has(p.n)?'on':''}" data-p="${p.n}">${p.n}${S.exam&&S.exam[p.n]?' · '+S.exam[p.n].g:''}</button>`).join('')}</div>
+     <div class="sec">Сколько планов</div><div class="seg">${[1,3,8].map(v=>`<button data-c="${v}" class="${cnt===v?'on':''}">${v===8?'Все выбранные':v}</button>`).join('')}</div>
+     <div class="sec">Время на один план</div><div class="seg">${[180,300,420,0].map(v=>`<button data-t="${v}" class="${tm===v?'on':''}">${v?v/60+' мин':'Без таймера'}</button>`).join('')}</div>
+     <button class="big" id="go" style="margin-top:22px">Тянуть билет</button>`;
+    sh.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const n=+b.dataset.p; sel.has(n)?sel.delete(n):sel.add(n); buzz(5); draw();});
+    sh.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{cnt=+b.dataset.c; draw();});
+    sh.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{tm=+b.dataset.t; draw();});
+    sh.querySelector('#go').onclick=()=>{
+      if(!sel.size){ sh.querySelector('#go').classList.add('shake'); return; }
+      // сначала планы без оценки и с плохой оценкой
+      let list=shuffle([...sel]).sort((a,b)=>((S.exam&&S.exam[a]?S.exam[a].p:-1)-(S.exam&&S.exam[b]?S.exam[b].p:-1))+(Math.random()-.5)*30);
+      closeSheet(); runExam(list.slice(0,cnt),tm);
     };
-  } else {
-    $("#retry").onclick = () => { newCollect(); };
-    $("#next").onclick = () => { L.i++; if (L.i < L.tasks.length) newCollect(); else drawCollect(); };
-  }
+  };
+  draw(); $('#dim').classList.add('on'); sh.classList.add('on');
 }
-
-/* ===== СОРТИРОВКА ===== */
-let S = {};
-function startSort() {
-  const sets = inTopics(SORT);
-  if (!sets.length) return empty();
-  S = { sets, set: null };
-  drawSortMenu();
+function runExam(list,tm){
+  closeSheet();
+  EX={list,tm,i:0,res:[]};
+  const tr=$('#tr');
+  tr.innerHTML=`<div class="trh"><button class="x" id="trx"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M1 1l10 10M11 1 1 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><div class="prog"><i id="pg"></i></div><div class="timer" id="tmr"></div></div><div class="trb" id="trb"></div><div class="trf" id="trf"></div>`;
+  tr.classList.add('on'); $('#trx').onclick=safeClose;
+  examTask();
 }
-function drawSortMenu() {
-  $("#main").innerHTML = `<div class="panel">
-    <div class="qtext">Выбери классификацию</div>
-    <div class="hint" style="margin-top:4px">Появляется по одному признаку — нажми, куда он относится.</div>
-    ${S.sets.map((s, k) => `<button class="opt" data-k="${k}">${esc(s.title)} <span class="tag">${s.items.length}</span></button>`).join("")}
-  </div>`;
-  $("#main").querySelectorAll(".opt").forEach(b => b.onclick = () => beginSort(S.sets[+b.dataset.k]));
+function examTask(){
+  clearInterval(EXT);
+  const n=EX.list[EX.i], pl=PLANS[n-1], b=$('#trb'), f=$('#trf'), tmr=$('#tmr');
+  $('#pg').style.width=(EX.i/EX.list.length*100)+'%';
+  const subs=pl.p.reduce((s,x)=>s+x[1].length,0);
+  b.innerHTML=`<div class="anim"><div class="kind">Билет ${EX.i+1} из ${EX.list.length} · План ${n}</div><div class="q">${esc(pl.t)}</div>${pl.s?`<div class="qs" style="margin-bottom:4px">${esc(pl.s)}</div>`:''}
+   <div class="qs">Составь план: ${pl.p.length} пунктов${subs?', подпункты ниже пунктов':''}. Как на тесте — нумеруй: «1. …», «а) …».</div>
+   <textarea class="mem exam" id="ta" placeholder="1. …&#10;   а) …&#10;   б) …&#10;2. …" autocapitalize="sentences"></textarea></div>`;
+  f.innerHTML=`<button class="big" id="sd">Сдать</button>`; tmr.style.visibility='';
+  let left=EX.tm, start=Date.now();
+  const tick=()=>{ if(!EX.tm){ tmr.textContent=fmt(Math.round((Date.now()-start)/1000)); return; }
+    left=EX.tm-Math.round((Date.now()-start)/1000);
+    tmr.textContent=fmt(Math.max(0,left)); tmr.classList.toggle('warn',left<=30);
+    if(left<=0){ clearInterval(EXT); buzz([30,60,30]); submit(true); } };
+  tick(); EXT=setInterval(tick,500);
+  EX.writing=true;
+  const submit=(auto)=>{ EX.writing=false; clearInterval(EXT); tmr.classList.remove('warn'); tmr.style.visibility='hidden'; examGrade(n,$('#ta').value,Math.round((Date.now()-start)/1000),auto); };
+  $('#sd').onclick=()=>submit(false);
 }
-function beginSort(set) {
-  S.set = set; S.items = shuffle(set.items); S.i = 0; S.score = 0; S.wrong = []; S.last = null;
-  drawSort();
+// разбивка текста по блокам: строка-пункт начинается с цифры, всё ниже до следующего пункта — его подпункты
+function splitByPoints(text){
+  const lines=text.split('\n').map(s=>s.trim()).filter(Boolean), blocks=[]; let cur=null;
+  lines.forEach(l=>{ if(/^\d+\s*[.)]/.test(l)||!cur){ cur={h:l.replace(/^\d+\s*[.)]\s*/,''),body:[]}; blocks.push(cur);} else cur.body.push(l.replace(/^[а-яa-z]\s*\)\s*|^[-–•*]\s*/i,'')); });
+  return blocks;
 }
-function drawSort() {
-  const m = $("#main"), set = S.set, n = S.items.length;
-  if (S.i >= n) {
-    m.innerHTML = `<div class="panel result"><h2>${esc(set.title)}</h2>
-      <div class="big">${S.score} / ${n}</div>
-      ${S.wrong.length ? `<p><b>Ошибки:</b></p><ul class="list">${S.wrong.map(w => `<li>${esc(w[0])} → <b>${esc(set.b[w[1]])}</b></li>`).join("")}</ul>` : "<p>Без ошибок!</p>"}
-      <table class="sum"><tr>${set.b.map(b => `<th>${esc(b)}</th>`).join("")}</tr>
-      <tr>${set.b.map((_, bi) => `<td>${set.items.filter(it => it[1] === bi).map(it => esc(it[0])).join("<br>")}</td>`).join("")}</tr></table>
-      <div class="row"><button id="menu">К списку классификаций</button><button class="primary" id="re">Ещё раз</button></div></div>`;
-    $("#re").onclick = () => beginSort(set); $("#menu").onclick = drawSortMenu; return;
-  }
-  const it = S.items[S.i];
-  const fb = S.last;
-  m.innerHTML = `
-    <div class="bar"><i style="width:${Math.round(100 * S.i / n)}%"></i></div>
-    <div class="meta"><span><span class="tag">${esc(set.title)}</span></span><span>${S.i + 1} из ${n} · верно ${S.score}</span></div>
-    <div class="panel">
-      <div class="item ${fb ? (fb.ok ? "ok" : "bad") : ""}">${esc(it[0])}</div>
-      ${fb ? `<div class="explain">${fb.ok ? "✓ Верно" : "✗ Неверно. Правильно: <b>" + esc(set.b[it[1]]) + "</b>"}</div>
-        <div class="row"><button class="primary" id="next">Дальше →</button></div>`
-      : `<div class="buckets b${set.b.length}">${set.b.map((b, k) => `<button data-k="${k}">${esc(b)}</button>`).join("")}</div>`}
-    </div>
-    <div class="row"><button id="menu">← Другая классификация</button></div>`;
-  $("#menu").onclick = drawSortMenu;
-  if (!fb) m.querySelectorAll(".buckets button").forEach(b => b.onclick = () => {
-    const ok = +b.dataset.k === it[1];
-    if (ok) S.score++; else S.wrong.push(it);
-    S.last = { ok }; drawSort();
+function examGrade(n,text,secs,auto){
+  const pl=PLANS[n-1];
+  const blocks=splitByPoints(text);
+  const numbered=/^\s*\d+\s*[.)]/m.test(text);
+  const heads=numbered?blocks.map(x=>x.h).join('\n'):text; // без нумерации ищем пункты по всему тексту
+  const pm=matchItems(pl.p.map(x=>x[0]),heads||' ');
+  const R=pl.p.map((x,i)=>{
+    // подпункты ищем во всём тексте: могли записать не под тем номером
+    const sm=x[1].length?matchItems(x[1],text||' '):[];
+    return {t:x[0],ok:pm[i].ok,sub:sm.map(s=>({t:s.it,ok:s.ok}))};
   });
-  else $("#next").onclick = () => { S.i++; S.last = null; drawSort(); };
+  const r={n,R,secs,auto,text}; EX.res[EX.i]=r;
+  drawGrade(r);
+}
+function scoreOf(r){
+  const P=r.R.length, p=r.R.filter(x=>x.ok).length;
+  const subs=r.R.flatMap(x=>x.sub), s=subs.filter(x=>x.ok).length;
+  const pct=Math.round(100*(subs.length? .5*p/P + .5*s/subs.length : p/P));
+  return {P,p,S:subs.length,s,pct,g:gradeOf(pct)};
+}
+function drawGrade(r){
+  const b=$('#trb'), f=$('#trf'), pl=PLANS[r.n-1];
+  const draw=()=>{
+    const sc=scoreOf(r);
+    b.innerHTML=`<div class="anim"><div class="kind">План ${r.n} · ${r.auto?'время вышло':'сдано за '+fmt(r.secs)}</div><div class="q" style="font-size:20px">${esc(pl.t)}</div>
+     <div class="grade"><div class="g" style="background:${GC[sc.g]}">${sc.g}</div><div><b>${sc.pct}%</b><small>Пункты: ${sc.p} из ${sc.P}${sc.S?` · подпункты: ${sc.s} из ${sc.S}`:''}</small><small>5 — от 85%, 4 — от 65%, 3 — от 45%</small></div></div>
+     <div class="res">${r.R.map((x,i)=>`<div class="${x.ok?'ok':'bad'}"><i>${x.ok?'✓':'✗'}</i><span><b style="font-weight:600">${i+1}. ${esc(x.t)}</b></span>${x.ok?'':`<button data-p="${i}">Засчитать</button>`}</div>
+       ${x.sub.length?`<div class="subl">${x.sub.map((s,j)=>`<div class="${s.ok?'ok':'bad'}"><i>${s.ok?'✓':'✗'}</i><span>${LETTERS[j]}) ${esc(s.t)}</span>${s.ok?'':`<button data-p="${i}" data-s="${j}">Засчитать</button>`}</div>`).join('')}</div>`:''}`).join('')}</div>
+     <div class="sec" style="margin-left:2px">Твой ответ</div><div class="note" style="white-space:pre-wrap;font-size:15px">${esc(r.text||'— пусто —')}</div>
+     <div class="qs">Проверка по ключевым словам. Если пункт написан верно, но иначе — жми «Засчитать».</div></div>`;
+    b.querySelectorAll('[data-p]').forEach(x=>x.onclick=()=>{ const i=+x.dataset.p; if(x.dataset.s!=null) r.R[i].sub[+x.dataset.s].ok=true; else r.R[i].ok=true; const st=b.scrollTop; draw(); b.scrollTop=st; b.firstElementChild.classList.remove('anim'); });
+  };
+  draw(); b.scrollTop=0;
+  const last=EX.i>=EX.list.length-1;
+  f.innerHTML=`<button class="big" id="nx">${last?'Итоги':'Следующий билет'}</button>`;
+  buzz(10);
+  $('#nx').onclick=()=>{ saveExam(r); EX.i++; if(EX.i>=EX.list.length) examSummary(); else examTask(); };
+}
+function saveExam(r){
+  const sc=scoreOf(r); S.exam=S.exam||{};
+  const prev=S.exam[r.n]; if(!prev||sc.pct>=prev.p) S.exam[r.n]={p:sc.pct,g:sc.g,ts:Date.now()};
+  r.final=sc;
+  // экзамен влияет на прогресс плана
+  mark('p'+r.n, r.R.every(x=>x.ok));
+  r.R.forEach((x,i)=>{ if(x.sub.length>=2 && G.find(g=>g.id==='p'+r.n+'.'+(i+1))) mark('p'+r.n+'.'+(i+1), x.sub.every(s=>s.ok)); });
+  save();
+}
+function examSummary(){
+  clearInterval(EXT); $('#pg').style.width='100%'; $('#tmr').textContent='';
+  const rs=EX.res, avg=Math.round(rs.reduce((s,r)=>s+r.final.pct,0)/rs.length), g=gradeOf(avg);
+  $('#trb').innerHTML=`<div class="done anim"><div class="em">${g===5?'🏆':g===4?'💪':g===3?'🙂':'📚'}</div><h2>Оценка: ${g}</h2><p>Средний результат ${avg}%</p></div>
+   ${rs.length>1?`<div class="group">${rs.map(r=>`<div class="row nl"><div class="num" style="background:${GC[r.final.g]}">${r.final.g}</div><div class="tx"><b>${esc(PLANS[r.n-1].t)}</b><small>${r.final.pct}% · ${r.auto?'время вышло':fmt(r.secs)}</small></div></div>`).join('')}</div>`:''}
+   <p class="qs" style="text-align:center;margin-top:14px">Лучшие оценки видны в списке планов.</p>`;
+  const weak=rs.filter(r=>r.final.g<5).map(r=>r.n);
+  $('#trf').innerHTML=`<button class="big" style="background:var(--card2);color:var(--text);box-shadow:none" onclick="endSession()">Готово</button>`+
+   (weak.length?`<button class="big" id="rw">Пересдать (${weak.length})</button>`:'');
+  if(weak.length) $('#rw').onclick=()=>runExam(shuffle(weak),EX.tm);
+  buzz([10,40,10]);
 }
 
-renderTopics();
-start();
+/* ===================== СЕРВИС ===================== */
+function toast(t){ let el=$('#toast'); if(!el){ el=document.createElement('div'); el.id='toast'; document.body.append(el);} el.textContent=t; el.classList.add('on'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('on'),2300); }
+// iOS: тренажёр подстраивается под клавиатуру, кнопка «Проверить» всегда видна
+if(window.visualViewport){ const vv=window.visualViewport; const fit=()=>{ const tr=$('#tr'); tr.style.height=vv.height+'px'; tr.style.top=vv.offsetTop+'px'; }; vv.addEventListener('resize',fit); vv.addEventListener('scroll',fit); }
+// клавиатура на компьютере: пробел — перевернуть, ←/→ — не знал/знал, Enter — дальше, Ctrl+Enter — сдать текст
+document.addEventListener('keydown',e=>{
+  if(!$('#tr').classList.contains('on')) return;
+  const inTa=e.target.tagName==='TEXTAREA', c=id=>{const b=$(id); if(b){ e.preventDefault(); b.click(); return true;} };
+  if(e.key==='Escape') return safeClose();
+  if(inTa){ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) c('#ck')||c('#sd'); return; }
+  if(e.key===' ') c('#sh');
+  else if(e.key==='ArrowLeft') c('#n');
+  else if(e.key==='ArrowRight') c('#y');
+  else if(e.key==='Enter') c('#nx')||c('#ck')||c('#sh')||c('#sd');
+});
+
+/* ===================== СТАРТ ===================== */
+renderAll();
+let quick=false; try{ quick=!!sessionStorage.getItem('seen'); sessionStorage.setItem('seen',1);}catch(e){}
+if(quick) $('#splash').classList.add('fast');
+setTimeout(()=>{ $('#splash').classList.add('hide'); setTimeout(()=>$('#splash').remove(),500); },quick?700:1750);
 </script>
 </body>
 </html>
