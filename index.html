@@ -2,998 +2,692 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Общество">
-<meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-<link rel="apple-touch-icon" href="data:image/png;base64,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">
-<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAALM0lEQVR42u2da6wdVRXH19p75sycc+77IX1AX0pFsKUWEBpooDw0ITwVPiABFCEmfvBBiCAxEg2ExBeIH4yaQEya+CA0SOojBpNGsLXYFNqKpb3UtpeWtpbbe3rPa+bM7L38cFro7b00bTRn5s78f7mf+qW9u/9Z+7/WXmtvvvvO/QTAdCgsAYA4AMQB/n84jDUAiBzgjCMHiWAVACIHgOcAiBwA4gBJGlIsAvhAzwF1AGwrAOIAEAdAnQMgWwGpFAfUAeA5ADwHQOQAEAdAtgJwtgKwrQCIA0AcIL+eA5YDIHIAnK0AlM8BthUAcQCUzwE8B0C2AuA5AMQBADwHQLYCsK0AZCsAngOkLHIkAyvLjKsMjyMswjCkxMqKVa16SYwmFiIEL3G8ULuRiErVJt/pyMFsW42S6wfnfOK1Ym/FGodz3ovGYo0+tP1j1cPDhWKT2Kbna+mo52AlUeCfvXTrinufGVy4W+tYiPPtiJlISFSj0vf685994w/XM3MesxVW0qqX5l645cbHvyVGR81iS5jRwkpERK4fXHnfT0r94+t/cZ/XMyFW5WlbYbFGucXminufbSuDtZn6jVib/TjCiqZGB2tVrTa85KYX92y85OC/LnBLjTTow+lU9JQo8M9Zvnlwwe4o9FmbqbJQmkpdorMrj/YOGrY4Cknpk6yYiFWOGy66fP07Wy/M12gCM1Gsir0V5UQUFGny32oNlbolqPPrfy1UxpTOaGVOhLQj5y2PhmfbRoNFJocQFiEuD4wzCUsqVsDp5IcjsTPViltDPd2y7kX/V0+WDo46rYA4o7mtCClNfcP2yluCex6uG0PGnPzL2tihnKayU8KUtVQqy0tr/Ke+3qMU+SXxixl3Hc0a//bpcrWivvx4lU9jifKQrbwXKN9fELHkebR/t/7pI90FX1yXjMl+YqI1Dc2xf/xl8SNLo5vuaVarfIL/4OMLlYp9RTFRp35Org+LUMGVjX/2GlV2C7lQRvu3tjGVumX9770gYKWm2X47+J9yqh+n04Fjyh+PbHGUytchiwg5Bdm/yzk6zr0DEscnOI8UBY4U9HP4pTxWvUTI9Ug7hGafU7FsZcsY4jx1HSlNYYPPXdYaGLJRK73ZWYfOVni60yRWFDT5oqtaiz4e733T6emXOMqFMuKYlKZP3RHIlDNp/oC1ykO2IidVxoyhYpf95s+OfvfzfXu2O+UeUUok08f4wQRrTV97cmL5ylatNo0hTY/pcDrc0jI1eIQhz5pvvrO6svaZ4uuvFCaOKJXpCuknr42vu6P5gcoQzl+zjxAJKR1PE2YVNRvcf5b90qPVyoQKGswqs+crrGhw2FqiaZUhwuzE6clWOtXPIey4cWXvvCjwSVkSPrEUqBTFEVVC5bjUMyAZLpEKUa3KxDStMjTHY7sWsTDnq3wu7Hjh2K6FezdctnjVS42jA+xMOrJnIq3IWrJZL4Udk4WcdMCk3VJj4vCsf69b6fhhSvpJnU5+NKzNP565q3/+3qFFb8WRb41mnlT9ymU3KTNJoVyPAv/vP7934sBsr7uakmYf/sotOzu3CsqalusUWktvXzN/xated80alfP+YiaxRh/esXjLb24b27XQLdfFpqWnhb/aOXEQCbESa1VUL/m9E44fiDB6z0W4MTaonMjxw5TEjGRGE8Qyk3g9EyZy4rAHymivSqFcI2ExCkNNJEYzCzsxdHH8m1GYeEtvwQdgVhZgyh7g8hZAuLwFwHMARA4AcQC8DgmQrQBsKwBAHACpLEDkADhbAchWADwHTXOTGiwQndABJMlePuCkpP+aiIK6tQZx7H3cgir4ylrJrziYyVqKI1m8rLz0iu7eIYck1yGkHS5Gdwbb1lcP7g2LZZ2UPvjBG7YnPLMhFIX2zm/MveTaXkSLE4la8tzTB/62dryrz0kkpjqc4LbGxMRRaO96eO5FV/diT5k0zSLkFvhzD84xkWx6qVLs0p1fHyfR+8i4WY8/urz7oqt7TSxaMx5QoEkzkqI033j/h7a9MmGNdP6WeJXs92ENLV3Zfey6Vijj5Gte2FrpGXAWLS2HTcuKc1chHZzlIoE9xYygUtw37Jj2AxP5qXO0g8WRgxHeazpVcLVy9HDsOMwdl4dK/LPY8nL12HtekMhUz6G4eiTetbXu+Ups5w1pcp+tNeKX1Fuv1Tb/pbL8mj5kKyfdWKE1E9GLPz/UappEqh2JF8HELfDqJ/ZZSxdf1wdNTK5z2Od/fODVPyVW5+CHrn8jJRXSDy8tLbmip3fIfa+gntcKKRHR6JvNN9ZPJFshddKwFqyo4PHIa/Udm2oIGHTC2UqCykjLwRsJCVGxrAhJ7eRT2QSVka5+DmsIGQthbgUQekgBxAEgDoAeUgDQfQ4wtwLgOQA8B0DkABAHQLZCp3NwrxTHsYjNjkHWDrNiMTO1DTIVZytKcdSyjYbtHnBcT2dGHPWjcatpiz1aEcsMVIiThgb8oG4GZhcu/8zQeZf1dPU7GWj2abfEHtoTbF1X2fC7MaVEaZ5x8nCSnqznVtMOne3d/4NF/bMKGduzFywpL1hSnnd++dePj7Ii4hlWVHISbhA04pXUF7+3sH9WwUSispVZi5A1suyavkY1XvPDfaUeZ2Y1UTssSVqNZi1edsPg4BzPxKJdzt7Tfswsli7+9MC61f+pV2LtzKTNJflUdvGlx8chKaNPP4q4vlq4pBwGCYw0zuizFSn4irPejsZMrs9iU/PW9OlOuh8fS0zmR+jt7XXKbvOoEDGTieXASLPgMYkkvOBn8pPkttKOt9vWVawR1mxtBsVhI2HF+95s7N/ZLPhaLLKV0229p4KnDu8J13z/7dsenteemM1ShVRp1i6PH2w998SodnjGhceEy+fWiN+lN74wZmK5+u5Zw/M81tmxpiaSPdtqL/xo37ujoZ/E1Tz/q1X69nVbkv9HaA5qxiuq+UvKXf1OBpKX9q9waHfwzkhTaXY9Ze3Meyg1FZ1gYqRYVtbIyKsTWZq1dwrKKyoiEmt5ZrYJpsO4WSEmr6yydMmkWJGZfDGNk7LVbI/NArQJAmQrAG2CAHMrAJ4DAGwrAIYUIHIAeA6AbAWgfE75fgNQRNLZBJSWe0iVZmskrOXxDUCluVBU7RVI1aMzSY4mTBp6q5pCSZ17aU+5z8nP9dbtI9t6JR7dWgurxu9OV0NQKsYh6+Px8hsGr/rC7KF5fj5393dHg3XPHti8dqzcn6LBJyfxEeqgZi65dejWRxa0v6Qs9ZCe/kzo0Dz/tkcXapc3rx3zE73vPC3ZCituhWZ4gXfzQ/NFSESU4iz1kNKZ9Dox880PzX/7n7WxfaHrqTR8JEnOrSimOLAXrOpXmsWIUvmtuSjFYkRpvmBVfxxYxamYW0m0fC7ETOecXz724Bvl/Tk3Ijrn/DJzWubiVOJJbCuweADwveSlFVgSnK0cZ2TDxLEHAHOvDGYa2TCBs5W2DRO/rHe8PH5k/+yBuV727uc4g5WIRbt8ZH+44+Vxv6wpHUMuSWYrIqQ0h3Wz+oGddz+1uG+2l9uwoV2uHAhXP7AzrBvXVynJ5/mxVZsSN+phw/TN8S69/axzV/R29bs58qdCRFQbj0Y2HN343KHKO6FXSkuRg4j4sas2UQoSubhlw4bpGnBdX5HkSRxMUWBrRyKvpJ2CsmmqAaZikxcrjstuv2siicM4hxXSrn5XrEjK5mmd9Hh1McKKclgKE6J0nkU7aVsnlDzQCQbQQwowmgAIowkA4gAAngMgWwEwpACeA8BzAEQOAHEAvA4JkK0AbCsA4gAAqSxA5AA4WwHIVgA8B4DnABAHgDhApvkvAXrE2i0lhiIAAAAASUVORK5CYII=">
-<title>Общество · планы</title>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ася">
+<meta name="theme-color" content="#f6f1e7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#191714" media="(prefers-color-scheme: dark)">
+<title>«Ася» по порядку — тезисы и вопросы</title>
 <style>
 :root{
-  --bg:#f2f2f7; --card:#fff; --card2:#f7f7fa; --text:#000; --sub:#6b6b73; --sep:rgba(60,60,67,.14);
-  --accent:#5e5ce6; --accent-soft:rgba(94,92,230,.12); --green:#30c759; --red:#ff3b30; --orange:#ff9500;
-  --hl:rgba(196,245,60,.75); --bar:rgba(249,249,251,.82); --shadow:0 1px 2px rgba(0,0,0,.04),0 6px 20px rgba(0,0,0,.05);
-  --r:18px; --safe-b:env(safe-area-inset-bottom); --safe-t:env(safe-area-inset-top);
+  color-scheme: light dark;
+  --bg:#f6f1e7; --glass:rgba(246,241,231,.88); --side:#efe8da;
+  --card:#fffdf8; --ink:#2a2520; --muted:#7c7164; --quote:#4a4037;
+  --line:#e5dccb; --line2:#d6cbb6; --chip:#ece4d4;
+  --accent:#8c3b2c; --onaccent:#fff;
+  --qbg:#f2e9d6; --qline:#e2d3b3;
+  --ok:#2e7a4b; --okbg:#e4f1e7; --bad:#b0412f; --badbg:#f8e5df;
+  --serif: ui-serif, "New York", Georgia, "Times New Roman", serif;
+  --sans: -apple-system, BlinkMacSystemFont, system-ui, "Helvetica Neue", Arial, sans-serif;
+  --fs: 18px; --hdr: 0px; --bar: 0px; --col: 720px;
+  --sl: max(16px, env(safe-area-inset-left)); --sr: max(16px, env(safe-area-inset-right));
 }
-@media (prefers-color-scheme:dark){:root{
-  --bg:#000; --card:#1c1c1e; --card2:#2c2c2e; --text:#fff; --sub:#98989f; --sep:rgba(84,84,88,.5);
-  --accent:#7d7aff; --accent-soft:rgba(125,122,255,.18); --hl:rgba(170,220,30,.45); --bar:rgba(22,22,24,.82); --shadow:none;
-}}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.35;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
-body{overflow:hidden;user-select:none;-webkit-user-select:none}
-button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-textarea{font:inherit;user-select:text;-webkit-user-select:text}
-mark{background:linear-gradient(transparent 12%,var(--hl) 12%,var(--hl) 88%,transparent 88%);color:inherit;padding:0 .15em;border-radius:3px}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#191714; --glass:rgba(25,23,20,.88); --side:#1f1c18;
+    --card:#24211c; --ink:#ece5d8; --muted:#a39888; --quote:#d6cbb9;
+    --line:#38322a; --line2:#4a4237; --chip:#312c25;
+    --accent:#e3a183; --onaccent:#1b1310;
+    --qbg:#2a251e; --qline:#433a2e;
+    --ok:#7fca97; --okbg:#1e3226; --bad:#f2907c; --badbg:#3b2420;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; text-size-adjust:100%; touch-action:manipulation; background:var(--bg)}
+body{margin:0; font-family:var(--serif); font-size:var(--fs); line-height:1.55; color:var(--ink); background:var(--bg);
+  -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent}
+button{font:inherit; color:inherit; -webkit-tap-highlight-color:transparent; touch-action:manipulation}
+.app{min-height:100dvh}
+.main{min-height:100dvh; display:flex; flex-direction:column; min-width:0}
 
-/* ---------- splash ---------- */
-#splash{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);transition:opacity .45s ease, transform .45s ease}
-#splash.hide{opacity:0;transform:scale(1.08);pointer-events:none}
-#splash .ic{width:112px;height:112px;border-radius:26px;box-shadow:0 18px 40px rgba(94,92,230,.35);animation:pop .7s cubic-bezier(.2,1.4,.4,1) both}
-#splash h1{margin-top:22px;font-size:28px;font-weight:700;letter-spacing:-.5px;animation:up .6s .15s both}
-#splash p{color:var(--sub);margin-top:4px;font-size:15px;animation:up .6s .25s both}
-#splash .ld{margin-top:34px;width:120px;height:4px;border-radius:2px;background:var(--sep);overflow:hidden;animation:up .6s .3s both}
-#splash .ld i{display:block;height:100%;width:0;background:var(--accent);border-radius:2px;animation:load 1.3s .35s ease-in-out forwards}
-@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
-@keyframes up{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
-@keyframes load{to{width:100%}}
+/* ---------- верхняя панель (телефон) ---------- */
+.top{position:sticky; top:0; z-index:20; background:var(--glass);
+  -webkit-backdrop-filter:saturate(1.4) blur(16px); backdrop-filter:saturate(1.4) blur(16px);
+  border-bottom:1px solid var(--line);
+  padding: calc(env(safe-area-inset-top) + 8px) var(--sr) 0 var(--sl)}
+.top-row{max-width:var(--col); margin:0 auto; display:flex; align-items:center; gap:12px; padding-bottom:9px}
+.top-title{min-width:0; flex:1}
+.top-title b{display:block; font-size:1.15rem; line-height:1.2}
+.top-title span{display:block; font-family:var(--sans); font-size:.78rem; color:var(--muted);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.top-count{font-family:var(--sans); font-size:.78rem; color:var(--muted); font-variant-numeric:tabular-nums}
+.btn-ch{border:0; background:var(--chip); border-radius:999px; min-height:38px; padding:0 16px;
+  font-family:var(--sans); font-size:.88rem; font-weight:600; color:var(--accent)}
+.track{height:3px; background:var(--line); margin:0 calc(-1 * var(--sl)) 0 calc(-1 * var(--sr))}
+.fill{height:100%; width:0; background:var(--accent); transition:width .3s ease}
 
-/* ---------- layout ---------- */
-#tabs{position:fixed;inset:0;}
-.tab{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:calc(var(--safe-t) + 14px) 16px calc(var(--safe-b) + 96px);display:none}
-.tab.on{display:block;animation:fade .25s}
-@keyframes fade{from{opacity:.4}to{opacity:1}}
-.large{font-size:34px;font-weight:800;letter-spacing:-.8px;margin:18px 4px 4px}
-.subtle{color:var(--sub);font-size:15px;margin:0 4px 18px}
-.sec{font-size:13px;text-transform:uppercase;letter-spacing:.3px;color:var(--sub);margin:26px 16px 8px}
-.group{background:var(--card);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
-.row{display:flex;align-items:center;gap:12px;padding:13px 16px;position:relative;width:100%;text-align:left}
-.row+.row:before{content:"";position:absolute;top:0;left:60px;right:0;height:.5px;background:var(--sep)}
-.row.nl+.row.nl:before{left:16px}
-.row:active{background:var(--card2)}
-.row .num{flex:none;width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-weight:700;font-size:15px;color:#fff;background:var(--accent)}
-.row .tx{flex:1;min-width:0}
-.row .tx b{display:block;font-weight:600;font-size:16px}
-.row .tx small{display:block;color:var(--sub);font-size:13px;margin-top:2px}
-.chev{flex:none;width:8px;height:14px;opacity:.35}
-.mini{height:4px;border-radius:2px;background:var(--sep);margin-top:7px;overflow:hidden}
-.mini i{display:block;height:100%;background:var(--green);border-radius:2px;transition:width .5s}
+/* ---------- лента ---------- */
+#feed{flex:1; width:100%; max-width:calc(var(--col) + 32px); margin:0 auto; padding:14px var(--sr) 28px var(--sl)}
+.th,.qz,.chap,.fb,.end,.intro{scroll-margin-top:calc(var(--hdr) + 12px); scroll-margin-bottom:calc(var(--bar) + 12px)}
+.intro{font-family:var(--sans); font-size:.9rem; line-height:1.5; color:var(--muted);
+  border:1px dashed var(--line2); border-radius:16px; padding:12px 14px; margin:6px 0 4px}
+.intro b{color:var(--ink)}
+.chap{margin:30px 0 12px; text-align:center}
+.chap .roman{font-family:var(--sans); font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); font-weight:700}
+.chap h2{margin:2px 0 0; font-size:1.4rem; font-weight:600; line-height:1.25}
+.chap::after{content:""; display:block; width:44px; height:2px; background:var(--line2); margin:10px auto 0; border-radius:2px}
 
-/* tab bar */
-#bar{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:space-around;padding:7px 6px calc(var(--safe-b) + 6px);background:var(--bar);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-top:.5px solid var(--sep)}
-#bar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10.5px;font-weight:500;color:var(--sub);padding:2px 0}
-#bar button svg{width:26px;height:26px}
-#bar button.on{color:var(--accent)}
+.th{position:relative; background:var(--card); border:1px solid var(--line); border-radius:16px;
+  padding:13px 16px 14px 52px; margin:10px 0; box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.th .num{position:absolute; left:13px; top:14px; width:27px; height:27px; border-radius:50%;
+  display:grid; place-items:center; font-family:var(--sans); font-size:.68rem; font-weight:700;
+  color:var(--muted); border:1px solid var(--line2); font-variant-numeric:tabular-nums}
+.th p{margin:0}
+.th blockquote{margin:9px 0 0; padding:1px 0 1px 12px; border-left:3px solid var(--accent);
+  font-style:italic; color:var(--quote); font-size:.96em}
 
-/* home */
-.hero{background:linear-gradient(135deg,#5e5ce6,#8c3cc8);color:#fff;border-radius:24px;padding:20px;display:flex;align-items:center;gap:18px;box-shadow:0 14px 30px rgba(94,92,230,.28)}
-.hero .ring{flex:none;width:92px;height:92px;position:relative}
-.hero .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
-.hero .ring span{position:absolute;inset:0;display:grid;place-items:center;font-size:22px;font-weight:800}
-.hero h2{font-size:20px;font-weight:700;letter-spacing:-.3px}
-.hero p{opacity:.85;font-size:14px;margin-top:4px}
-.big{display:block;width:100%;margin-top:14px;padding:16px;border-radius:16px;background:var(--accent);color:#fff;font-weight:700;font-size:17px;text-align:center;box-shadow:0 8px 18px rgba(94,92,230,.3);transition:transform .12s}
-.big:active,.tile:active,.btn:active{transform:scale(.97)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.tile{background:var(--card);border-radius:var(--r);padding:16px;text-align:left;box-shadow:var(--shadow);transition:transform .12s;display:flex;flex-direction:column;gap:10px;min-height:128px}
-.tile .ti{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:20px}
-.tile b{font-size:16px;font-weight:700}
-.tile small{color:var(--sub);font-size:13px;line-height:1.3;margin-top:-6px}
-.tile.wide{flex-direction:row;align-items:center;min-height:0;width:100%;margin-top:12px;gap:14px}
-.tile.wide>div:nth-child(2){flex:1;display:flex;flex-direction:column;gap:8px}
-.timer{font-variant-numeric:tabular-nums;font-weight:700;font-size:15px;padding:5px 11px;border-radius:20px;background:var(--accent-soft);color:var(--accent);min-width:64px;text-align:center;transition:all .3s}
-.timer.warn{background:rgba(255,59,48,.14);color:var(--red);animation:pulse 1s infinite}
-@keyframes pulse{50%{transform:scale(1.07)}}
-textarea.exam{min-height:52vh}
-.grade{display:flex;align-items:center;gap:16px;background:var(--card);border-radius:20px;padding:16px;box-shadow:var(--shadow);margin:6px 0 14px}
-.grade .g{flex:none;width:72px;height:72px;border-radius:20px;display:grid;place-items:center;font-size:40px;font-weight:800;color:#fff}
-.grade b{font-size:18px;display:block}
-.grade small{color:var(--sub);font-size:14px;display:block;margin-top:3px}
-.res .subl{display:block;padding:0;background:none;margin:-3px 0 9px 26px}
-.res .subl div{padding:7px 10px;font-size:14.5px;margin-bottom:5px}
-.badge{font-size:12px;font-weight:700;padding:2px 8px;border-radius:8px;color:#fff;margin-left:6px;vertical-align:2px}
-.step .num{background:var(--card2);color:var(--sub)}
-.step.cur .num{background:var(--accent);color:#fff;box-shadow:0 0 0 4px var(--accent-soft)}
-.step.ok .num{background:var(--green);color:#fff}
-.step.ok b{color:var(--sub);text-decoration:line-through;text-decoration-color:var(--sep)}
-#splash.fast .ld i{animation-duration:.5s}
-#toast{position:fixed;left:50%;top:calc(var(--safe-t) + 12px);z-index:200;transform:translate(-50%,-140%);background:rgba(30,30,32,.92);color:#fff;padding:11px 18px;border-radius:22px;font-size:14.5px;font-weight:500;transition:transform .35s cubic-bezier(.3,.9,.3,1);max-width:90vw;text-align:center;backdrop-filter:blur(10px)}
-#toast.on{transform:translate(-50%,0)}
-.link{color:var(--accent);font-size:15px;padding:14px;display:block;margin:10px auto 0;text-align:center}
-.link.danger{color:var(--red)}
+.qz{background:var(--qbg); border:1px solid var(--qline); border-radius:18px; padding:15px 15px 16px; margin:18px 0}
+.qz .lab{font-family:var(--sans); font-size:.72rem; font-weight:800; letter-spacing:.13em; text-transform:uppercase; color:var(--accent)}
+.qz .ask{margin:5px 0 12px; font-weight:600; line-height:1.4}
+.opts{display:grid; gap:10px}
+.opt{appearance:none; -webkit-appearance:none; display:flex; gap:12px; align-items:flex-start; width:100%; text-align:left;
+  min-height:54px; padding:12px 14px; border-radius:14px; border:1.5px solid var(--line2); background:var(--card);
+  font-size:.97rem; line-height:1.42; cursor:pointer; transition:border-color .15s, background-color .15s, opacity .15s, transform .08s}
+.opt:active:not([disabled]){transform:scale(.985)}
+.opt .l{flex:none; width:27px; height:27px; border-radius:50%; display:grid; place-items:center; margin-top:-1px;
+  font-family:var(--sans); font-size:.8rem; font-weight:700; background:var(--chip); color:var(--muted)}
+.opt[disabled]{cursor:default}
+.opts.done .opt:not(.ok):not(.bad){opacity:.5}
+.opt.ok{border-color:var(--ok); background:var(--okbg)}
+.opt.ok .l{background:var(--ok); color:var(--card)}
+.opt.bad{border-color:var(--bad); background:var(--badbg)}
+.opt.bad .l{background:var(--bad); color:var(--card)}
+@media (hover:hover){ .opt:not([disabled]):hover{border-color:var(--accent)} }
+.fb{margin-top:12px; padding:12px 14px; border-radius:12px; background:var(--card); border:1px solid var(--line); font-size:.95rem; line-height:1.5}
+.fb[hidden]{display:none}
+.fb .v{font-family:var(--sans); font-weight:800}
+.fb .v.okt{color:var(--ok)} .fb .v.badt{color:var(--bad)}
 
-/* pages (push) */
-.page{position:fixed;inset:0;z-index:30;background:var(--bg);overflow-y:auto;padding:calc(var(--safe-t) + 54px) 16px calc(var(--safe-b) + 40px);transform:translateX(100%);transition:transform .38s cubic-bezier(.3,.9,.3,1)}
-.page.in{transform:none}
-.nav{position:fixed;top:0;left:0;right:0;z-index:31;display:flex;align-items:center;justify-content:space-between;padding:calc(var(--safe-t) + 8px) 10px 8px;background:var(--bar);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:.5px solid var(--sep);transform:translateX(100%);transition:transform .38s cubic-bezier(.3,.9,.3,1)}
-.nav.in{transform:none}
-.nav .back{color:var(--accent);display:flex;align-items:center;gap:4px;font-size:17px;padding:6px}
-.nav .ttl{font-weight:600;font-size:16px;position:absolute;left:90px;right:90px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
-.nav .act{color:var(--accent);font-size:15px;padding:6px}
-.pt{padding:14px 16px}
-.pt+.pt{border-top:.5px solid var(--sep)}
-.pt>b{display:flex;gap:8px;font-weight:600}
-.pt>b em{font-style:normal;color:var(--accent);flex:none}
-.pt ul{list-style:none;margin:8px 0 0 22px;transition:filter .25s,opacity .25s}
-.pt li{padding:3px 0;color:var(--text);font-size:15.5px;display:flex;gap:6px}
-.pt li em{font-style:normal;color:var(--sub);flex:none}
-.hidden-sub .pt ul{filter:blur(7px);opacity:.55}
-.hidden-sub .pt.open ul{filter:none;opacity:1}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.btn{padding:11px 14px;border-radius:13px;background:var(--accent-soft);color:var(--accent);font-weight:600;font-size:15px;transition:transform .12s}
-.btn.solid{background:var(--accent);color:#fff}
+.end{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:18px; margin:28px 0 8px}
+.end h3{margin:0 0 8px; font-size:1.25rem}
+.end ul{margin:0; padding-left:1.1em}
+.end li{margin:6px 0}
 
-/* notes */
-.note{background:var(--card);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);margin-bottom:12px}
-.note .dt{font-size:12px;color:var(--sub);font-weight:600;letter-spacing:.3px}
-.note h3{font-size:19px;margin:2px 0 10px;letter-spacing:-.2px}
-.note .def{margin:8px 0;font-size:15.5px}
-.note .lst{margin:10px 0}
-.note .lst b{font-size:14px;color:var(--sub);font-weight:600;display:block;margin-bottom:3px}
-.note .lst div{font-size:15.5px;padding:2px 0 2px 14px;position:relative}
-.note .lst div:before{content:"";position:absolute;left:2px;top:.62em;width:5px;height:5px;border-radius:50%;background:var(--accent)}
-.note .tip{margin-top:10px;font-size:14px;color:var(--sub);background:var(--card2);padding:10px 12px;border-radius:12px}
-.formula{display:flex;align-items:center;gap:10px;justify-content:center;font-weight:700;margin:12px 0;font-size:17px}
-.frac{display:inline-flex;flex-direction:column;align-items:center}
-.frac span:first-child{border-bottom:2px solid currentColor;padding:0 6px 2px}
-.frac span:last-child{padding:2px 6px 0}
+.new{animation:appear .32s ease both}
+@keyframes appear{from{opacity:0; transform:translateY(10px)}}
+@media (prefers-reduced-motion:reduce){ .new{animation:none} .fill{transition:none} }
 
-/* sheet */
-#dim{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .3s}
-#dim.on{opacity:1;pointer-events:auto}
-#sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--bg);border-radius:22px 22px 0 0;padding:8px 16px calc(var(--safe-b) + 18px);transform:translateY(105%);transition:transform .4s cubic-bezier(.3,.9,.3,1);max-height:88vh;overflow-y:auto}
-#sheet.on{transform:none}
-#sheet .grab{width:38px;height:5px;border-radius:3px;background:var(--sep);margin:0 auto 12px}
-#sheet h3{font-size:22px;font-weight:700;margin:4px 4px 2px}
-.tog{padding:10px 14px;border-radius:12px;background:var(--card);font-size:15px;font-weight:500;border:1.5px solid transparent;transition:all .15s}
-.tog.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
-.seg{display:flex;background:var(--card2);border-radius:10px;padding:2px}
-.seg button{flex:1;padding:7px;border-radius:8px;font-size:14px;font-weight:600;color:var(--sub)}
-.seg button.on{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+/* ---------- нижняя кнопка ---------- */
+.bar{position:sticky; bottom:0; z-index:15; background:var(--glass);
+  -webkit-backdrop-filter:saturate(1.4) blur(16px); backdrop-filter:saturate(1.4) blur(16px);
+  border-top:1px solid var(--line); padding:10px var(--sr) max(12px, env(safe-area-inset-bottom)) var(--sl)}
+.bar-in{max-width:var(--col); margin:0 auto; display:flex}
+#next{flex:1; min-height:56px; border:0; border-radius:16px; background:var(--accent); color:var(--onaccent);
+  font-family:var(--sans); font-size:1.05rem; font-weight:650; cursor:pointer; transition:background-color .15s, transform .08s}
+#next:active:not(:disabled){transform:scale(.985)}
+#next:disabled{background:var(--chip); color:var(--muted); cursor:default}
 
-/* trainer */
-#tr{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;transform:translateY(100%);transition:transform .42s cubic-bezier(.3,.9,.3,1)}
-#tr.on{transform:none}
-.trh{display:flex;align-items:center;gap:12px;padding:calc(var(--safe-t) + 10px) 16px 10px}
-.x{width:32px;height:32px;border-radius:50%;background:var(--card2);display:grid;place-items:center;flex:none}
-.prog{flex:1;height:8px;border-radius:4px;background:var(--sep);overflow:hidden}
-.prog i{display:block;height:100%;background:var(--green);border-radius:4px;transition:width .4s}
-.cnt{font-size:14px;color:var(--sub);font-variant-numeric:tabular-nums;min-width:44px;text-align:right}
-.trb{flex:1;overflow-y:auto;padding:8px 16px 16px;display:flex;flex-direction:column}
-.trf{padding:10px 16px calc(var(--safe-b) + 14px);display:flex;gap:10px}
-.trf .big{margin:0}
-.kind{font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--accent);margin:6px 2px 6px}
-.q{font-size:22px;font-weight:700;letter-spacing:-.3px;line-height:1.25;margin:0 2px 4px}
-.qs{color:var(--sub);font-size:15px;margin:0 2px 16px}
-.anim{animation:slide .35s cubic-bezier(.3,.9,.3,1)}
-@keyframes slide{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+/* ---------- главы: шторка на телефоне ---------- */
+.scrim{position:fixed; inset:0; z-index:35; background:rgba(0,0,0,.38); opacity:0; pointer-events:none; transition:opacity .2s}
+.scrim.show{opacity:1; pointer-events:auto}
+.nav{position:fixed; left:0; right:0; bottom:0; z-index:40; max-height:84dvh; display:flex; flex-direction:column;
+  background:var(--card); border-radius:22px 22px 0 0; box-shadow:0 -12px 40px rgba(0,0,0,.2);
+  transform:translateY(105%); transition:transform .28s cubic-bezier(.2,.8,.2,1), visibility 0s linear .28s; visibility:hidden;
+  padding:0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.nav.open{transform:none; visibility:visible; transition:transform .28s cubic-bezier(.2,.8,.2,1), visibility 0s}
+.brand{display:none}
+.sheet-head{display:flex; align-items:center; justify-content:space-between; padding:14px 18px 8px}
+.sheet-head b{font-size:1.15rem}
+.sheet-head button{border:0; background:none; color:var(--accent); font-family:var(--sans); font-weight:600; font-size:1rem; min-height:44px; padding:0 4px}
+.grab{width:40px; height:5px; border-radius:3px; background:var(--line2); margin:8px auto 0}
+.nav-list{overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; padding:2px 8px 6px}
+.ch-btn{display:flex; align-items:center; gap:10px; width:100%; min-height:48px; padding:6px 12px; border:0; background:none;
+  border-radius:12px; text-align:left; cursor:pointer; line-height:1.3}
+.ch-btn .r{flex:none; width:44px; font-family:var(--sans); font-size:.8rem; font-weight:700; color:var(--muted)}
+.ch-btn .n{flex:1; min-width:0}
+.ch-btn .d{flex:none; width:8px; height:8px; border-radius:50%; background:var(--line2)}
+.ch-btn.reached .d{background:var(--accent)}
+.ch-btn.cur{background:var(--chip)}
+.ch-btn.cur .r{color:var(--accent)}
+@media (hover:hover){ .ch-btn:hover{background:var(--chip)} }
+.nav-foot{padding:6px 18px 12px; border-top:1px solid var(--line)}
+.btn-reset{border:0; background:none; color:var(--muted); font-family:var(--sans); font-size:.9rem; min-height:44px; padding:0; cursor:pointer; text-decoration:underline; text-underline-offset:3px}
 
-/* flashcard */
-.fc{perspective:1200px;flex:1;min-height:340px;display:flex}
-.fc-in{position:relative;flex:1;transition:transform .55s cubic-bezier(.3,.9,.3,1);transform-style:preserve-3d}
-.fc.flip .fc-in{transform:rotateY(180deg)}
-.face{position:absolute;inset:0;background:var(--card);border-radius:24px;box-shadow:0 10px 30px rgba(0,0,0,.08);padding:24px 22px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;overflow-y:auto}
-.face.back{transform:rotateY(180deg)}
-.face .q{font-size:24px}
-.face .hint{margin-top:auto;color:var(--sub);font-size:14px;text-align:center;padding-top:16px}
-.ans div{padding:7px 0;border-bottom:.5px solid var(--sep);font-size:16px;display:flex;gap:8px}
-.ans div:last-child{border:0}
-.ans em{font-style:normal;color:var(--accent);font-weight:700;flex:none;min-width:18px}
-.no{background:rgba(255,59,48,.12)!important;color:var(--red)!important;box-shadow:none!important}
-.yes{background:var(--green)!important;color:#fff!important;box-shadow:0 8px 18px rgba(48,199,89,.3)!important}
-
-/* assemble */
-.slots{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
-.slot{min-height:50px;border-radius:14px;border:1.5px dashed var(--sep);display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:15.5px;color:var(--sub);transition:all .2s}
-.slot.f{border:1.5px solid transparent;background:var(--card);color:var(--text);box-shadow:var(--shadow)}
-.slot em{font-style:normal;font-weight:700;color:var(--accent);flex:none}
-.slot.ok{background:rgba(48,199,89,.14);color:var(--text)}
-.slot.bad{background:rgba(255,59,48,.12)}
-.slot .fix{display:block;font-size:13px;color:var(--green);margin-top:3px}
-.pool{display:flex;flex-direction:column;gap:8px}
-.chip{padding:12px 14px;border-radius:14px;background:var(--card);box-shadow:var(--shadow);font-size:15.5px;text-align:left;transition:transform .12s,opacity .2s,background .2s;width:100%}
-.chip:active{transform:scale(.98)}
-.chip.used{opacity:.25;pointer-events:none}
-.chip.sel{background:var(--accent);color:#fff}
-.chip.ok{background:rgba(48,199,89,.16)}
-.chip.bad{background:rgba(255,59,48,.14)}
-.chip.miss{outline:2px solid var(--green);outline-offset:-2px}
-
-/* memory */
-textarea.mem{width:100%;min-height:190px;border:0;border-radius:16px;background:var(--card);color:var(--text);padding:14px;font-size:16px;line-height:1.5;resize:none;outline:none;box-shadow:var(--shadow)}
-textarea.mem:focus{box-shadow:0 0 0 2px var(--accent)}
-.res div{padding:10px 12px;border-radius:12px;margin-bottom:7px;font-size:15.5px;display:flex;gap:10px;align-items:flex-start}
-.res .ok{background:rgba(48,199,89,.14)}
-.res .bad{background:rgba(255,59,48,.10)}
-.res i{font-style:normal;flex:none;font-weight:700}
-.res small{display:block;color:var(--sub);font-size:13px;margin-top:2px}
-.res button{margin-left:auto;font-size:13px;color:var(--accent);font-weight:600;flex:none}
-
-/* toast / result */
-.done{text-align:center;padding:30px 10px}
-.done .em{font-size:64px;animation:pop .6s both}
-.done h2{font-size:26px;margin-top:10px}
-.done p{color:var(--sub);margin-top:6px}
-.fb{border-radius:14px;padding:12px 14px;margin-top:14px;font-weight:600;font-size:15px;animation:up .3s}
-.fb.ok{background:rgba(48,199,89,.14);color:#1f9e45}
-.fb.bad{background:rgba(255,59,48,.1);color:var(--red)}
-@media (prefers-color-scheme:dark){.fb.ok{color:#5be080}}
-.shake{animation:shake .4s}
-@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+/* ---------- iPad горизонтально и широкие экраны ---------- */
+@media (min-width:900px) and (min-height:600px){
+  :root{--fs:20px; --col:700px}
+  .app{display:grid; grid-template-columns:320px minmax(0,1fr)}
+  .top,.scrim,.sheet-head,.grab{display:none}
+  .nav{position:sticky; top:0; align-self:start; height:100dvh; max-height:none; transform:none; visibility:visible;
+    border-radius:0; box-shadow:none; background:var(--side); border-right:1px solid var(--line); transition:none;
+    padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom) env(safe-area-inset-left); font-size:17px}
+  .brand{display:block; padding:26px 22px 14px}
+  .brand .b1{font-size:2rem; font-weight:700; line-height:1.1}
+  .brand .b2{font-family:var(--sans); font-size:.82rem; color:var(--muted); margin-top:4px}
+  .brand .b3{font-family:var(--sans); font-size:.82rem; color:var(--muted); margin-top:12px; line-height:1.45}
+  .brand .track{margin:14px 0 6px; border-radius:2px; overflow:hidden; height:4px}
+  .brand .pt{font-family:var(--sans); font-size:.8rem; color:var(--muted); font-variant-numeric:tabular-nums}
+  .nav-list{flex:1; padding:4px 10px 8px}
+  .ch-btn{min-height:40px; padding:5px 12px}
+  .nav-foot{padding:4px 22px 10px}
+  #feed{padding-top:22px}
+  .th{padding:15px 20px 16px 58px}
+  .th .num{left:16px; top:16px; width:28px; height:28px}
+  .qz{padding:18px 18px 18px}
+}
 </style>
 </head>
 <body>
+<div class="app">
+  <nav class="nav" id="nav" aria-label="Главы">
+    <div class="grab"></div>
+    <div class="sheet-head"><b>Главы</b><button type="button" id="navClose">Готово</button></div>
+    <div class="brand">
+      <div class="b1">Ася</div>
+      <div class="b2">И. С. Тургенев · 1858</div>
+      <div class="b3" id="brandWhat"></div>
+      <div class="track"><div class="fill" id="fill2"></div></div>
+      <div class="pt" id="pt2"></div>
+    </div>
+    <div class="nav-list" id="navList"></div>
+    <div class="nav-foot"><button type="button" class="btn-reset" id="reset">Начать заново</button></div>
+  </nav>
+  <div class="scrim" id="scrim"></div>
 
-<div id="splash">
-  <img class="ic" src="data:image/png;base64,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" alt="">
-  <h1>Обществознание</h1>
-  <p>Планы к тесту</p>
-  <div class="ld"><i></i></div>
+  <main class="main">
+    <header class="top">
+      <div class="top-row">
+        <div class="top-title"><b>Ася</b><span id="curLabel">Глава I</span></div>
+        <div class="top-count" id="pt1"></div>
+        <button type="button" class="btn-ch" id="navOpen">Главы</button>
+      </div>
+      <div class="track"><div class="fill" id="fill1"></div></div>
+    </header>
+
+    <div id="feed" aria-live="polite"></div>
+
+    <div class="bar"><div class="bar-in"><button type="button" id="next">Дальше</button></div></div>
+  </main>
 </div>
-
-<div id="tabs">
-  <section class="tab on" id="t-home"></section>
-  <section class="tab" id="t-plans"></section>
-  <section class="tab" id="t-signs"></section>
-  <section class="tab" id="t-notes"></section>
-</div>
-
-<nav id="bar">
-  <button data-t="home" class="on"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2 3 10.4V20a1 1 0 0 0 1 1h5.5v-6h5v6H20a1 1 0 0 0 1-1v-9.6z"/></svg>Сегодня</button>
-  <button data-t="plans"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h11l4 4v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm3 6v1.8h8V9zm0 4v1.8h8V13zm0 4v1.8h5V17z"/></svg>Планы</button>
-  <button data-t="signs"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 5h3v3H4zm5 .6h11v1.8H9zM4 10.5h3v3H4zm5 .6h11v1.8H9zM4 16h3v3H4zm5 .6h11v1.8H9z"/></svg>Признаки</button>
-  <button data-t="notes"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h11a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm2 4v2h8V6zm0 4v2h8v-2zm0 4v2h5v-2z"/></svg>Конспект</button>
-</nav>
-
-<div id="dim"></div>
-<div id="sheet"></div>
-<div id="tr"></div>
 
 <script>
-/* ===================== ДАННЫЕ ===================== */
-const PLANS = [
- {n:1,t:'Человек как биосоциальное существо',p:[
-  ['Человек как результат биологической и социокультурной эволюции',[]],
-  ['Проявление биологической природы человека',['функционирование внутренних органов и систем','первичные (физиологические) потребности — в пище, воде, отдыхе','генотип человека и механизмы наследственности']],
-  ['Проявления социальной природы человека / отличие человека от животных',['социальные потребности и интересы','наличие сознания и самосознания','владение членораздельной речью','использование сложных орудий труда','мировоззрение']],
-  ['Виды потребностей человека',['биологические (в пище, воздухе, воде, жилище, одежде, сне, отдыхе)','социальные (в труде, общении, признании, успехе)','духовные / идеальные (в познании, творчестве, самосовершенствовании, красоте)']],
-  ['Единство биологического и социального в человеке',['влияние биологического (наследственного) на физические данные и психические свойства человека','возможности современного общества в борьбе с наследственными заболеваниями','удовлетворение биологических потребностей в рамках социальных норм','развитие природных задатков в процессе деятельности']]
- ]},
- {n:2,t:'Роль потребностей в деятельности человека',p:[
-  ['Структура деятельности',['субъект','объект','мотив','цель','средства','результат']],
-  ['Мотивы деятельности',['потребности','интересы','убеждения']],
-  ['Виды потребностей',['биологические (в пище, воздухе, воде, жилище, одежде, сне, отдыхе)','социальные (в труде, общении, признании, успехе)','идеальные (в познании, творчестве, самосовершенствовании, красоте)']]
- ]},
- {n:3,t:'Мировоззрение и его роль в жизни человека',s:'(Мировоззрение, его виды и формы)',p:[
-  ['Структура мировоззрения',['знания','принципы','убеждения','духовные ценности']],
-  ['Пути формирования мировоззрения',['стихийный','осознанный (целенаправленный)']],
-  ['Основные виды мировоззрения',['обыденное','религиозное','научное']],
-  ['Уровни мировоззрения',['обыденно-практический','теоретический']],
-  ['Функции мировоззрения',['ценностно-ориентационная (даёт ориентиры в деятельности)','познавательная (даёт методы познания)','практическая (даёт методы деятельности)']]
- ]},
- {n:4,t:'Деятельность как форма взаимодействия человека с окружающим миром',p:[
-  ['Особенности (характеристики) деятельности',['преобразовательная','направленность на получение результата','социальный характер','осознанная']],
-  ['Структура деятельности',['субъект','объект','мотив','цель','средства','результат']],
-  ['Мотивы деятельности',['потребности','интересы','убеждения']],
-  ['Различные классификации видов деятельности',['практическая и духовная','труд, игра, учение, общение','созидательная и разрушительная','экономическая, социальная, политическая','творческая и репродуктивная']],
-  ['Основные направления деятельности, её результаты',['материальное производство','создание духовных ценностей','поддержание социальных отношений']]
- ]},
- {n:5,t:'Общение как форма (вид) деятельности',p:[
-  ['Структура общения',['субъект','мотивы общения','цель','средства достижения цели','результат']],
-  ['Цели общения',['обмен информацией','гармонизация личности','налаживание контактов между людьми']],
-  ['Средства общения',['невербальные','вербальные']],
-  ['Виды общения',['по связям: личное и деловое','по субъектам: межличностное и групповое','по направленности: прямое и опосредованное','по времени: кратковременное и длительное']],
-  ['Коммуникативные качества личности',['внимательность к собеседнику, умение слушать','понимание другого','управление собственными эмоциями','грамотная устная и письменная речь']]
- ]},
- {n:6,t:'Познавательная деятельность',p:[
-  ['Структура познавательной деятельности',['объект познания','субъект познания','средства познания','результат познания (знания)']],
-  ['Этапы (ступени) познания',['чувственное (ощущение, восприятие, представление)','рациональное (понятие, суждение, умозаключение)']],
-  ['Основные виды ненаучного познания мира',['мифологическое познание','обыденное познание','искусство','паранаука']],
-  ['Научное познание мира и его особенности',['эмпирический и теоретический уровни','стремление к объективности','доказательность','системность']],
-  ['Особенности социального познания',['совпадение субъекта и объекта познания','уникальность и неповторимость социальных явлений','высокая доля субъективизма, связь с интересами субъекта']]
- ]},
- {n:7,t:'Проблема познаваемости мира',p:[
-  ['Основные виды познания мира',['мифологическое познание','обыденное познание','искусство','паранаука']],
-  ['Этапы (ступени) познания',['чувственное (ощущение, восприятие, представление)','рациональное (понятие, суждение, умозаключение)']],
-  ['Философские теории о познаваемости мира',['оптимизм','скептицизм','агностицизм']],
-  ['Причины, по которым полное познание невозможно',['безграничность мира','несовершенство органов чувств и инструментов познания','динамичность мира']]
- ]},
- {n:8,t:'Понятие истины и её критерии',p:[
-  ['Истина как цель и результат познания',[]],
-  ['Свойства истины',['объективность','конкретность']],
-  ['Виды истины',['относительная','абсолютная']],
-  ['Критерии истины',['практика','соответствие законам логики','соответствие ранее открытым законам науки']]
- ]}
+(function(){
+"use strict";
+
+/* ============ СОДЕРЖАНИЕ ============
+   t — тезис, q — цитата из текста Тургенева (необязательно)
+   ask — вопрос «что было дальше?», o — 3 варианта, a — номер верного (0,1,2), why — пояснение */
+var DATA = [
+{n:"I", t:"Городок на Рейне", items:[
+ {t:"Н. Н. вспоминает молодость: ему около двадцати пяти, он только что «вырвался на волю» и уехал за границу — не учиться, а просто посмотреть на мир.", q:"Мне было тогда лет двадцать пять"},
+ {t:"Он путешествует без цели и без плана. Памятники и красивые виды его мало трогают — интересны ему только люди.", q:"Меня занимали исключительно одни люди"},
+ {t:"Недавно его отвергла молодая вдова — предпочла ему баварского лейтенанта. Чтобы прийти в себя, Н. Н. поселяется в маленьком немецком городке З. на левом берегу Рейна."},
+ {t:"Любимое место Н. Н. — каменная скамья под старым ясенем у реки. В ветвях ясеня стоит маленькая статуя мадонны. Запомните её: она появится в самом конце.", q:"с почти детским лицом и красным сердцем на груди, пронзенным мечами"},
+ {ask:"Однажды вечером Н. Н. сидит у реки. Что было дальше?", o:["Мимо проходит вдова под руку с баварским лейтенантом","С другого берега, из городка Л., доносится музыка","Перевозчик предлагает ему прокатиться по Рейну до Кёльна"], a:1,
+  why:"Музыка — случайность, с которой начинается вся история. Это в характере Н. Н.: он живёт без плана и идёт туда, куда позовёт настроение."},
+ {t:"Из Л. звучит вальс: контрабас, скрипка, флейта. Старик объясняет, что студенты из города Б. приехали на коммерш — студенческий праздник."},
+ {t:"Н. Н. садится в лодку перевозчика и переправляется через Рейн в Л."}
+]},
+{n:"II", t:"Коммерш", items:[
+ {t:"Коммерш — торжественный студенческий пир с песнями и пивом. В Л. он идёт в саду гостиницы «Солнце», под липами и флагами."},
+ {ask:"Н. Н. смотрит на праздник из толпы зрителей. Что было дальше?", o:["Он слышит русскую речь и знакомится с братом и сестрой — Гагиным и Асей","Студенты зовут его за стол, и он пирует с ними до утра","Он встречает знакомого из Петербурга и уходит с ним в гостиницу"], a:0,
+  why:"Обычно Н. Н. избегал русских за границей, а тут заговаривает первым. Интерес к живым людям — та самая черта, о которой он говорил в гл. I."},
+ {t:"В толпе Н. Н. слышит русскую речь: молодой человек зовёт девушку «Ася». У Н. Н. невольно вырывается вопрос.", q:"Вы русские?"},
+ {t:"Молодой человек — Гагин. Он приглашает Н. Н. к себе. Обычно Н. Н. сторонился русских за границей, но Гагин ему сразу понравился."},
+ {t:"Ася, «сестра» Гагина, — невысокая, смуглая, с короткими чёрными кудрями, как у мальчика. Она то дичится, то смеётся без причины. Брат её подбадривает.", q:"Ася, полно ежиться! он не кусается."},
+ {ask:"Гагин зовёт Н. Н. в гости. Куда они идут?", o:["В гостиницу «Солнце», за стол к студентам","На развалины старого замка — смотреть закат","В домик Гагиных на винограднике над Рейном"], a:2,
+  why:"Домик на винограднике станет главным местом действия: здесь будут разговоры, вальс, ночное ожидание Аси — и отсюда Гагины однажды утром исчезнут."},
+ {t:"Они поднимаются в домик Гагиных на винограднике и ужинают на воздухе: кислое молоко, ягоды, хлеб, рейнвейн. Ася уходит в дом и долго стоит у окна."},
+ {t:"Ночью перевозчик везёт Н. Н. обратно по лунному Рейну, Ася весело кричит ему вслед. Дома Н. Н. чувствует себя счастливым и понимает, что за весь вечер ни разу не вспомнил о вдове.", q:"Вы в лунный столб въехали"}
+]},
+{n:"III", t:"Этюды Гагина", items:[
+ {t:"Утром Гагин будит Н. Н. песней под окном. За кофе он рассказывает, что хочет стать художником: он обеспечен, но поздно взялся за дело."},
+ {t:"Н. Н. делится историей несчастной любви к вдове. Гагин слушает вежливо, но без особого сочувствия."},
+ {ask:"Гагин показывает Н. Н. свои этюды. Что было дальше?", o:["Н. Н. восхищается и советует отправить их на выставку","Н. Н. честно говорит, что они живые, но незаконченные, — и Гагин сердится на себя","Н. Н. из вежливости молчит, и Гагин обижается"], a:1,
+  why:"Гагин сам называет свою беду — «славянская распущенность»: начать хватает таланта, довести до конца — терпения. Мотив «не довести до конца» в повести ещё вернётся."},
+ {t:"Этюды живые, но небрежные и незаконченные. Н. Н. откровенно говорит об этом. Гагин бросает картоны на диван и винит «славянскую распущенность».", q:"Коли хватит терпенья, из меня выйдет что-нибудь"},
+ {t:"Хозяйка сообщает: Ася ушла на «развалину» — старый замок в двух верстах от Л. Гагин предлагает пойти за ней.", q:"Пойдемте-ка лучше Асю отыскивать"}
+]},
+{n:"IV", t:"Развалина", items:[
+ {t:"Дорога к развалине идёт по лесистой долине с ручьём. Замок стоит на скале: четырёхугольная башня с трещиной, плющ, деревья прямо на стенах."},
+ {ask:"Мужчины подходят к замку и замечают Асю. Где она?", o:["Сидит на краю стены прямо над пропастью","Читает книгу у подножия башни","Ждёт их у ворот с корзинкой ягод"], a:0,
+  why:"Ася с первых сцен делает то, что пугает и привлекает внимание. Н. Н. и тревожится, и раздражается: ему кажется, что всё это нарочно."},
+ {t:"Ася сидит на краю стены над пропастью. Гагин в ужасе вскрикивает, Н. Н. упрекает её в неосторожности.", q:"экая сумасшедшая!"},
+ {t:"Старушка в балаганчике продаёт пиво и пряники. Ася карабкается по развалинам со стаканом воды, будто поливает цветы на стенах. Н. Н. раздражён.", q:"Да она как коза лазит"},
+ {t:"Гагин поднимает тост за «даму сердца» Н. Н. Ася тут же спрашивает, есть ли у него такая дама."},
+ {ask:"Прогулка окончена. Как Ася ведёт себя дальше?", o:["Запирается у себя и не выходит до вечера","Снова дерзит и хохочет за обедом","По дороге шалит, а дома надевает лучшее платье и держится как чинная барышня"], a:2,
+  why:"Резкая смена ролей — главная загадка Аси. Это не каприз ради каприза: Ася ищет, какой ей быть. Почему — станет ясно в гл. VIII."},
+ {t:"На обратном пути Ася хохочет и громко поёт мимо чопорной английской семьи. А дома переодевается в лучшее платье и за обедом держится чинно, как благовоспитанная барышня."},
+ {t:"Вечером Ася уходит к фрау Луизе, вдове бургомистра: её тянет к людям простого круга. Когда Н. Н. и Гагин проходят мимо, Ася из окна третьего этажа бросает Гагину ветку герани.", q:"вообрази, что я дама твоего сердца"},
+ {t:"По дороге домой Н. Н. раздражён и впервые думает: а сестра ли Ася Гагину?"},
+ {ask:"Наутро Н. Н. снова у Гагиных. Какой он застаёт Асю?", o:["Тихой и скромной: в старом платье шьёт у окна","Снова на развалинах замка","Обиженной: она не выходит к гостю"], a:0,
+  why:"После вчерашних выходок — полная тишина. Н. Н. не понимает, где настоящая Ася. Скоро он назовёт это одним словом."}
+]},
+{n:"V", t:"Хамелеон", items:[
+ {t:"Утром Ася совсем другая: в старом платье сидит у окна, шьёт и тихо напевает — простая русская девушка."},
+ {t:"Гагин пишет этюд с дубом в долине, Н. Н. идёт с ним. Они лежат на траве и говорят о живописи, о назначении художника, о молодости."},
+ {t:"Ася весь день скромна и не кокетничает. Гагин шутит, что она «пост и покаяние на себя наложила». Вечером Ася рано уходит спать."},
+ {ask:"Н. Н. возвращается к себе. Что он думает об Асе?", o:["Что влюблён и завтра же признается","Что она хамелеон — и всё-таки не сестра Гагину","Что больше не будет ходить к Гагиным"], a:1,
+  why:"«Хамелеон» точно схватывает главную черту Аси — быструю смену облика. А подозрение «не сестра» подготовит следующее недоразумение."},
+ {t:"Ложась спать, Н. Н. думает: «Что за хамелеон эта девушка!» И тут же добавляет:", q:"А все-таки она ему не сестра"}
+]},
+{n:"VI", t:"Беседка из акаций", items:[
+ {t:"Проходят две недели. Н. Н. бывает у Гагиных каждый день. Ася его избегает, перестаёт шалить и выглядит озабоченной."},
+ {t:"Ася хорошо говорит по-французски и по-немецки, но воспитание у неё странное: она горда и стыдлива. Застав её за французским романом, Н. Н. подшучивает — и слышит резкий ответ.", q:"Вы думаете, что я только смеяться умею"},
+ {ask:"Вечером Н. Н. читает Гагину вслух поэму Гёте «Герман и Доротея». Что было дальше?", o:["Ася смеётся над поэмой и уходит к фрау Луизе","Ася просит книгу и читает её всю ночь","Ася тихо слушает до конца, а назавтра ведёт себя как домовитая Доротея"], a:2,
+  why:"Ася примеряет на себя героинь книг: сегодня Доротея, позже — пушкинская Татьяна. Она ищет образец, на который хочется быть похожей."},
+ {t:"Ася сначала мелькает рядом, потом садится и слушает «Германа и Доротею» до конца. На следующий день она подражает Доротее — домовита и степенна."},
+ {t:"Н. Н. всё больше уверен, что Гагин ведёт себя не как брат: он ласков с Асей слишком снисходительно и как-то принуждённо."},
+ {ask:"Однажды вечером Н. Н. проходит мимо беседки из акаций, где сидят Гагин и Ася. Что он слышит?", o:["Ася в слезах говорит Гагину, что никого не хочет любить, кроме него","Гагин говорит Асе, что скоро они вернутся в Россию","Ася просит брата больше не звать Н. Н."], a:0,
+  why:"Для Н. Н. это звучит как признание возлюбленной и подтверждает его подозрения. На самом деле это привязанность сестры — но он узнает об этом только в гл. VIII."},
+ {t:"Ася рыдает в беседке и говорит Гагину эти слова. Н. Н. уходит злой: он решил, что его обманывают. И ему горько.", q:"Нет, я никого не хочу любить, кроме тебя"}
+]},
+{n:"VII", t:"Три дня в горах", items:[
+ {t:"Н. Н. уходит на три дня в горы, вверх по Рейну, к хребту, который называют Собачьей спиной. Причина у него одна.", q:"одно чувство было мне ясно: нежелание видеться с Гагиным"},
+ {t:"Он ночует в деревенских харчевнях, лежит на тёплых камнях и смотрит на облака. Запоминаются мелочи: запах смолы, стук дятлов, форели в ручьях."},
+ {t:"Он пробует думать о вдове — и понимает, что всё прошло. В горах Н. Н. навсегда прощается со своим увлечением."},
+ {ask:"На третий день Н. Н. возвращается домой. Что его ждёт?", o:["Письмо от вдовы с просьбой о встрече","Записка Гагина: тот удивлён его исчезновением и зовёт к себе","Ася у ясеня с мадонной"], a:1,
+  why:"Шаг навстречу снова делает не Н. Н. — его зовут, и он идёт. Эта пассивность героя ещё сыграет свою роль."},
+ {t:"Дома Н. Н. находит записку Гагина: тот удивлён его внезапным отъездом и просит прийти. На следующий день Н. Н. отправляется в Л."}
+]},
+{n:"VIII", t:"Тайна Аси", items:[
+ {t:"Увидев Н. Н., Ася беспричинно смеётся и убегает. Разговор не клеится. Н. Н. ссылается на срочную работу, и Гагин провожает его через Рейн."},
+ {t:"У ясеня с мадонной Гагин спрашивает, что Н. Н. думает об Асе. У неё доброе сердце, говорит он, но голова бедовая.", q:"Ее надо хорошенько узнать, чтобы о ней судить"},
+ {ask:"Гагин решается рассказать правду. Кто такая Ася?", o:["Его невеста — они скрывают помолвку от родных","Сирота, дочь его опекуна","Его сестра по отцу, дочь бывшей горничной Татьяны"], a:2,
+  why:"Это ключ к поведению Аси: дочь барина и горничной не своя ни среди господ, ни среди прислуги. Отсюда гордость, стыдливость и желание доказать, что она «не хуже»."},
+ {t:"Ася — сестра Гагина по отцу. Её мать Татьяна была горничной матери Гагина. Отец хотел на ней жениться, но Татьяна отказалась и жила у своей сестры-скотницы."},
+ {t:"Гагина ещё мальчиком увёз в Петербург дядя. Когда Асе было девять, Татьяна умерла, и отец взял девочку к себе в дом."},
+ {t:"Умирая, отец поручил Асю сыну. Двадцатилетний Гагин остался с тринадцатилетней девочкой на руках: четыре года пансиона в Петербурге, а в семнадцать — заграница.", q:"завещаю тебе мою дочь – твою сестру."},
+ {ask:"Гагин закончил рассказ. Что чувствует Н. Н.?", o:["Облегчение: подозрения рассеялись, на душе легко","Обиду: его так долго держали в неведении","Желание уехать, чтобы не мешать брату и сестре"], a:0,
+  why:"Раздражение Н. Н. держалось на мысли об обмане. Нет обмана — нет и причины сторониться Аси. Путь к сближению открыт."},
+ {t:"Гагин признаётся, что с сестрой ему нелегко. Н. Н. становится легко на душе.", q:"Порох она настоящий."}
+]},
+{n:"IX", t:"Вальс", items:[
+ {t:"Н. Н. снова у Гагиных. Ася встречает его бледная и молчаливая. Гагин замечает сестре, что гость вернулся по своей воле.", q:"Вот он опять… и, заметь, сам захотел вернуться."},
+ {t:"Ася ведёт Н. Н. в виноградник; они садятся на плиту над долиной. Она расспрашивает о горах, о легенде про Лорелею, о чёрном коте фрау Луизе — и говорит откровеннее, чем раньше."},
+ {t:"Мимо проходят богомольцы с хоругвями. Ася смотрит им вслед."},
+ {ask:"Ася провожает взглядом богомольцев. О чём она мечтает?", o:["Поступить на сцену и стать актрисой","Пойти куда-нибудь далеко, на молитву, на трудный подвиг","Вернуться в Россию, в деревню отца"], a:1,
+  why:"Ася хочет жизни, в которой есть смысл и поступок. Этим она резко отличается от Н. Н., который живёт «без цели, без плана»."},
+ {t:"Ася мечтает о трудном подвиге. Н. Н. отвечает коротко: «Попытайтесь» — и замечает: «Вы честолюбивы».", q:"Пойти куда-нибудь далеко, на молитву, на трудный подвиг"},
+ {t:"Ася просит почитать что-нибудь из «Евгения Онегина» и признаётся, на кого хотела бы быть похожей.", q:"А я хотела бы быть Татьяной"},
+ {ask:"Вечер продолжается. Что предлагает Ася?", o:["Покататься втроём на лодке по Рейну","Спеть русские песни","Потанцевать вальс"], a:2,
+  why:"Вальс станет символом их общего счастья. Запомните его: в гл. XII Ася откажется вальсировать — и по этому отказу будет видно, как много изменилось."},
+ {t:"Ася просит брата сыграть вальс. Звучит вальс Ланнера; Н. Н. и Ася кружатся по комнате, и он чувствует её близость."}
+]},
+{n:"X", t:"Жажда счастья", items:[
+ {t:"День проходит весело, как у детей. Ася мила и проста, Гагин радуется, глядя на неё."},
+ {t:"Поздно вечером Н. Н. просит перевозчика пустить лодку вниз по течению. Перевозчик дремлет над вёслами, лодка плывёт сама.", q:"царственная река понесла нас."},
+ {ask:"Лодка плывёт по ночному Рейну, на берегу поёт соловей. Что чувствует Н. Н.?", o:["Тоску по вдове и желание уехать","Спокойствие: всё прояснилось","Что в нём «зажглась жажда счастья»"], a:2,
+  why:"Он ещё не называет это любовью к Асе — ему хочется «счастья» вообще. Н. Н. чувствует, но не формулирует. А кто не формулирует, тот и не действует."},
+ {t:"Звёзды, небо и вода кажутся ему неспокойными. Н. Н. чувствует слёзы и жажду счастья.", q:"Нет! во мне зажглась жажда счастья."}
+]},
+{n:"XI", t:"«Что мне читать?»", items:[
+ {t:"Назавтра Ася краснеет, когда Н. Н. входит. Она принарядилась, но печальна. Гагин увлечённо пишет картину — хочет «поймать природу за хвост»."},
+ {t:"Ася говорит, что плохо спала: думала о жизни с матерью. Она называет себя необразованной и неумелой."},
+ {ask:"Ася жалуется, что ничего не знает. О чём она просит Н. Н.?", o:["Сказать ей, что читать и что делать","Уговорить брата снова отдать её в пансион","Учить её немецкому"], a:0,
+  why:"Ася признаёт за Н. Н. право решать за неё. Она доверяет ему всё — и от этого его будущая нерешительность становится ещё тяжелее."},
+ {t:"Ася спрашивает, умна ли она, и просит совета: что ей читать, что делать? Она будет делать всё, что он скажет."},
+ {t:"Ася сжимает его руку. Гагин зовёт Н. Н. посмотреть фон картины, и Ася уходит.", q:"Ведь вам не будет скучно со мной?"}
+]},
+{n:"XII", t:"Крылья", items:[
+ {t:"Через час Ася возвращается и задаёт странный вопрос. Ей кажется, что всё вокруг с ней прощается.", q:"если б я умерла, вам было бы жаль меня?"},
+ {t:"Ася просит верить всему, что она скажет, — даёт «честное слово». Н. Н. смеётся, и она обижается."},
+ {ask:"Ася пытается объяснить, что с ней происходит. Какой образ она находит?", o:["«Я как птица в клетке»","«Крылья у меня выросли – да лететь некуда»","«Я как Лорелея: пою, а никто не слышит»"], a:1,
+  why:"Крылья — любовь и готовность к поступку; «некуда» — Ася не видит, куда это чувство может привести. Ответа она ждёт от Н. Н."},
+ {t:"Ася говорит о себе так:", q:"Крылья у меня выросли – да лететь некуда."},
+ {t:"Гагин предлагает сыграть вальс — Ася резко отказывается и бледнеет. Вечером Н. Н. идёт к Рейну и задаёт себе вопрос.", q:"Неужели она меня любит?"},
+ {ask:"На следующий день Н. Н. снова у Гагиных. Как Ася?", o:["Больна: у неё болит голова, она почти не выходит","Весела и снова лазит по развалинам","Уехала на день в Кёльн"], a:0,
+  why:"Чувство Аси так сильно, что переходит в болезнь. А Н. Н. становится «скучно и пусто» — он уже тоскует по ней, хотя себе в этом не признаётся."}
+]},
+{n:"XIII", t:"Записка", items:[
+ {t:"Н. Н. не хочет заглядывать в себя, но образ Аси засел в душе. Весь день он у Гагиных, а Асе нездоровится: она ненадолго спускается с повязанным лбом, бледная, и слабо улыбается.", q:"Это пройдет, это ничего, все пройдет, не правда ли?"},
+ {t:"Следующее утро — как в полусне: ни работать, ни бездельничать не выходит. Н. Н. бродит по городу, и вдруг мальчик окликает его: «Вы ли господин Н.?» — и передаёт записку от «фрейлейн Annette»."},
+ {ask:"Н. Н. разворачивает записку. Что в ней?", o:["Гагин сообщает, что они завтра уезжают","Ася просит больше не приходить","Ася просит о встрече в четыре часа у каменной часовни возле развалины"], a:2,
+  why:"Ася сама назначает свидание — для барышни того времени шаг смелый, почти немыслимый. Он показывает и силу её чувства, и готовность к поступку."},
+ {t:"Почерк Аси: она должна его видеть, сегодня она сделала «большую неосторожность». Встреча — в четыре часа у каменной часовни на дороге возле развалины. Н. Н. велит мальчику передать: «да»."}
+]},
+{n:"XIV", t:"Признание Гагина", items:[
+ {t:"Н. Н. дома перечитывает записку — ещё нет полудня. Входит Гагин, пасмурный и взволнованный, и сразу говорит главное.", q:"моя сестра, Ася, в вас влюблена."},
+ {t:"Ночью у Аси был жар, она плакала; хозяйка разбудила Гагина в два часа. Ася умоляла увезти её, если он хочет, чтобы она осталась жива, — и призналась в любви к Н. Н."},
+ {t:"По словам Гагина, Ася полюбила Н. Н. с первого взгляда и боится, что он её презирает, раз знает её историю."},
+ {ask:"Гагин задаёт Н. Н. прямой вопрос. Какой?", o:["«Вы её любите?»","«Ведь вы не женитесь на ней?»","«Зачем вы ей писали?»"], a:1,
+  why:"Для Гагина главное — судьба сестры, а её будущее зависит от брака. Для Н. Н. это проверка: готов ли он к решению. И он уходит от прямого ответа."},
+ {t:"Н. Н. признаёт, что Ася ему нравится, но о женитьбе прямо не отвечает. Он показывает Гагину записку Аси — тот удивлён.", q:"ведь вы не женитесь на ней?"},
+ {t:"Договариваются: Н. Н. пойдёт на свидание и честно объяснится, Гагин подождёт дома. Но уехать Гагины решили в любом случае — завтра.", q:"С огнем шутить нельзя."},
+ {t:"Оставшись один, Н. Н. мечется: досадует на откровенность Гагина, а любовь Аси его и радует, и смущает.", q:"Жениться на семнадцатилетней девочке, с ее нравом, как это можно!"},
+ {ask:"До свидания ещё есть время. Что происходит дальше?", o:["Ася приходит к Н. Н. сама, не дождавшись четырёх часов","Тот же мальчик приносит вторую записку: встреча переносится в дом фрау Луизе","Гагин просит отменить свидание"], a:1,
+  why:"Ася меняет открытую часовню у дороги на закрытую комнату. Позже Н. Н. будет корить себя, что даже не задумался, почему."}
+]},
+{n:"XV", t:"Ганхен", items:[
+ {t:"Вторая записка: свидание переносится в дом фрау Луизе — постучать внизу и подняться на третий этаж."},
+ {t:"Н. Н. заходит в сад за городской стеной, где играют в кегли и пьют пиво. Хорошенькая служанка Ганхен плачет: её жених ушёл в солдаты. Н. Н. даёт ей талер — она даже не благодарит."},
+ {ask:"Н. Н. ждёт часа свидания и думает о будущем. Какое решение он принимает?", o:["Жениться он не может, и Ася не узнает, что он тоже её полюбил","Сегодня же сделать Асе предложение","Не идти на свидание и уехать"], a:0,
+  why:"Решение принято до встречи — не сердцем, а рассудком. Поэтому на свидание Н. Н. идёт не признаваться, а «объясняться»."},
+ {t:"Н. Н. вспоминает слова Гагина «С огнем шутить нельзя» и решает: жениться он не может.", q:"она не узнает, что и я полюбил ее"},
+ {t:"В сумерках он приходит к дому фрау Луизе. В тёмной прихожей его ведёт костлявая старушечья рука, по крутой лестнице он поднимается на третий этаж."},
+ {t:"Фрау Луизе с приторной улыбкой указывает на маленькую дверь. Н. Н. входит."},
+ {ask:"Н. Н. входит в комнату. Что он видит?", o:["Комната пуста: Ася не пришла","Ася и Гагин ждут его вдвоём","Ася сидит у окна, закутанная в шаль, и дрожит"], a:2,
+  why:"Решиться на свидание Асе было очень трудно. Она ждёт от Н. Н. одного — ответа на своё чувство."}
+]},
+{n:"XVI", t:"Свидание", items:[
+ {t:"В полутёмной комнате у окна сидит Ася в длинной шали и дрожит. Н. Н. обращается к ней по имени-отчеству. Её рука холодна, она не может вымолвить ни слова.", q:"Анна Николаевна"},
+ {t:"Он садится рядом, держит её руку, тихо зовёт: «Ася». Она поднимает глаза, он целует её руку — и Ася кладёт голову ему на грудь.", q:"Ваша…"},
+ {ask:"Ася чуть слышно шепчет: «Ваша…» Что делает Н. Н.?", o:["Обнимает её и говорит, что любит","Вспоминает о Гагине и отшатывается","Молчит, и они сидят так до темноты"], a:1,
+  why:"Это кульминация повести. В решающую секунду Н. Н. думает не о ней и не о своём чувстве, а о брате и приличиях. Чернышевский потом разберёт эту сцену в статье «Русский человек на rendez-vous» как проверку героя."},
+ {t:"Н. Н. вдруг вспоминает о Гагине и отстраняется. Он говорит, что брат всё знает.", q:"Что мы делаем!.."},
+ {t:"Ася отвечает: она не звала брата — он пришёл сам. Она заперлась, но у хозяйки был другой ключ."},
+ {t:"Н. Н. упрекает её: она сама выдала тайну, усомнилась в нём — и теперь всё кончено. Ася опускается на колени и рыдает."},
+ {ask:"Ася на коленях, в слезах. Что было дальше?", o:["Н. Н. поднимает её и обещает всё исправить","Входит Гагин и уводит сестру","Ася вырывается и убегает"], a:2,
+  why:"Ася ушла не потому, что её прямо отвергли, а потому, что вместо любви услышала упрёки. Слова, которого она ждала, так и не прозвучало."},
+ {t:"Н. Н. пытается её поднять, но Ася вырывается и убегает. Входит фрау Луизе: «Фрейлейн ушла?» Н. Н. смотрит на неё «как дурак» и уходит."}
+]},
+{n:"XVII", t:"Досада", items:[
+ {t:"Н. Н. выходит из города прямо в поле.", q:"Досада, досада бешеная, меня грызла."},
+ {t:"Он корит себя: не понял, почему Ася сменила место встречи, не удержал её, когда был с ней наедине. Твердит «Я поступил по совести» — и знает, что это неправда."},
+ {ask:"Наступает ночь. Что понимает и что делает Н. Н.?", o:["Что не может её потерять, — и идёт к дому Гагиных","Что поступил правильно, — и идёт спать","Что надо уехать, — и идёт за билетом на пароход"], a:0,
+  why:"Понимание приходит, когда Аси рядом уже нет. Так у Н. Н. всё время: чувство опаздывает за событиями."},
+ {t:"Образ Аси не отпускает его. С наступлением ночи он большими шагами идёт к дому, где живёт Ася.", q:"Разве я могу лишиться ее?"}
+]},
+{n:"XVIII", t:"Поиски", items:[
+ {t:"Гагин встречает его у дома тревожным вопросом. Аси дома нет.", q:"Видели вы сестру?"},
+ {t:"Н. Н. признаётся, что видел её у фрау Луизе. Но где она теперь — неизвестно: ни дома, ни у часовни её нет."},
+ {ask:"Аси нигде нет. Что решают Н. Н. и Гагин?", o:["Ждать до утра: Ася всегда возвращается","Разойтись в разные стороны и искать её","Позвать на помощь соседей и хозяйку"], a:1,
+  why:"Тревога общая: Гагин помнит ночные слёзы сестры, Н. Н. — как она убежала от него в слезах."},
+ {t:"Они расходятся: Н. Н. — в город, Гагин — в другую сторону. Встретиться договариваются через час."}
+]},
+{n:"XIX", t:"Белая фигура", items:[
+ {t:"Н. Н. обходит улицы, берег Рейна, дом фрау Луизе. Досада сменяется страхом и раскаянием.", q:"Куда она могла пойти, что она с собою сделала?"},
+ {t:"Именно теперь он понимает, что любит Асю, — и что так и не сказал ей об этом. Он повторяет себе это сто раз."},
+ {ask:"Н. Н. выходит на берег Рейна. Что он видит?", o:["Асю в лодке посреди реки","Гагина с фонарём","У старого каменного креста мелькает что-то белое — и исчезает"], a:2,
+  why:"Белая фигура у креста только усиливает страх. Ася ли это — Тургенев не говорит. Герой остаётся в неизвестности, как и читатель."},
+ {t:"У старого каменного креста на берегу мелькает что-то белое. Н. Н. кричит: «Ася!» — никто не отзывается.", q:"Что-то белое мелькнуло вдруг на самом берегу реки"},
+ {t:"Н. Н. спешит обратно — узнать, не нашёл ли её Гагин."}
+]},
+{n:"XX", t:"«Завтра я буду счастлив!»", items:[
+ {t:"По тропинке виноградника он поднимается к дому и видит свет в комнате Аси. Он стучит, из окна высовывается Гагин."},
+ {t:"Гагин шёпотом сообщает: Ася вернулась и уже раздевается. «Слава богу!» Н. Н. хочет поговорить, но Гагин отвечает, что сейчас не время, и закрывает окно.", q:"Она вернулась"},
+ {ask:"Н. Н. счастлив и уверен в своём чувстве. Что он решает?", o:["Просить руки Аси — но завтра утром","Разбудить Асю и признаться немедленно","Подождать неделю и всё обдумать"], a:0,
+  why:"Решающая ошибка — отложить. Мысль рассказчика, которая сейчас прозвучит, звучит как приговор."},
+ {t:"Н. Н. мог бы сразу просить руки Аси, но откладывает до утра.", q:"Завтра я буду счастлив!"},
+ {t:"Тогда Н. Н. шёл в город словно на крыльях, и ему казалось, что соловей поёт о его любви. А рассказчик, вспоминая этот вечер, говорит горькую вещь.", q:"У счастья нет завтрашнего дня"},
+ {ask:"Утром Н. Н. приходит к Гагиным с готовым решением. Что он застаёт?", o:["Ася встречает его у калитки в дорожном платье","Домик пуст: Гагины уехали","Гагин просит подождать — Ася ещё спит"], a:1,
+  why:"Развязка наступает, пока Н. Н. «ждал утра». Гагин делает то, о чём договорились ещё накануне: уезжает в любом случае."}
+]},
+{n:"XXI", t:"Отъезд", items:[
+ {t:"Окна и двери домика открыты настежь, на пороге валяются бумажки. Служанка сообщает: Гагины уехали в шесть утра, не сказав куда.", q:"Уехали!"},
+ {t:"Хозяйка передаёт письмо Гагина. Он просит не сердиться: разлука необходима, Ася сама всё ему рассказала. Гагин ссылается на «предрассудки» и пишет, что жениться на Асе Н. Н. не может. Искать их не нужно.", q:"Вчера вечером, – писал он, – пока мы оба молча ждали Асю, я убедился окончательно в необходимости разлуки."},
+ {t:"Н. Н. в ярости: кто дал Гагину право похитить у него Асю? В конторе пароходства он узнаёт: билеты взяты до Кёльна. Он решает ехать следом."},
+ {ask:"Фрау Луизе передаёт Н. Н. записку от Аси. Что в ней?", o:["Адрес в Кёльне и просьба приехать","Упрёк за то, что он всё рассказал брату","Прощание: скажи он «одно слово» — она бы осталась"], a:2,
+  why:"Записка — ключ к повести. Ася ждала не подвига и не предложения — одного слова. Н. Н. понимает это, когда исправить уже ничего нельзя."},
+ {t:"Фрау Луизе отдаёт Н. Н. записку Аси.", q:"Прощайте, мы не увидимся более. Не из гордости я уезжаю – нет, мне нельзя иначе. Вчера, когда я плакала перед вами, если б вы мне сказали одно слово, одно только слово – я бы осталась. Вы его не сказали. Видно, так лучше… Прощайте навсегда!"},
+ {t:"Н. Н. понимает: он любил её — и не сказал.", q:"Одно слово… О, я безумец!"},
+ {ask:"Н. Н. уплывает на пароходе. Что он видит на берегу?", o:["Ганхен смеётся с молодым человеком, а из зелени ясеня смотрит мадонна","Асю, которая машет ему платком","Гагина, передумавшего уезжать"], a:0,
+  why:"Вчера Ганхен плакала о женихе, сегодня утешилась — простое чувство быстро проходит. А мадонна на ясене возвращает нас к гл. I: вокруг всё как прежде, изменилась только жизнь героя."},
+ {t:"С парохода Н. Н. видит Ганхен с молодым человеком, а на другом берегу из тёмной зелени старого ясеня выглядывает маленькая мадонна."}
+]},
+{n:"XXII", t:"Цветок герани", items:[
+ {t:"В Кёльне Н. Н. узнаёт, что Гагины уехали в Лондон. Он едет за ними, но в Лондоне поиски ни к чему не приводят."},
+ {t:"Долго он не хотел смириться, но в конце концов оставил надежду. Годы спустя мельком видел в вагоне женщину, похожую на Асю, — но, вероятно, ошибся.", q:"Я даже не знаю, жива ли она."},
+ {t:"Он признаётся: горевал не слишком долго и даже утешал себя мыслью, что с Асей не был бы счастлив."},
+ {t:"Но такого чувства он больше не испытал ни к одной женщине.", q:"Осужденный на одиночество бессемейного бобыля"},
+ {ask:"Что Н. Н. хранит в память об Асе?", o:["Портрет Аси работы Гагина","Шаль, оставленную в доме фрау Луизе","Её записочки и высохший цветок герани"], a:2,
+  why:"Цветок — тот самый, что Ася бросила из окна в гл. IV. Начало и конец истории сходятся в одной детали."},
+ {t:"Он хранит записочки Аси и высохший цветок герани, который она когда-то бросила из окна. Повесть заканчивается мыслью о том, как мало остаётся от человека.", q:"Так легкое испарение ничтожной травки переживает все радости и все горести человека – переживает самого человека."}
+]}
 ];
 
-const SIGNS = [
- ['Человек как биосоциальное существо',['обладает сознанием, мышлением и членораздельной речью','способен создавать сложные орудия труда','способен к целенаправленной, в том числе творческой деятельности','наличие духовных потребностей']],
- ['Личность',['совокупность социально значимых качеств человека','формируется в процессе усвоения социальных норм, образцов, культуры общества','формируется и развивается на протяжении всей жизни','субъект социальных отношений и сознательной деятельности']],
- ['Способности человека',['качества, обеспечивающие успешность выполнения определённого рода деятельности','основаны на генетически предопределённых задатках','развиваются постепенно в процессе обучения и освоения деятельности','их развитие зависит от активности и целеустремлённости самого человека']],
- ['Потребность',['нужда в чём-либо необходимом для существования и развития человека','безграничность','переживается и осознаётся человеком','лежит в основе мотивов поведения (побуждает к деятельности)']],
- ['Мировоззрение',['система взглядов, оценок, норм, установок, ценностей, чувств, убеждений','определяет отношение человека к природе, обществу и самому себе','создаёт определённую картину мира','является ориентиром для жизни и деятельности']],
- ['Общение как вид деятельности',['обмен информацией, мыслями, чувствами между людьми','установление и развитие взаимных отношений, контактов','предполагает наличие партнёра']],
- ['Учение как вид деятельности',['направленность на получение знаний, умений и навыков','требует специальных средств (учебников) и специальных лиц (преподавателей)']],
- ['Игра как вид деятельности',['направленность на удовольствие от самого процесса','совершается по определённым правилам','происходит в условной воображаемой ситуации']],
- ['Деятельность',['целенаправленность (целевой характер)','осознанность (осознанный характер)','преобразующий характер','продуктивный характер','осуществляется в обществе (общественный характер)']],
- ['Свобода человека',['подразумевает возможность выбора','ограничена объективными рамками законов природы и общества','подразумевает ответственность личности за результаты выбора']],
- ['Ответственность',['осознание и учёт возможных последствий своих действий','готовность следовать нормам и принимать санкции за их нарушение','подразумевает выполнение своего нравственного долга']],
- ['Социальное познание',['связано с приобретением знания о человеке и обществе','субъект и объект познания совпадают','социальное знание связано с интересами субъектов, имеет ценностный характер','ограниченная возможность применения эксперимента']],
- ['Мышление',['опосредованный характер — проникает в скрытые свойства и связи предметов','обобщённо отражает действительность (общее и существенное)','тесно связано с языком','результаты закрепляются в форме понятий, суждений, умозаключений']],
- ['Истина',['соответствие действительности, свойствам познаваемого предмета','объективность','конкретность']],
- ['Абсолютная истина',['знание, которое не меняется в процессе познания (не может быть опровергнуто)','полнота, точность, исчерпывающий характер']],
- ['Относительная истина',['зависит от условий и инструментов познания (уровня развития познания)','ограниченно верное, недостаточно полное знание']]
-];
-
-/* блоки конспекта: d = определение, l = список, f = формула, n = заметка */
-const NOTES = [
- {dt:'09.10',t:'Человек и общество',b:[
-  {d:'Социализация',x:'процесс усвоения человеком правил, по которым живёт общество'},
-  {l:'Агенты социализации',i:['первичной: семья, друзья','вторичной: коллеги, одноклассники']},
-  {d:'Индивид',x:'единичный представитель людского рода (БИО)'},
-  {d:'Индивидуальность',x:'отличительные особенности человека (БИО + СОЦ)'},
-  {d:'Личность',x:'человек с социально обусловленными и индивидуально выраженными характеристиками (СОЦ)'}
- ]},
- {dt:'13.10',t:'Деятельность человека',b:[
-  {d:'Деятельность',x:'активность человека, направленная на преобразование окружающей среды и самого человека'},
-  {l:'Особенности деятельности',i:['сознательный характер','орудийная','преобразовательный характер','общественный характер','целесообразная']},
-  {l:'Структура деятельности',o:1,i:['субъект','объект','цель (осознанный образ результата)','средства','мотив (побуждает человека к действию: интересы, потребности)','результат']},
-  {d:'Потребность',x:'нужда человека в чём-либо'},
-  {l:'Виды потребностей',i:['биологические','социальные','духовные']},
-  {l:'Пирамида потребностей (снизу вверх)',o:1,i:['физиологические','экзистенциальные','общение (социальные)','престижные','духовные']},
-  {l:'Виды деятельности',i:['игра (воображение, процесс, условный характер)','учение','труд (направлен на получение практически полезного результата)']},
-  {l:'Классификации деятельности',i:['практическая (материально-производственная) / духовная (познавательная, прогностическая)','индивидуальная / коллективная','законная / незаконная','созидательная / разрушительная']}
- ]},
- {dt:'Октябрь',t:'Мировоззрение',b:[
-  {d:'Мировоззрение',x:'система взглядов человека на мир'},
-  {l:'Пути формирования мировоззрения',i:['стихийное','организованное']},
-  {l:'Типы мировоззрения',i:['научное','религиозное','обыденное']},
-  {l:'Мировоззрение включает в себя',i:['знания','убеждения','идеалы','ценности']}
- ]},
- {dt:'Октябрь',t:'Способности',b:[
-  {d:'Способности',x:'свойства личности, позволяющие более успешно справляться с той или иной деятельностью'},
-  {l:'Виды способностей',i:['общие (красноречие, память и т.д.)','специальные (спортивные, математические и т.д.)']},
-  {l:'Ступени развития способностей (снизу вверх)',o:1,i:['задатки','одарённость','талант','гениальность']}
- ]},
- {dt:'Октябрь',t:'Мышление',b:[
-  {d:'Мышление',x:'активный процесс отражения окружающей действительности в понятиях, суждениях, теориях'},
-  {l:'Особенности мышления',i:['опосредованный характер','неразрывно связано с языком, речью','социальная природа','требует наличия проблемной ситуации','возникает на основе практической деятельности']},
-  {l:'Виды мышления',i:['наглядно-действенное (дети)','наглядно-образное (гуманитарии)','словесно-логическое (технари)']},
-  {l:'Мыслительные операции',i:['анализ и синтез','индукция и дедукция','сравнение','аналогия','абстрагирование']},
-  {d:'Индукция',x:'рассуждение от частного к общему'},
-  {d:'Дедукция',x:'рассуждение от общего к частному'},
-  {d:'Сравнение',x:'процесс поиска сходства и различий предметов, явлений'},
-  {d:'Аналогия',x:'установление сходства в каких-либо отношениях между явлениями, предметами'},
-  {d:'Абстрагирование',x:'отвлечение от несущественных признаков и мысленное выделение существенных особенностей предмета'}
- ]},
- {dt:'19.10',t:'Свобода человека',b:[
-  {d:'Свобода',x:'способность выбирать; осознанная необходимость'},
-  {l:'Понятия, связанные со свободой',i:['независимость','неподчинение','выбор','необходимость','активность','альтернатива','возможности']},
-  {l:'Проявления свободы (по сферам)',i:['социальная','экономическая','политическая','духовная']},
-  {n:'Любая свобода сопряжена с ответственностью.'}
- ]},
- {dt:'02.11',t:'Познавательная деятельность',b:[
-  {d:'Гносеология',x:'раздел философии, изучающий вопросы познания'},
-  {l:'Чувственное познание',o:1,i:['ощущение','восприятие','представление']},
-  {l:'Рациональное познание',o:1,i:['понятие','суждение','умозаключение']},
-  {n:'Обе формы познания ведут к истине. В тетради — подсказки «ПВО» и «СУП».'},
-  {d:'Истина',x:'соответствие наших знаний о предмете самому предмету познания'},
-  {d:'Агностицизм',x:'система взглядов, основанная на невозможности познать мир до конца'},
-  {d:'Абсолютная истина',x:'полное, исчерпывающее знание о предмете, не меняющееся со временем'},
-  {d:'Относительная истина',x:'неполное знание, которое со временем может измениться'},
-  {n:'И абсолютная, и относительная истина — объективны.'},
-  {l:'Критерии истины',i:['соответствие законам логики','соответствие ранее открытым научным законам','практика (универсальный критерий)']},
-  {d:'Практика',x:'активная деятельность людей, направленная на преобразование'},
-  {l:'Свойства истины',i:['объективность','конкретность']},
-  {l:'Под практикой понимают',i:['эксперимент','социальные действия (реформы)','материальное производство']}
- ]},
- {dt:'10.11',t:'Научное познание',b:[
-  {l:'Особенности научного познания',i:['доказуемость и обоснованность','выявление / открытие нового знания для человечества','системность','выработка специфических методов (наблюдение, эксперимент)','особый понятийный аппарат','непротиворечивость','объективность']},
-  {d:'Эмпирический уровень',x:'основывается на опытных данных; главная задача — описание внешних свойств объекта'},
-  {l:'Методы эмпирического уровня',i:['эксперимент','наблюдение','измерение','описание']},
-  {d:'Теоретический уровень',x:'факты и законы; даёт представление о внутренних связях; главная задача — ответить на вопрос «почему»'},
-  {l:'Методы теоретического уровня',i:['синтез','анализ','классификация']},
-  {l:'Особенности социального познания',i:['социальное знание всегда связано с интересами индивидов','социальное знание всегда нагружено оценкой','совпадение субъекта и объекта','ограниченность использования эксперимента']}
- ]},
- {dt:'11.11',t:'Ненаучное познание',b:[
-  {l:'Формы ненаучного познания',i:['жизненный опыт','народная мудрость (противоречивость)','околонаучные / паранаучные знания','искусство','мифология']}
- ]},
- {dt:'13.11',t:'Самопознание',b:[
-  {d:'Самопознание',x:'изучение личностью собственных психических и физических особенностей, осмысление самого себя'},
-  {l:'Методы самопознания',i:['наблюдение','самосравнение','самоанализ']},
-  {l:'Средства самопознания',i:['самоотчёт и самоисповедь','самопоставление','изучение психологической литературы','консультации психологов','участие в тестированиях','участие в социально-психологических тренингах']},
-  {d:'Самооценка',x:'результат самопознания'},
-  {l:'Что влияет на самооценку (3 фактора)',i:['сопоставление «реального Я» с «идеальным»','оценивание себя так, как оценивают тебя другие','отношение к собственным успехам и неудачам']},
-  {f:1}
- ]}
-];
-
-/* ===================== ПОСТРОЕНИЕ ВОПРОСОВ ===================== */
-// group: {id, src:'plan'|'sign'|'note', key (фильтр), title, ctx, items, ordered}
-const G = []; const DEFS = [];
-PLANS.forEach(pl=>{
-  G.push({id:'p'+pl.n, src:'plan', key:'p'+pl.n, title:pl.t, ctx:'План '+pl.n, items:pl.p.map(x=>x[0]), ordered:true, top:true});
-  pl.p.forEach((x,i)=>{ if(x[1].length>=2) G.push({id:'p'+pl.n+'.'+(i+1), src:'plan', key:'p'+pl.n, title:x[0], ctx:'План '+pl.n+' · пункт '+(i+1), items:x[1], ordered:false}); });
+/* ============ ПОДГОТОВКА ============ */
+var LET = ["А","Б","В"];
+var KEY = "asya-chrono-v1";
+var ITEMS = [], CH_START = [], TH_UPTO = [], thN = 0, qN = 0;
+DATA.forEach(function(ch, ci){
+  CH_START[ci] = ITEMS.length;
+  ch.items.forEach(function(it){
+    var o = {ci: ci};
+    for (var k in it) o[k] = it[k];
+    if (it.ask){ o.type = "q"; o.n = ++qN; } else { o.type = "t"; o.n = ++thN; }
+    ITEMS.push(o); TH_UPTO.push(thN);
+  });
 });
-SIGNS.forEach((s,i)=>G.push({id:'s'+i, src:'sign', key:'sign', title:s[0], ctx:'Признаки', items:s[1], ordered:false}));
-NOTES.forEach((nt,ni)=>nt.b.forEach((b,bi)=>{
-  if(b.l) G.push({id:'n'+ni+'.'+bi, src:'note', key:'note', title:b.l, ctx:'Конспект · '+nt.t, items:b.i, ordered:!!b.o});
-  if(b.d) DEFS.push({id:'d'+ni+'.'+bi, src:'note', key:'note', term:b.d, x:b.x, ctx:'Конспект · '+nt.t});
-}));
-DEFS.push({id:'dform', src:'note', key:'note', term:'Формула самооценки', x:'Самооценка = Успех / Притязания', ctx:'Конспект · Самопознание'});
+var N = ITEMS.length, TH_TOTAL = thN, Q_TOTAL = qN;
 
-/* ===================== ХРАНИЛИЩЕ ===================== */
-const LS='obsch-v1';
-let S={box:{}, seen:0, streak:0};
-try{ const r=localStorage.getItem(LS); if(r) S=Object.assign(S,JSON.parse(r)); }catch(e){}
-function save(){ try{ localStorage.setItem(LS,JSON.stringify(S)); }catch(e){} }
-function mark(id,ok){ const b=S.box[id]||0; S.box[id]= ok? Math.min(3,b+1) : 0; S.seen++; save(); }
-function mastery(ids){ if(!ids.length) return 0; let s=0; ids.forEach(id=>s+=(S.box[id]||0)); return s/(3*ids.length); }
-const allIds=()=>G.map(g=>g.id).concat(DEFS.map(d=>d.id));
-const planIds=n=>G.filter(g=>g.key==='p'+n).map(g=>g.id);
+function typo(s){
+  return s.replace(/Н\. Н\./g, "Н. Н.").replace(/ ([—–]) /g, " $1 ").replace(/ (гл\.) /g, " $1 ");
+}
+var SMOOTH = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
 
-/* ===================== УТИЛИТЫ ===================== */
-const $=s=>document.querySelector(s);
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
-const pick=a=>a[Math.random()*a.length|0];
-const norm=s=>s.toLowerCase().replace(/ё/g,'е').replace(/\([^)]*\)/g,' ').replace(/[^a-zа-я0-9\s-]/g,' ').replace(/\s+/g,' ').trim();
-const STOP=new Set('и в во с со на по к ко от для а о об как т д др его ее их это то что из за при над под между же или не'.split(' '));
-const stem=w=>w.length>=7?w.slice(0,5):w.slice(0,Math.max(3,w.length-2));
-const stems=s=>norm(s).split(/[\s-]+/).filter(w=>w.length>2&&!STOP.has(w)).map(stem);
-const same=(a,b)=>a.startsWith(b)||b.startsWith(a);
-const hasStem=(arr,s)=>arr.some(x=>same(x,s));
-// похожесть двух пунктов: доля общих основ от меньшего
-function sim(a,b){ const A=[...new Set(stems(a))],B=[...new Set(stems(b))]; if(!A.length||!B.length) return 0; const k=A.filter(x=>hasStem(B,x)).length; return k/Math.min(A.length,B.length); }
-const buzz=n=>{try{navigator.vibrate&&navigator.vibrate(n)}catch(e){}};
-const CHEV='<svg class="chev" viewBox="0 0 8 14"><path d="M1 1l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
-const LETTERS='абвгдеж';
-
-/* ===================== ЭКРАНЫ ===================== */
-function renderHome(){
-  const ids=allIds(), m=mastery(ids), pct=Math.round(m*100);
-  const weak=ids.filter(id=>id in S.box && S.box[id]===0).length;
-  const ex=S.exam||{}, five=PLANS.filter(p=>ex[p.n]&&ex[p.n].g===5).length, good=PLANS.filter(p=>ex[p.n]&&ex[p.n].g>=4).length;
-  const read=Object.keys(S.read||{}).length;
-  const pm=mastery(G.filter(g=>g.src==='plan').map(g=>g.id));
-  const hr=new Date().getHours(), morning=hr>=4&&hr<14, D=dayLog();
-  const EVE=[
-    {ok:read>=8, t:'Прочитать все 8 планов', s:`≈15 мин · открыто ${read} из 8`, a:"openPlan(0)"},
-    {ok:pm>=.6, t:'Тренировка планов: 2–3 подхода', s:`≈20 мин · выучено ${Math.round(pm*100)}%, цель 60%`, a:"openSetup('mix',{plans:true})"},
-    {ok:good>=8, t:'Экзамен по всем 8 планам', s:`≈30 мин · на 4–5 сдано ${good} из 8`, a:"examAll()"},
-    {ok:good>=8&&!weak, t:'Перед сном: повторить ошибки', s:weak?`≈5 мин · на повтор ${weak}`:'≈5 мин · сон закрепит выученное', a:"startWeak()"}
-  ];
-  const MOR=[
-    {ok:!!D.m1, t:'Утренний прогон', s:'≈7 мин · вспомнить пункты всех 8 планов', a:"startMorning()"},
-    {ok:!!D.m2, t:'Мини-экзамен: 3 самых слабых плана', s:'≈10 мин · по 3 минуты', a:"morningExam()"},
-    {ok:!!D.m3, t:'Перед уроком: шпаргалка', s:'≈3 мин · пробежать глазами все планы', a:"openPlan(0)"}
-  ];
-  const stepList=(arr,active)=>{ const cur=active?arr.findIndex(x=>!x.ok):-1;
-    return `<div class="group">${arr.map((x,i)=>`<button class="row step ${x.ok?'ok':''} ${i===cur?'cur':''}" onclick="${x.a}"><div class="num">${x.ok?'✓':i+1}</div><div class="tx"><b>${x.t}</b><small>${x.s}</small></div>${CHEV}</button>`).join('')}</div>`; };
-  const steps=morning?MOR:EVE, cur=steps.findIndex(x=>!x.ok);
-  const C=2*Math.PI*40;
-  $('#t-home').innerHTML=`
-   <div class="large">Сегодня</div>
-   <div class="subtle">Тест по обществознанию · планы</div>
-   <div class="hero">
-     <div class="ring"><svg viewBox="0 0 92 92"><circle cx="46" cy="46" r="40" stroke="rgba(255,255,255,.25)" stroke-width="9" fill="none"/>
-       <circle cx="46" cy="46" r="40" stroke="#c4f53c" stroke-width="9" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-m)}" style="transition:stroke-dashoffset 1s"/></svg><span>${pct}%</span></div>
-     <div><h2>${cur<0?(pct>=60?(morning?'Готов к тесту! 🎉':'На сегодня всё — спать! 🌙'):'Шаги пройдены — добей ошибки'):morning?'Доброе утро! Освежим':pct<30?'Начнём с планов':pct<70?'Хороший темп':'Почти готово!'}</h2><p>Готовность к тесту${five?` · на «5» сдано ${five} из 8`:''}</p></div>
-   </div>
-   <div class="sec">${morning?'Утром перед тестом · ≈20 мин':'Сегодня вечером · ≈1 ч 10 мин'}</div>
-   ${stepList(steps,true)}
-   <div class="sec">${morning?'Вечер (если не успели)':'Завтра утром · ≈20 мин'}</div>
-   ${stepList(morning?EVE:MOR,false)}
-   ${weak?`<button class="big" style="background:var(--orange);box-shadow:0 8px 18px rgba(255,149,0,.3)" onclick="startWeak()">↻ Повторить ошибки (${weak})</button>`:''}
-   <div class="sec">Тренировка</div>
-   <button class="tile wide" style="margin-top:0;margin-bottom:12px" onclick="openSetup('mix')"><div class="ti" style="background:rgba(94,92,230,.14)">⚡️</div><div><b>Быстрая тренировка</b><small>Все режимы вперемешку</small></div>${CHEV}</button>
-   <div class="grid">
-     ${tile('cards','🃏','Карточки','Вспомни, переверни, оцени себя','rgba(94,92,230,.14)')}
-     ${tile('build','🧩','Собрать план','Расставь пункты по порядку','rgba(255,149,0,.16)')}
-     ${tile('mem','✍️','По памяти','Напиши пункты — проверю','rgba(48,199,89,.16)')}
-     ${tile('odd','🔍','Лишний пункт','Найди то, что не отсюда','rgba(255,59,48,.13)')}
-   </div>
-   <button class="tile wide" onclick="openExamSetup()"><div class="ti" style="background:rgba(140,60,200,.15)">⏱</div><div><b>Экзамен</b><small>План целиком по памяти, на время, с оценкой</small></div>${CHEV}</button>
-   <button class="link danger" id="rst" onclick="resetP(this)">Сбросить прогресс</button>`;
-}
-function today(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
-function dayLog(){ S.day=S.day||{}; return S.day[today()]||(S.day[today()]={}); }
-function logDay(k){ dayLog()[k]=1; save(); }
-// планы с худшей подготовкой — первыми
-function weakestPlans(){ return shuffle(PLANS.map(p=>p.n)).sort((a,b)=>{ const sa=(S.exam&&S.exam[a]?S.exam[a].p:-1)+mastery(planIds(a))*50, sb=(S.exam&&S.exam[b]?S.exam[b].p:-1)+mastery(planIds(b))*50; return sa-sb; }); }
-function examAll(){ runExam(weakestPlans(),240); }
-function morningExam(){ runExam(weakestPlans().slice(0,3),180,'m2'); }
-function startMorning(){
-  const tops=shuffle(G.filter(g=>g.top)).map(g=>makeTask('cards',g));
-  const ids=new Set(allIds().filter(id=>id in S.box && S.box[id]===0 && !id.match(/^p\d$/)));
-  const weak=shuffle(G.filter(g=>ids.has(g.id)&&g.src==='plan')).slice(0,6).map(g=>makeTask(pick(['build','odd','mem'].filter(m=>modeFits(m,g))),g));
-  runSession(tops.concat(weak),'m1');
-}
-function goTab(t){ document.querySelector(`#bar button[data-t="${t}"]`).click(); }
-function tile(mode,ic,t,s,bg){return `<button class="tile" onclick="openSetup('${mode}')"><div class="ti" style="background:${bg}">${ic}</div><b>${t}</b><small>${s}</small></button>`}
-function planRow(pl){
-  const m=mastery(planIds(pl.n));
-  return `<button class="row" onclick="openPlan(${pl.n})"><div class="num" style="background:${m>=.67?'var(--green)':m>0?'var(--orange)':'var(--accent)'}">${pl.n}</div>
-   <div class="tx"><b>${esc(pl.t)}${S.exam&&S.exam[pl.n]?`<span class="badge" style="background:${GC[S.exam[pl.n].g]}">${S.exam[pl.n].g}</span>`:''}</b><div class="mini"><i style="width:${Math.round(m*100)}%"></i></div></div>${CHEV}</button>`;
-}
-function exText(n){ return S.exam&&S.exam[n]?'Лучшая оценка: '+S.exam[n].g+' ('+S.exam[n].p+'%) · 5 минут':'5 минут, весь план по памяти'; }
-let rstT=0;
-function resetP(el){ if(Date.now()-rstT<2500){ S={box:{},seen:0,streak:0,exam:{},read:{}}; save(); renderAll(); toast('Прогресс сброшен'); } else { rstT=Date.now(); el.textContent='Нажмите ещё раз для сброса'; setTimeout(()=>{ if(el.isConnected) el.textContent='Сбросить прогресс'; },2500);} }
-
-function renderPlans(){
-  $('#t-plans').innerHTML=`<div class="large">Планы</div><div class="subtle">Полоска — насколько выучен план, значок — лучшая оценка на экзамене.</div>
-   <button class="tile wide" style="margin:0 0 12px" onclick="openPlan(0)"><div class="ti" style="background:rgba(196,245,60,.35)">📄</div><div><b>Все планы на одной странице</b><small>Прочитать подряд или проверить себя</small></div>${CHEV}</button>
-   <div class="group">${PLANS.map(planRow).join('')}</div>
-   <button class="big" onclick="openSetup('mix',{plans:true})">Тренировать все планы</button>
-   <button class="link" onclick="openExamSetup()">⏱ Экзамен по планам →</button>`;
-}
-function renderSigns(){
-  $('#t-signs').innerHTML=`<div class="large">Признаки</div><div class="subtle">Дополнительно — если останется время. Главное к тесту — планы.</div>
-   <div class="group">${SIGNS.map((s,i)=>`<button class="row nl" onclick="toggleSign(this,${i})" style="flex-wrap:wrap">
-     <div class="tx"><b>${esc(s[0])}</b><small>${s[1].length} ${s[1].length>4?'признаков':'признака'}</small></div>${CHEV}
-     <div class="ans" style="display:none;width:100%;margin-top:6px">${s[1].map((x,j)=>`<div><em>${j+1}</em>${esc(x)}</div>`).join('')}</div></button>`).join('')}</div>
-   <button class="big" onclick="startSession('cards',{sign:true})">Карточки по признакам</button>
-   <button class="link" onclick="openSetup('mix',{sign:true})">Другие режимы →</button>`;
-}
-function toggleSign(el){ const a=el.querySelector('.ans'), o=a.style.display==='none'; a.style.display=o?'block':'none'; el.querySelector('.chev').style.transform=o?'rotate(90deg)':''; }
-function renderNotes(){
-  $('#t-notes').innerHTML=`<div class="large">Конспект</div><div class="subtle">Тетрадь начисто. Дополнительно — главное к тесту планы.</div>
-   ${NOTES.map(nt=>`<div class="note"><div class="dt">${esc(nt.dt)}</div><h3>${esc(nt.t)}</h3>${nt.b.map(b=>{
-     if(b.d) return `<div class="def"><mark>${esc(b.d)}</mark> — ${esc(b.x)}</div>`;
-     if(b.l) return `<div class="lst"><b>${esc(b.l)}</b>${b.i.map(x=>`<div>${esc(x)}</div>`).join('')}</div>`;
-     if(b.n) return `<div class="tip">${esc(b.n)}</div>`;
-     if(b.f) return `<div class="formula">Самооценка = <span class="frac"><span>Успех</span><span>Притязания</span></span></div>`;
-     return '';}).join('')}</div>`).join('')}
-   <button class="big" onclick="startSession('cards',{note:true})">Карточки по конспекту</button>
-   <button class="link" onclick="openSetup('mix',{note:true})">Другие режимы →</button>`;
-}
-function renderAll(){ renderHome(); renderPlans(); renderSigns(); renderNotes();
-  document.querySelectorAll('.page[data-plan]').forEach(p=>{ const e=p.querySelector('#exs'); if(e) e.textContent=exText(+p.dataset.plan); }); }
-
-/* tabs */
-document.querySelectorAll('#bar button').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('#bar button').forEach(x=>x.classList.toggle('on',x===b));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.id==='t-'+b.dataset.t));
-  $('#t-'+b.dataset.t).scrollTop=0; buzz(5);
-});
-
-/* ===================== СТРАНИЦА ПЛАНА ===================== */
-function planHTML(pl){ return pl.p.map((x,i)=>`<div class="pt"><b><em>${i+1}.</em>${esc(x[0])}</b>${x[1].length?`<ul>${x[1].map((y,j)=>`<li><em>${LETTERS[j]})</em>${esc(y)}</li>`).join('')}</ul>`:''}</div>`).join(''); }
-function openPlan(n){
-  S.read=S.read||{};
-  if(n===0){ PLANS.forEach(p=>S.read[p.n]=1); if(new Date().getHours()>=4&&new Date().getHours()<14) dayLog().m3=1; }
-  else S.read[n]=1;
-  save(); renderHome();
-  const pl=PLANS[n-1];
-  const nav=document.createElement('div'); nav.className='nav';
-  nav.innerHTML=`<button class="back"><svg width="12" height="20" viewBox="0 0 12 20"><path d="M10 2 2 10l8 8" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Назад</button><div class="ttl">${n?'План '+n:'Все планы'}</div><button class="act">Скрыть</button>`;
-  const pg=document.createElement('div'); pg.className='page';
-  if(!n){
-    pg.innerHTML=`<div class="q" style="font-size:26px;margin-top:6px">Все 8 планов</div><div class="qs">Читай вслух. «Скрыть» — размыть подпункты и проверять себя: нажми на пункт, чтобы открыть.</div>
-     <div id="pbody">${PLANS.map(p=>`<div class="kind" style="margin-top:20px">План ${p.n}</div><div style="font-weight:700;font-size:19px;margin:0 2px 10px">${esc(p.t)}</div><div class="group">${planHTML(p)}</div>`).join('')}</div>
-     <button class="big" style="margin-top:22px" onclick="openSetup('mix',{plans:true})">Тренировать</button>`;
-  } else {
-  pg.innerHTML=`<div class="kind" style="margin-top:6px">План ${n}</div><div class="q" style="font-size:26px">${esc(pl.t)}</div>${pl.s?`<div class="qs">${esc(pl.s)}</div>`:'<div style="height:14px"></div>'}
-   <div class="group" id="pbody">${planHTML(pl)}</div>
-   <div class="sec">Учить этот план</div>
-   <div class="grid">
-     <button class="tile" data-m="cards"><div class="ti" style="background:rgba(94,92,230,.14)">🃏</div><b>Карточки</b></button>
-     <button class="tile" data-m="build"><div class="ti" style="background:rgba(255,149,0,.16)">🧩</div><b>Собрать</b></button>
-     <button class="tile" data-m="mem"><div class="ti" style="background:rgba(48,199,89,.16)">✍️</div><b>По памяти</b></button>
-     <button class="tile" data-m="odd"><div class="ti" style="background:rgba(255,59,48,.13)">🔍</div><b>Лишний</b></button>
-   </div>
-   <button class="tile wide" id="exb"><div class="ti" style="background:rgba(140,60,200,.15)">⏱</div><div><b>Экзамен по этому плану</b><small id="exs">${exText(n)}</small></div>${CHEV}</button>`;
+var st = {pos: 0, ans: {}};
+try {
+  var saved = JSON.parse(localStorage.getItem(KEY) || "null");
+  if (saved && typeof saved.pos === "number" && saved.pos >= 0 && saved.pos < N){
+    st.pos = Math.floor(saved.pos); st.ans = saved.ans && typeof saved.ans === "object" ? saved.ans : {};
   }
-  document.body.append(pg,nav);
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{pg.classList.add('in');nav.classList.add('in')}));
-  const close=()=>{pg.classList.remove('in');nav.classList.remove('in');setTimeout(()=>{pg.remove();nav.remove()},400)};
-  nav.querySelector('.back').onclick=close;
-  const act=nav.querySelector('.act'), body=pg.querySelector('#pbody');
-  act.onclick=()=>{ const h=body.classList.toggle('hidden-sub'); act.textContent=h?'Показать':'Скрыть'; body.querySelectorAll('.pt').forEach(p=>p.classList.remove('open')); };
-  body.querySelectorAll('.pt').forEach(p=>p.onclick=()=>p.classList.toggle('open'));
-  pg.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>startSession(b.dataset.m,{plans:[n]}));
-  if(n) pg.querySelector('#exb').onclick=()=>runExam([n],300);
-  if(n) pg.dataset.plan=n;
-  // свайп назад от левого края
-  let sx=null; pg.addEventListener('touchstart',e=>{const x=e.touches[0].clientX; sx=x<30?x:null},{passive:true});
-  pg.addEventListener('touchend',e=>{ if(sx!==null && e.changedTouches[0].clientX-sx>80) close(); sx=null; });
+} catch(e){}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e){} }
+
+var $ = function(id){ return document.getElementById(id); };
+var feed = $("feed"), nextBtn = $("next"), nav = $("nav"), scrim = $("scrim"), navList = $("navList");
+var root = document.documentElement;
+
+/* ============ ЭЛЕМЕНТЫ ЛЕНТЫ ============ */
+function mk(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+function elIntro(){
+  var d = mk("div", "intro");
+  d.innerHTML = "<b>Как это работает.</b> Читайте тезисы по порядку и нажимайте «Дальше». Примерно каждые три шага — вопрос «что было дальше?»: выберите вариант и сразу увидите, верно ли. Прогресс сохраняется на этом устройстве.";
+  return d;
+}
+function elChapter(ci){
+  var s = mk("section", "chap"); s.id = "ch-" + ci; s.setAttribute("data-ci", ci);
+  s.appendChild(mk("div", "roman", "Глава " + DATA[ci].n));
+  s.appendChild(mk("h2", null, DATA[ci].t));
+  return s;
+}
+function elThesis(it){
+  var a = mk("article", "th");
+  a.appendChild(mk("span", "num", String(it.n)));
+  a.appendChild(mk("p", null, typo(it.t)));
+  if (it.q) a.appendChild(mk("blockquote", null, "«" + it.q + "»"));
+  return a;
+}
+function elQuestion(it, i){
+  var a = mk("article", "qz");
+  a.appendChild(mk("div", "lab", "Что было дальше?"));
+  a.appendChild(mk("p", "ask", typo(it.ask)));
+  var opts = mk("div", "opts");
+  it.o.forEach(function(txt, k){
+    var b = mk("button", "opt"); b.type = "button";
+    b.appendChild(mk("span", "l", LET[k]));
+    b.appendChild(mk("span", null, typo(txt)));
+    b.addEventListener("click", function(){ answer(i, k); });
+    opts.appendChild(b);
+  });
+  a.appendChild(opts);
+  var fb = mk("div", "fb"); fb.hidden = true; a.appendChild(fb);
+  if (st.ans[i] !== undefined) paintAnswer(a, it, st.ans[i]);
+  return a;
+}
+function paintAnswer(card, it, k){
+  var opts = card.querySelector(".opts"), btns = opts.querySelectorAll(".opt"), fb = card.querySelector(".fb");
+  opts.classList.add("done");
+  for (var j = 0; j < btns.length; j++){ btns[j].disabled = true; }
+  btns[it.a].classList.add("ok");
+  if (k !== it.a) btns[k].classList.add("bad");
+  fb.textContent = "";
+  var right = k === it.a;
+  fb.appendChild(mk("span", "v " + (right ? "okt" : "badt"), right ? "Верно. " : "Неверно. "));
+  if (!right) fb.appendChild(document.createTextNode("Правильный ответ — " + LET[it.a] + ". "));
+  fb.appendChild(document.createTextNode(typo(it.why)));
+  fb.hidden = false;
+  return fb;
+}
+function elEnd(){
+  var d = mk("section", "end"); d.id = "end";
+  d.innerHTML = "<h3>Конец повести</h3><ul>" +
+    "<li><b>Кульминация</b> — свидание в доме фрау Луизе (гл. XVI): на порыв Аси Н. Н. отвечает упрёками.</li>" +
+    "<li><b>Ключ к повести</b> — «одно слово» из записки Аси (гл. XXI).</li>" +
+    "<li><b>«У счастья нет завтрашнего дня»</b> (гл. XX): Н. Н. откладывает — и теряет.</li>" +
+    "<li><b>Сквозные детали:</b> мадонна на ясене (гл. I и XXI), вальс (гл. IX и XII), цветок герани (гл. IV и XXII).</li>" +
+    "<li><b>Тип героя</b> — «лишний человек»: тонко чувствует, но в решающий момент не действует. См. статью Н. Г. Чернышевского «Русский человек на rendez-vous» (1858).</li>" +
+    "</ul>";
+  return d;
 }
 
-/* ===================== НАСТРОЙКА СЕССИИ (шторка) ===================== */
-const MODE_NAMES={mix:'Быстрая тренировка',cards:'Карточки',build:'Собрать план',odd:'Лишний пункт',mem:'По памяти'};
-function openSetup(mode,pre){
-  pre=pre||{};
-  let sel={plans:new Set(), sign:false, note:false};
-  if(pre.plans===true||(!pre.sign&&!pre.note&&!pre.plans)) PLANS.forEach(p=>sel.plans.add(p.n));
-  else if(Array.isArray(pre.plans)) pre.plans.forEach(n=>sel.plans.add(n));
-  if(pre.sign) sel.sign=true; if(pre.note) sel.note=true;
-  let len=mode==='cards'?20:12;
-  const sh=$('#sheet');
-  const draw=()=>{
-    sh.innerHTML=`<div class="grab"></div><h3>${MODE_NAMES[mode]}</h3><div class="subtle" style="margin-bottom:14px">${mode==='mix'?'Все режимы вперемешку — как будто не знаешь формат теста':'Что тренируем?'}</div>
-     <div class="sec" style="margin-top:4px">Планы <button style="float:right;color:var(--accent);text-transform:none;font-size:13px" id="allp">${sel.plans.size===8?'Снять все':'Выбрать все'}</button></div>
-     <div class="chips">${PLANS.map(p=>`<button class="tog ${sel.plans.has(p.n)?'on':''}" data-p="${p.n}">${p.n}. ${esc(p.t.length>22?p.t.slice(0,21)+'…':p.t)}</button>`).join('')}</div>
-     <div class="sec">Ещё</div>
-     <div class="chips"><button class="tog ${sel.sign?'on':''}" data-x="sign">Признаки</button><button class="tog ${sel.note?'on':''}" data-x="note">Конспект</button></div>
-     <div class="sec">Сколько вопросов</div><div class="seg">${[8,12,20,0].map(v=>`<button data-l="${v}" class="${len===v?'on':''}">${v||'Все'}</button>`).join('')}</div>
-     <button class="big" id="go" style="margin-top:22px">Начать</button>`;
-    sh.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const n=+b.dataset.p; sel.plans.has(n)?sel.plans.delete(n):sel.plans.add(n); buzz(5); draw();});
-    sh.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{sel[b.dataset.x]=!sel[b.dataset.x]; buzz(5); draw();});
-    sh.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{len=+b.dataset.l; draw();});
-    sh.querySelector('#allp').onclick=()=>{ if(sel.plans.size===8) sel.plans.clear(); else PLANS.forEach(p=>sel.plans.add(p.n)); draw(); };
-    sh.querySelector('#go').onclick=()=>{
-      if(!sel.plans.size&&!sel.sign&&!sel.note){ sh.querySelector('#go').classList.add('shake'); setTimeout(()=>sh.querySelector('#go')&&sh.querySelector('#go').classList.remove('shake'),400); return; }
-      closeSheet(); startSession(mode,{plans:[...sel.plans],sign:sel.sign,note:sel.note,len});
-    };
-  };
-  draw(); $('#dim').classList.add('on'); sh.classList.add('on');
+function appendItem(i, animate){
+  var it = ITEMS[i], head = null;
+  if (CH_START[it.ci] === i){ head = elChapter(it.ci); if (animate) head.classList.add("new"); feed.appendChild(head); }
+  var el = it.type === "t" ? elThesis(it) : elQuestion(it, i);
+  el.id = "it-" + i; if (animate) el.classList.add("new");
+  feed.appendChild(el);
+  return {head: head, el: el};
 }
-function closeSheet(){ $('#dim').classList.remove('on'); $('#sheet').classList.remove('on'); }
-$('#dim').onclick=closeSheet;
-(()=>{let sy=null;const sh=$('#sheet');sh.addEventListener('touchstart',e=>{sy=sh.scrollTop<=0?e.touches[0].clientY:null},{passive:true});sh.addEventListener('touchend',e=>{if(sy!==null&&e.changedTouches[0].clientY-sy>90)closeSheet();sy=null});})();
-
-/* ===================== ГЕНЕРАЦИЯ ЗАДАНИЙ ===================== */
-function poolFor(f){
-  const keys=new Set((f.plans||[]).map(n=>'p'+n)); if(f.sign) keys.add('sign'); if(f.note) keys.add('note');
-  return {groups:G.filter(g=>keys.has(g.key)), defs:DEFS.filter(d=>keys.has(d.key))};
+function syncEnd(animate){
+  var end = $("end");
+  if (st.pos === N - 1 && !end){ end = elEnd(); if (animate) end.classList.add("new"); feed.appendChild(end); return end; }
+  if (st.pos !== N - 1 && end) end.remove();
+  return null;
 }
-function intruderFor(g,avoid){
-  avoid=avoid||[];
-  const src=G.filter(x=>x.src===g.src && x.id!==g.id && x.title!==g.title && !!x.top===!!g.top);
-  const pool=(src.length?src:G.filter(x=>x.id!==g.id)).flatMap(x=>x.items);
-  const okc=c=>!g.items.some(it=>sim(it,c)>=.5) && !avoid.includes(c) && !sim(g.title,c);
-  const cands=shuffle(pool).filter(okc);
-  if(cands.length) return cands[0];
-  return shuffle(G.flatMap(x=>x.items)).find(okc)||'классовая борьба';
-}
-function makeTask(mode,obj){
-  if(obj.term) return {mode:'cards',def:obj,id:obj.id};
-  const g=obj;
-  if(mode==='odd'){
-    const shown=shuffle(g.items).slice(0,Math.min(4,g.items.length));
-    const extra=intruderFor(g);
-    return {mode,g,id:g.id,opts:shuffle(shown.concat([extra])),extra};
-  }
-  if(mode==='build'){
-    if(g.ordered) return {mode,g,id:g.id,kind:'order',opts:shuffle(g.items)};
-    const ds=[]; ds.push(intruderFor(g)); ds.push(intruderFor(g,ds));
-    return {mode,g,id:g.id,kind:'pick',opts:shuffle(g.items.concat(ds)),ds};
-  }
-  return {mode,g,id:g.id};
-}
-function modeFits(mode,o){
-  if(o.term) return mode==='cards';
-  if(mode==='odd') return o.items.length>=2;
-  if(mode==='build') return o.items.length>=2;
-  return true;
-}
-function startSession(mode,f){
-  f=f||{}; if(!f.plans&&!f.sign&&!f.note) f.plans=PLANS.map(p=>p.n);
-  const {groups,defs}=poolFor(f);
-  let tasks=[];
-  if(mode==='cards'){
-    let objs=groups.concat(defs);
-    // слабые и новые — вперёд
-    objs=shuffle(objs).sort((a,b)=>(S.box[a.id]||0)-(S.box[b.id]||0));
-    tasks=objs.map(o=>makeTask('cards',o));
-    if(f.len) tasks=tasks.slice(0,f.len);
-  } else {
-    const modes=mode==='mix'?['cards','build','mem','odd']:[mode];
-    let objs=shuffle(mode==='mix'?groups.concat(defs):groups).sort((a,b)=>(S.box[a.id]||0)-(S.box[b.id]||0)+(Math.random()-.5)*1.2);
-    // планы целиком — в приоритете
-    objs.sort((a,b)=>(b.top?1:0)-(a.top?1:0)+(Math.random()-.5)*1.4);
-    for(const o of objs){
-      const ms=modes.filter(m=>modeFits(m,o)); if(!ms.length) continue;
-      tasks.push(makeTask(pick(ms),o));
-    }
-    if(f.len) tasks=tasks.slice(0,f.len);
-  }
-  if(!tasks.length){ return; }
-  runSession(tasks, mode);
-}
-function startWeak(){
-  const ids=new Set(allIds().filter(id=>id in S.box && S.box[id]===0));
-  const objs=G.filter(g=>ids.has(g.id)).concat(DEFS.filter(d=>ids.has(d.id)));
-  const tasks=shuffle(objs).map(o=>{ const ms=['cards','build','mem','odd'].filter(m=>modeFits(m,o)); return makeTask(pick(ms),o); });
-  if(tasks.length) runSession(tasks,'weak'); else toast('Ошибок на повтор нет 👍');
+function render(){
+  feed.textContent = "";
+  feed.appendChild(elIntro());
+  for (var i = 0; i <= st.pos; i++) appendItem(i, false);
+  syncEnd(false);
+  curCh = -1; update(); trackChapter();
 }
 
-/* ===================== ТРЕНАЖЁР ===================== */
-let SES=null;
-function runSession(tasks,mode){
-  SES={tasks,i:0,ok:0,mode};
-  const tr=$('#tr');
-  tr.innerHTML=`<div class="trh"><button class="x" id="trx"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M1 1l10 10M11 1 1 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><div class="prog"><i id="pg"></i></div><div class="cnt" id="cnt"></div></div><div class="trb" id="trb"></div><div class="trf" id="trf"></div>`;
-  tr.classList.add('on');
-  $('#trx').onclick=safeClose;
-  showTask();
-}
-let xT=0;
-function safeClose(){ if(EX&&EX.writing&&$('#ta')&&$('#ta').value.trim()&&Date.now()-xT>2500){ xT=Date.now(); toast('Ответ не сдан. Нажмите ✕ ещё раз, чтобы выйти'); return; } endSession(); }
-function endSession(){ clearInterval(EXT); $('#tr').classList.remove('on'); SES=null; EX=null; renderAll(); }
-function progress(){ $('#pg').style.width=(SES.i/SES.tasks.length*100)+'%'; $('#cnt').textContent=Math.min(SES.i+1,SES.tasks.length)+' / '+SES.tasks.length; }
-function next(ok){
-  const t=SES.tasks[SES.i]; mark(t.id,ok); if(ok) SES.ok++;
-  SES.i++; if(SES.i>=SES.tasks.length) return finish(); showTask();
-}
-function finish(){
-  if(SES.mode==='m1') logDay('m1');
-  $('#pg').style.width='100%'; $('#cnt').textContent='';
-  const r=SES.ok/SES.tasks.length;
-  $('#trb').innerHTML=`<div class="done anim"><div class="em">${r>=.85?'🏆':r>=.6?'💪':'📚'}</div><h2>${SES.ok} из ${SES.tasks.length}</h2>
-   <p>${r>=.85?'Отлично! Этот материал ты знаешь.':r>=.6?'Неплохо. Ошибки попадут в «Повторить ошибки».':'Ничего страшного — повтори ошибки ещё раз, станет легче.'}</p></div>`;
-  $('#trf').innerHTML=`<button class="big" style="background:var(--card2);color:var(--text);box-shadow:none" onclick="endSession()">Готово</button>`+
-   (SES.ok<SES.tasks.length?`<button class="big" onclick="redoWrong()">Ещё раз ошибки</button>`:'');
-  buzz([10,40,10]);
-}
-function redoWrong(){
-  const wrong=SES.tasks.filter(t=>(S.box[t.id]||0)===0);
-  const fresh=wrong.map(t=>{ const o=t.def||t.g; return makeTask(t.mode,o); });
-  if(fresh.length) runSession(fresh,SES.mode); else endSession();
-}
-function head(t,kind,q,qs){ return `<div class="kind">${kind}</div><div class="q">${esc(q)}</div><div class="qs">${qs}</div>`; }
-function showTask(){
-  progress();
-  const t=SES.tasks[SES.i], b=$('#trb'), f=$('#trf');
-  b.scrollTop=0; b.innerHTML=''; f.innerHTML='';
-  ({cards:taskCard,build:taskBuild,mem:taskMem,odd:taskOdd})[t.mode](t,b,f);
-  b.firstElementChild&&b.firstElementChild.classList.add('anim');
+/* ============ ЛОГИКА ============ */
+function pending(){ var it = ITEMS[st.pos]; return it.type === "q" && st.ans[st.pos] === undefined; }
+
+function update(){
+  if (st.pos === N - 1 && !pending()){ nextBtn.textContent = "Пройти заново"; nextBtn.disabled = false; }
+  else if (pending()){ nextBtn.textContent = "Выберите ответ"; nextBtn.disabled = true; }
+  else { nextBtn.textContent = "Дальше"; nextBtn.disabled = false; }
+  var done = TH_UPTO[st.pos], frac = ((st.pos + 1) / N * 100).toFixed(1) + "%";
+  $("fill1").style.width = frac; $("fill2").style.width = frac;
+  $("pt1").textContent = done + "/" + TH_TOTAL;
+  $("pt2").textContent = "Тезис " + done + " из " + TH_TOTAL;
+  var btns = navList.children;
+  for (var c = 0; c < btns.length; c++) btns[c].classList.toggle("reached", CH_START[c] <= st.pos);
 }
 
-/* --- карточки --- */
-function letters(items){ return items.map(it=>{ const w=norm(it).split(' ').find(w=>w.length>2&&!STOP.has(w))||norm(it); return (w[0]||'?').toUpperCase(); }).join(' · '); }
-function taskCard(t,b,f){
-  let front,back,ctx;
-  if(t.def){ ctx=t.def.ctx; front=`<div class="q">${esc(t.def.term)}</div><div class="qs">Дай определение</div>`;
-    back=`<div class="kind">${esc(t.def.term)}</div><div style="font-size:19px;line-height:1.4">${esc(t.def.x)}</div>`; }
-  else { const g=t.g; ctx=g.ctx;
-    front=`<div class="q">${esc(g.title)}</div><div class="qs">${g.top?'Назови пункты плана':g.src==='sign'?'Назови признаки':'Перечисли'} · ${g.items.length} шт.</div>`;
-    back=`<div class="kind">${esc(g.title)}</div><div class="ans">${g.items.map((x,i)=>`<div><em>${g.top?(i+1)+'.':LETTERS[i]+')'}</em>${esc(x)}</div>`).join('')}</div>`; }
-  b.innerHTML=`<div><div class="kind">${esc(ctx)}</div></div><div class="fc" id="fc"><div class="fc-in"><div class="face">${front}${t.g?`<button class="btn" id="hb" style="align-self:flex-start;margin-top:4px">💡 Подсказка</button>`:''}<div class="hint">Вспомни ответ вслух и нажми на карточку</div></div><div class="face back">${back}</div></div></div>`;
-  const fc=$('#fc'); let flipped=false;
-  const flip=()=>{ if(flipped) return; flipped=true; fc.classList.add('flip'); buzz(8);
-    f.innerHTML=`<button class="big no" id="n">Не знал</button><button class="big yes" id="y">Знал</button>`;
-    $('#n').onclick=()=>next(false); $('#y').onclick=()=>next(true); };
-  fc.onclick=flip;
-  const hb=$('#hb'); if(hb) hb.onclick=e=>{ e.stopPropagation(); hb.outerHTML=`<div class="tip" style="margin-top:6px;font-size:18px;font-weight:700;letter-spacing:1px;color:var(--accent)">${letters(t.g.items)}</div><div class="qs" style="margin-top:6px">Первые буквы пунктов</div>`; };
-  f.innerHTML=`<button class="big" id="sh">Показать ответ</button>`; $('#sh').onclick=flip;
-}
-
-/* --- собрать --- */
-function taskBuild(t,b,f){
-  const g=t.g;
-  if(t.kind==='order'){
-    const placed=[];
-    b.innerHTML=`<div>${head(t,esc(g.ctx),g.title,'Нажимай на пункты в правильном порядке. Нажми на заполненный слот, чтобы вернуть пункт.')}</div>
-      <div class="slots" id="sl"></div><div class="pool" id="pl"></div>`;
-    const draw=()=>{
-      $('#sl').innerHTML=g.items.map((_,i)=>`<div class="slot ${placed[i]!=null?'f':''}" data-i="${i}"><em>${i+1}.</em><span>${placed[i]!=null?esc(t.opts[placed[i]]):''}</span></div>`).join('');
-      $('#pl').innerHTML=t.opts.map((x,i)=>`<button class="chip ${placed.includes(i)?'used':''}" data-o="${i}">${esc(x)}</button>`).join('');
-      $('#sl').querySelectorAll('.slot.f').forEach(s=>s.onclick=()=>{ placed.splice(+s.dataset.i,1); draw(); });
-      $('#pl').querySelectorAll('.chip').forEach(c=>c.onclick=()=>{ placed.push(+c.dataset.o); buzz(5); draw(); if(placed.length===g.items.length) check(); });
-    };
-    const check=()=>{
-      let ok=true;
-      $('#sl').querySelectorAll('.slot').forEach((s,i)=>{ const good=t.opts[placed[i]]===g.items[i]; if(!good){ok=false; s.querySelector('span').innerHTML+=`<span class="fix">✓ ${esc(g.items[i])}</span>`;} s.classList.add(good?'ok':'bad'); s.onclick=null; });
-      $('#pl').style.display='none';
-      f.innerHTML=`<button class="big ${ok?'yes':''}" id="nx">${ok?'Верно! Дальше':'Понятно, дальше'}</button>`;
-      if(!ok){ b.insertAdjacentHTML('beforeend',`<div class="fb bad">Порядок важен: на тесте пункты плана пишут в логичной последовательности.</div>`); buzz(30);} else buzz(10);
-      $('#nx').onclick=()=>next(ok);
-    };
-    draw();
-  } else {
-    const chosen=new Set();
-    b.innerHTML=`<div>${head(t,esc(g.ctx),g.title,`Выбери все верные подпункты (их ${g.items.length}). Есть 2 лишних.`)}</div><div class="pool" id="pl"></div>`;
-    const draw=()=>{ $('#pl').innerHTML=t.opts.map((x,i)=>`<button class="chip ${chosen.has(i)?'sel':''}" data-o="${i}">${esc(x)}</button>`).join('');
-      $('#pl').querySelectorAll('.chip').forEach(c=>c.onclick=()=>{const i=+c.dataset.o; chosen.has(i)?chosen.delete(i):chosen.add(i); buzz(5); draw(); upd();}); };
-    const upd=()=>{ f.innerHTML=`<button class="big" id="ck" ${chosen.size?'':'style="opacity:.4"'}>Проверить</button>`; $('#ck').onclick=()=>chosen.size&&check(); };
-    const check=()=>{
-      let ok=true;
-      $('#pl').querySelectorAll('.chip').forEach((c,i)=>{ const isRight=g.items.includes(t.opts[i]); c.classList.remove('sel'); c.onclick=null;
-        if(chosen.has(i)&&isRight) c.classList.add('ok'); else if(chosen.has(i)&&!isRight){c.classList.add('bad');ok=false;} else if(isRight){c.classList.add('miss');ok=false;} else c.style.opacity='.35'; });
-      b.insertAdjacentHTML('beforeend',`<div class="fb ${ok?'ok':'bad'}">${ok?'Всё верно!':'Зелёная рамка — пропущенный верный пункт, красный — лишний.'}</div>`);
-      f.innerHTML=`<button class="big ${ok?'yes':''}" id="nx">Дальше</button>`; $('#nx').onclick=()=>next(ok); buzz(ok?10:30);
-    };
-    draw(); upd();
-  }
-}
-
-/* --- лишний --- */
-function taskOdd(t,b,f){
-  const g=t.g;
-  b.innerHTML=`<div>${head(t,esc(g.ctx),g.title,'Какой пункт сюда <b>не относится</b>?')}</div><div class="pool" id="pl">${t.opts.map((x,i)=>`<button class="chip" data-o="${i}">${esc(x)}</button>`).join('')}</div>`;
-  $('#pl').querySelectorAll('.chip').forEach(c=>c.onclick=()=>{
-    const ok=t.opts[+c.dataset.o]===t.extra;
-    $('#pl').querySelectorAll('.chip').forEach((d,i)=>{ d.onclick=null; if(t.opts[i]===t.extra) d.classList.add(ok?'ok':'miss'); else if(d===c) d.classList.add('bad'); else d.style.opacity='.45'; });
-    const from=G.find(x=>x.id!==g.id&&x.items.includes(t.extra));
-    b.insertAdjacentHTML('beforeend',`<div class="fb ${ok?'ok':'bad'}">${ok?'Верно!':'Лишний — «'+esc(t.extra)+'».'}${from?`<div style="font-weight:400;margin-top:4px;opacity:.85">Он из: ${esc(from.title)}</div>`:''}</div>`);
-    f.innerHTML=`<button class="big ${ok?'yes':''}" id="nx">Дальше</button>`; $('#nx').onclick=()=>next(ok); buzz(ok?10:30);
+function next(){
+  if (st.pos === N - 1 && !pending()){ restart(); return; }
+  if (pending() || st.pos >= N - 1) return;
+  st.pos++; save();
+  var r = appendItem(st.pos, true);
+  var end = syncEnd(true);
+  update();
+  requestAnimationFrame(function(){
+    if (r.head) r.head.scrollIntoView({behavior: SMOOTH, block: "start"});
+    else r.el.scrollIntoView({behavior: SMOOTH, block: "nearest"});
+    if (end) setTimeout(function(){ end.scrollIntoView({behavior: SMOOTH, block: "nearest"}); }, 380);
   });
 }
 
-/* --- по памяти --- */
-function matchItems(items,text){
-  const lines=text.split(/\n|;|,(?![^()]*\))/).map(s=>s.trim()).filter(Boolean);
-  const ls=lines.map(stems), all=stems(text);
-  return items.map(it=>{
-    const k=[...new Set(stems(it))]; if(!k.length) return {it,ok:true};
-    let best=0;
-    ls.forEach(l=>{ best=Math.max(best,k.filter(s=>hasStem(l,s)).length); });
-    const need=k.length<=2?1:Math.ceil(k.length*.5);
-    if(best<need && k.length===1 && hasStem(all,k[0])) best=1;
-    return {it,ok:best>=need};
-  });
-}
-function taskMem(t,b,f){
-  const g=t.g;
-  b.innerHTML=`<div>${head(t,esc(g.ctx),g.title,`Напиши ${g.top?'пункты плана':'все пункты'} (${g.items.length}) — каждый с новой строки. Можно кратко, ключевыми словами.`)}</div>
-   <textarea class="mem" id="ta" placeholder="1. …&#10;2. …" autocapitalize="sentences"></textarea>`;
-  f.innerHTML=`<button class="big" id="ck">Проверить</button>`;
-  $('#ck').onclick=()=>{
-    const v=$('#ta').value; if(!v.trim()){ $('#ta').classList.add('shake'); setTimeout(()=>$('#ta')&&$('#ta').classList.remove('shake'),400); return; }
-    const res=matchItems(g.items,v);
-    const box=document.createElement('div'); box.className='res'; box.style.marginTop='16px';
-    const draw=()=>{
-      const n=res.filter(r=>r.ok).length;
-      box.innerHTML=`<div class="kind" style="padding:0;background:none">Совпало ${n} из ${res.length}</div>`+res.map((r,i)=>`<div class="${r.ok?'ok':'bad'}"><i>${r.ok?'✓':'✗'}</i><span>${esc(r.it)}</span>${r.ok?'':`<button data-a="${i}">Засчитать</button>`}</div>`).join('');
-      box.querySelectorAll('[data-a]').forEach(x=>x.onclick=()=>{res[+x.dataset.a].ok=true; draw(); foot();});
-    };
-    const foot=()=>{ const ok=res.every(r=>r.ok); f.innerHTML=`<button class="big ${ok?'yes':''}" id="nx">${ok?'Отлично! Дальше':'Дальше'}</button>`; $('#nx').onclick=()=>next(ok); };
-    $('#ta').readOnly=true; $('#ta').style.minHeight='0'; $('#ta').style.opacity='.7';
-    b.append(box); draw(); foot();
-    b.insertAdjacentHTML('beforeend',`<div class="qs" style="margin-top:4px">Проверка по ключевым словам. Если написал верно другими словами — жми «Засчитать».</div>`);
-    setTimeout(()=>box.scrollIntoView({behavior:'smooth',block:'start'}),50);
-  };
+function answer(i, k){
+  if (st.ans[i] !== undefined) return;
+  st.ans[i] = k; save();
+  var card = $("it-" + i);
+  var fb = paintAnswer(card, ITEMS[i], k);
+  fb.classList.add("new");
+  update();
+  requestAnimationFrame(function(){ fb.scrollIntoView({behavior: SMOOTH, block: "nearest"}); });
+  if (i === st.pos) nextBtn.focus({preventScroll: true});
 }
 
-/* ===================== ЭКЗАМЕН ===================== */
-const GC={5:'#30c759',4:'#5e5ce6',3:'#ff9500',2:'#ff3b30'};
-let EX=null, EXT=0;
-const gradeOf=p=>p>=85?5:p>=65?4:p>=45?3:2;
-const fmt=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
-function openExamSetup(){
-  const sel=new Set(PLANS.map(p=>p.n)); let cnt=1, tm=300;
-  const sh=$('#sheet');
-  const draw=()=>{
-    sh.innerHTML=`<div class="grab"></div><h3>Экзамен</h3><div class="subtle" style="margin-bottom:14px">Случайный план → пишешь его целиком: пункты и подпункты. По таймеру — автосдача.</div>
-     <div class="sec" style="margin-top:4px">Из каких планов тянуть</div>
-     <div class="chips">${PLANS.map(p=>`<button class="tog ${sel.has(p.n)?'on':''}" data-p="${p.n}">${p.n}${S.exam&&S.exam[p.n]?' · '+S.exam[p.n].g:''}</button>`).join('')}</div>
-     <div class="sec">Сколько планов</div><div class="seg">${[1,3,8].map(v=>`<button data-c="${v}" class="${cnt===v?'on':''}">${v===8?'Все выбранные':v}</button>`).join('')}</div>
-     <div class="sec">Время на один план</div><div class="seg">${[180,300,420,0].map(v=>`<button data-t="${v}" class="${tm===v?'on':''}">${v?v/60+' мин':'Без таймера'}</button>`).join('')}</div>
-     <button class="big" id="go" style="margin-top:22px">Тянуть билет</button>`;
-    sh.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const n=+b.dataset.p; sel.has(n)?sel.delete(n):sel.add(n); buzz(5); draw();});
-    sh.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{cnt=+b.dataset.c; draw();});
-    sh.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{tm=+b.dataset.t; draw();});
-    sh.querySelector('#go').onclick=()=>{
-      if(!sel.size){ sh.querySelector('#go').classList.add('shake'); return; }
-      // сначала планы без оценки и с плохой оценкой
-      let list=shuffle([...sel]).sort((a,b)=>((S.exam&&S.exam[a]?S.exam[a].p:-1)-(S.exam&&S.exam[b]?S.exam[b].p:-1))+(Math.random()-.5)*30);
-      closeSheet(); runExam(list.slice(0,cnt),tm);
-    };
-  };
-  draw(); $('#dim').classList.add('on'); sh.classList.add('on');
-}
-function runExam(list,tm,tag){
-  closeSheet();
-  EX={list,tm,i:0,res:[],tag};
-  const tr=$('#tr');
-  tr.innerHTML=`<div class="trh"><button class="x" id="trx"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M1 1l10 10M11 1 1 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><div class="prog"><i id="pg"></i></div><div class="timer" id="tmr"></div></div><div class="trb" id="trb"></div><div class="trf" id="trf"></div>`;
-  tr.classList.add('on'); $('#trx').onclick=safeClose;
-  examTask();
-}
-function examTask(){
-  clearInterval(EXT);
-  const n=EX.list[EX.i], pl=PLANS[n-1], b=$('#trb'), f=$('#trf'), tmr=$('#tmr');
-  $('#pg').style.width=(EX.i/EX.list.length*100)+'%';
-  const subs=pl.p.reduce((s,x)=>s+x[1].length,0);
-  b.innerHTML=`<div class="anim"><div class="kind">Билет ${EX.i+1} из ${EX.list.length} · План ${n}</div><div class="q">${esc(pl.t)}</div>${pl.s?`<div class="qs" style="margin-bottom:4px">${esc(pl.s)}</div>`:''}
-   <div class="qs">Составь план: ${pl.p.length} пунктов${subs?', подпункты ниже пунктов':''}. Как на тесте — нумеруй: «1. …», «а) …».</div>
-   <textarea class="mem exam" id="ta" placeholder="1. …&#10;   а) …&#10;   б) …&#10;2. …" autocapitalize="sentences"></textarea></div>`;
-  f.innerHTML=`<button class="big" id="hn" style="flex:0 0 auto;width:auto;padding:16px 18px;background:var(--card2);color:var(--text);box-shadow:none">💡 −10%</button><button class="big" id="sd">Сдать</button>`; tmr.style.visibility='';
-  EX.hint=false;
-  $('#hn').onclick=()=>{ if(EX.hint) return; EX.hint=true; $('#hn').style.opacity='.4'; $('#ta').insertAdjacentHTML('beforebegin',`<div class="tip" style="margin-bottom:10px">Первые буквы пунктов: <b style="color:var(--accent);letter-spacing:1px">${letters(pl.p.map(x=>x[0]))}</b></div>`); };
-  let left=EX.tm, start=Date.now();
-  const tick=()=>{ if(!EX.tm){ tmr.textContent=fmt(Math.round((Date.now()-start)/1000)); return; }
-    left=EX.tm-Math.round((Date.now()-start)/1000);
-    tmr.textContent=fmt(Math.max(0,left)); tmr.classList.toggle('warn',left<=30);
-    if(left<=0){ clearInterval(EXT); buzz([30,60,30]); submit(true); } };
-  tick(); EXT=setInterval(tick,500);
-  EX.writing=true;
-  const submit=(auto)=>{ EX.writing=false; clearInterval(EXT); tmr.classList.remove('warn'); tmr.style.visibility='hidden'; examGrade(n,$('#ta').value,Math.round((Date.now()-start)/1000),auto); };
-  $('#sd').onclick=()=>submit(false);
-}
-// разбивка текста по блокам: строка-пункт начинается с цифры, всё ниже до следующего пункта — его подпункты
-function splitByPoints(text){
-  const lines=text.split('\n').map(s=>s.trim()).filter(Boolean), blocks=[]; let cur=null;
-  lines.forEach(l=>{ if(/^\d+\s*[.)]/.test(l)||!cur){ cur={h:l.replace(/^\d+\s*[.)]\s*/,''),body:[]}; blocks.push(cur);} else cur.body.push(l.replace(/^[а-яa-z]\s*\)\s*|^[-–•*]\s*/i,'')); });
-  return blocks;
-}
-function examGrade(n,text,secs,auto){
-  const pl=PLANS[n-1];
-  const blocks=splitByPoints(text);
-  const numbered=/^\s*\d+\s*[.)]/m.test(text);
-  const heads=numbered?blocks.map(x=>x.h).join('\n'):text; // без нумерации ищем пункты по всему тексту
-  const pm=matchItems(pl.p.map(x=>x[0]),heads||' ');
-  const R=pl.p.map((x,i)=>{
-    // подпункты ищем во всём тексте: могли записать не под тем номером
-    const sm=x[1].length?matchItems(x[1],text||' '):[];
-    return {t:x[0],ok:pm[i].ok,sub:sm.map(s=>({t:s.it,ok:s.ok}))};
-  });
-  const r={n,R,secs,auto,text,hint:EX.hint}; EX.res[EX.i]=r;
-  drawGrade(r);
-}
-function scoreOf(r){
-  const P=r.R.length, p=r.R.filter(x=>x.ok).length;
-  const subs=r.R.flatMap(x=>x.sub), s=subs.filter(x=>x.ok).length;
-  const pct=Math.max(0,Math.round(100*(subs.length? .5*p/P + .5*s/subs.length : p/P))-(r.hint?10:0));
-  return {P,p,S:subs.length,s,pct,g:gradeOf(pct)};
-}
-function drawGrade(r){
-  const b=$('#trb'), f=$('#trf'), pl=PLANS[r.n-1];
-  const draw=()=>{
-    const sc=scoreOf(r);
-    b.innerHTML=`<div class="anim"><div class="kind">План ${r.n} · ${r.auto?'время вышло':'сдано за '+fmt(r.secs)}</div><div class="q" style="font-size:20px">${esc(pl.t)}</div>
-     <div class="grade"><div class="g" style="background:${GC[sc.g]}">${sc.g}</div><div><b>${sc.pct}%</b><small>Пункты: ${sc.p} из ${sc.P}${sc.S?` · подпункты: ${sc.s} из ${sc.S}`:''}</small><small>${r.hint?'с подсказкой −10% · ':''}5 — от 85%, 4 — от 65%, 3 — от 45%</small></div></div>
-     <div class="res">${r.R.map((x,i)=>`<div class="${x.ok?'ok':'bad'}"><i>${x.ok?'✓':'✗'}</i><span><b style="font-weight:600">${i+1}. ${esc(x.t)}</b></span>${x.ok?'':`<button data-p="${i}">Засчитать</button>`}</div>
-       ${x.sub.length?`<div class="subl">${x.sub.map((s,j)=>`<div class="${s.ok?'ok':'bad'}"><i>${s.ok?'✓':'✗'}</i><span>${LETTERS[j]}) ${esc(s.t)}</span>${s.ok?'':`<button data-p="${i}" data-s="${j}">Засчитать</button>`}</div>`).join('')}</div>`:''}`).join('')}</div>
-     <div class="sec" style="margin-left:2px">Твой ответ</div><div class="note" style="white-space:pre-wrap;font-size:15px">${esc(r.text||'— пусто —')}</div>
-     <div class="qs">Проверка по ключевым словам. Если пункт написан верно, но иначе — жми «Засчитать».</div></div>`;
-    b.querySelectorAll('[data-p]').forEach(x=>x.onclick=()=>{ const i=+x.dataset.p; if(x.dataset.s!=null) r.R[i].sub[+x.dataset.s].ok=true; else r.R[i].ok=true; const st=b.scrollTop; draw(); b.scrollTop=st; b.firstElementChild.classList.remove('anim'); });
-  };
-  draw(); b.scrollTop=0;
-  const last=EX.i>=EX.list.length-1;
-  f.innerHTML=`<button class="big" id="nx">${last?'Итоги':'Следующий билет'}</button>`;
-  buzz(10);
-  $('#nx').onclick=()=>{ saveExam(r); EX.i++; if(EX.i>=EX.list.length) examSummary(); else examTask(); };
-}
-function saveExam(r){
-  const sc=scoreOf(r); S.exam=S.exam||{};
-  const prev=S.exam[r.n]; if(!prev||sc.pct>=prev.p) S.exam[r.n]={p:sc.pct,g:sc.g,ts:Date.now()};
-  r.final=sc;
-  // экзамен влияет на прогресс плана
-  mark('p'+r.n, r.R.every(x=>x.ok));
-  r.R.forEach((x,i)=>{ if(x.sub.length>=2 && G.find(g=>g.id==='p'+r.n+'.'+(i+1))) mark('p'+r.n+'.'+(i+1), x.sub.every(s=>s.ok)); });
-  save();
-}
-function examSummary(){
-  if(EX.tag) logDay(EX.tag);
-  clearInterval(EXT); $('#pg').style.width='100%'; $('#tmr').textContent='';
-  const rs=EX.res, avg=Math.round(rs.reduce((s,r)=>s+r.final.pct,0)/rs.length), g=gradeOf(avg);
-  $('#trb').innerHTML=`<div class="done anim"><div class="em">${g===5?'🏆':g===4?'💪':g===3?'🙂':'📚'}</div><h2>Оценка: ${g}</h2><p>Средний результат ${avg}%</p></div>
-   ${rs.length>1?`<div class="group">${rs.map(r=>`<div class="row nl"><div class="num" style="background:${GC[r.final.g]}">${r.final.g}</div><div class="tx"><b>${esc(PLANS[r.n-1].t)}</b><small>${r.final.pct}% · ${r.auto?'время вышло':fmt(r.secs)}</small></div></div>`).join('')}</div>`:''}
-   <p class="qs" style="text-align:center;margin-top:14px">Лучшие оценки видны в списке планов.</p>`;
-  const weak=rs.filter(r=>r.final.g<5).map(r=>r.n);
-  $('#trf').innerHTML=`<button class="big" style="background:var(--card2);color:var(--text);box-shadow:none" onclick="endSession()">Готово</button>`+
-   (weak.length?`<button class="big" id="rw">Пересдать (${weak.length})</button>`:'');
-  if(weak.length) $('#rw').onclick=()=>runExam(shuffle(weak),EX.tm);
-  buzz([10,40,10]);
+function restart(){
+  if (!confirm("Начать заново? Прогресс и ответы будут сброшены.")) return;
+  st = {pos: 0, ans: {}}; save(); closeNav(); render();
+  window.scrollTo({top: 0, behavior: "auto"});
 }
 
-/* ===================== СЕРВИС ===================== */
-function toast(t){ let el=$('#toast'); if(!el){ el=document.createElement('div'); el.id='toast'; document.body.append(el);} el.textContent=t; el.classList.add('on'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('on'),2300); }
-// iOS: тренажёр подстраивается под клавиатуру, кнопка «Проверить» всегда видна
-if(window.visualViewport){ const vv=window.visualViewport; const fit=()=>{ const tr=$('#tr'); tr.style.height=vv.height+'px'; tr.style.top=vv.offsetTop+'px'; }; vv.addEventListener('resize',fit); vv.addEventListener('scroll',fit); }
-// клавиатура на компьютере: пробел — перевернуть, ←/→ — не знал/знал, Enter — дальше, Ctrl+Enter — сдать текст
-document.addEventListener('keydown',e=>{
-  if(!$('#tr').classList.contains('on')) return;
-  const inTa=e.target.tagName==='TEXTAREA', c=id=>{const b=$(id); if(b){ e.preventDefault(); b.click(); return true;} };
-  if(e.key==='Escape') return safeClose();
-  if(inTa){ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) c('#ck')||c('#sd'); return; }
-  if(e.key===' ') c('#sh');
-  else if(e.key==='ArrowLeft') c('#n');
-  else if(e.key==='ArrowRight') c('#y');
-  else if(e.key==='Enter') c('#nx')||c('#ck')||c('#sh')||c('#sd');
+function jump(ci){
+  var idx = CH_START[ci];
+  if (idx > st.pos){
+    if (!confirm("Перейти к главе " + DATA[ci].n + "? Пропущенные вопросы останутся без ответа — к ним можно вернуться, прокрутив вверх.")) return;
+    st.pos = idx; save(); render();
+  }
+  closeNav();
+  var h = $("ch-" + ci);
+  if (h) requestAnimationFrame(function(){ h.scrollIntoView({behavior: SMOOTH, block: "start"}); });
+}
+
+/* ============ ГЛАВЫ: список, шторка, текущая глава ============ */
+DATA.forEach(function(ch, ci){
+  var b = mk("button", "ch-btn"); b.type = "button";
+  b.appendChild(mk("span", "r", ch.n));
+  b.appendChild(mk("span", "n", ch.t));
+  b.appendChild(mk("span", "d"));
+  b.addEventListener("click", function(){ jump(ci); });
+  navList.appendChild(b);
+});
+function plural(n, a, b, c){ var m10 = n % 10, m100 = n % 100; return n + " " + (m10 === 1 && m100 !== 11 ? a : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? b : c); }
+$("brandWhat").textContent = "Вся повесть по порядку: " + plural(TH_TOTAL, "тезис", "тезиса", "тезисов") + " и " + plural(Q_TOTAL, "вопрос", "вопроса", "вопросов") + " «что было дальше?».";
+
+var navIsSheet = function(){ return getComputedStyle($("navClose")).display !== "none" && getComputedStyle(document.querySelector(".sheet-head")).display !== "none"; };
+function openNav(){
+  nav.classList.add("open"); scrim.classList.add("show");
+  var cur = navList.children[Math.max(curCh, 0)];
+  if (cur) cur.scrollIntoView({block: "center"});
+}
+function closeNav(){ nav.classList.remove("open"); scrim.classList.remove("show"); }
+$("navOpen").addEventListener("click", openNav);
+$("navClose").addEventListener("click", closeNav);
+scrim.addEventListener("click", closeNav);
+$("reset").addEventListener("click", restart);
+nextBtn.addEventListener("click", next);
+
+var curCh = -1, ticking = false;
+function trackChapter(){
+  var heads = feed.querySelectorAll(".chap"), lim = Math.max((parseFloat(getComputedStyle(root).getPropertyValue("--hdr")) || 0) + 70, innerHeight * 0.45), cur = 0;
+  if (scrollY + innerHeight >= document.documentElement.scrollHeight - 4) lim = innerHeight - (parseFloat(getComputedStyle(root).getPropertyValue("--bar")) || 0) - 40;
+  for (var j = 0; j < heads.length; j++){
+    if (heads[j].getBoundingClientRect().top <= lim) cur = +heads[j].getAttribute("data-ci"); else break;
+  }
+  if (cur === curCh) return;
+  curCh = cur;
+  $("curLabel").textContent = "Глава " + DATA[cur].n + " · " + DATA[cur].t;
+  var btns = navList.children;
+  for (var c = 0; c < btns.length; c++){
+    var on = c === cur; btns[c].classList.toggle("cur", on);
+    if (on) btns[c].setAttribute("aria-current", "true"); else btns[c].removeAttribute("aria-current");
+  }
+  if (!navIsSheet()){
+    var b = btns[cur], box = navList.getBoundingClientRect(), bb = b.getBoundingClientRect();
+    if (bb.top < box.top || bb.bottom > box.bottom) b.scrollIntoView({block: "nearest"});
+  }
+}
+window.addEventListener("scroll", function(){
+  if (ticking) return; ticking = true;
+  requestAnimationFrame(function(){ ticking = false; trackChapter(); });
+}, {passive: true});
+
+function measure(){
+  var t = document.querySelector(".top"), b = document.querySelector(".bar");
+  root.style.setProperty("--hdr", (t.offsetHeight || 0) + "px");
+  root.style.setProperty("--bar", (b.offsetHeight || 0) + "px");
+  if (!navIsSheet()) closeNav();
+}
+window.addEventListener("resize", measure);
+window.addEventListener("orientationchange", function(){ setTimeout(measure, 250); });
+
+/* ============ КЛАВИАТУРА (iPad с клавиатурой) ============ */
+document.addEventListener("keydown", function(e){
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === "Escape"){ closeNav(); return; }
+  if (nav.classList.contains("open")) return;
+  if (pending()){
+    var map = {"1":0,"2":1,"3":2,"а":0,"б":1,"в":2,"a":0,"b":1,"c":2};
+    var k = map[(e.key || "").toLowerCase()];
+    if (k !== undefined){ e.preventDefault(); answer(st.pos, k); return; }
+  }
+  if (e.key === "ArrowRight" || ((e.key === "Enter" || e.key === " ") && !(document.activeElement && document.activeElement.tagName === "BUTTON"))){
+    e.preventDefault(); if (!nextBtn.disabled) next();
+  }
 });
 
-/* ===================== СТАРТ ===================== */
-renderAll();
-let quick=false; try{ quick=!!sessionStorage.getItem('seen'); sessionStorage.setItem('seen',1);}catch(e){}
-if(quick) $('#splash').classList.add('fast');
-setTimeout(()=>{ $('#splash').classList.add('hide'); setTimeout(()=>$('#splash').remove(),500); },quick?700:1750);
+/* ============ СТАРТ ============ */
+measure();
+render();
+if (st.pos > 0){
+  var last = $("end") || $("it-" + st.pos);
+  if (last) last.scrollIntoView({block: "nearest"});
+  trackChapter();
+}
+})();
 </script>
 </body>
 </html>
