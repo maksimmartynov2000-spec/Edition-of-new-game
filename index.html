@@ -20,7 +20,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .icon-btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:6px 12px;font-size:15px}
 .bar{height:4px;background:var(--line)}
 .bar i{display:block;height:100%;background:var(--acc);width:0;transition:width .3s}
-main{max-width:760px;margin:0 auto;padding:18px 16px 120px}
+main{max-width:760px;margin:0 auto;padding:18px 16px 140px}
 .serif{font-family:Georgia,"Times New Roman",serif}
 .hero h2{font-family:Georgia,serif;font-size:30px;line-height:1.2;margin:10px 0 6px;color:var(--acc)}
 .hero p{margin:0 0 12px}
@@ -61,6 +61,20 @@ main{max-width:760px;margin:0 auto;padding:18px 16px 120px}
 .drawer a.locked::after{content:" · ещё не открыто";font-size:12px}
 .reset{margin-top:24px;border:1px solid var(--bad);color:var(--bad);background:transparent;border-radius:10px;padding:8px 12px;font-size:14px}
 .note{font-size:14px;color:var(--muted)}
+.part-head{font-family:Georgia,serif;color:var(--acc);font-size:22px;margin:26px 0 0}
+.part-head small{display:block;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--muted);font-size:14px}
+.ch-btn{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px}
+.ch-btn b{font-size:17px}.ch-btn em{font-style:normal;color:var(--muted);font-size:14px;white-space:nowrap}.ch-btn em.ok{color:var(--ok);font-size:20px}
+.parts{gap:8px;margin-top:10px}
+.crumb{color:var(--muted);font-size:14px;text-transform:uppercase;letter-spacing:.05em}
+.chap.first{margin-top:4px;border-top:0;padding-top:0}
+.navrow{display:grid;gap:10px}.navrow .primary{margin-top:0}
+.sec{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:12px;font-size:16px}
+.drawer a.cur{background:var(--acc-soft);font-weight:600}
+#bottom{position:fixed;left:0;right:0;bottom:0;z-index:15;display:none;background:linear-gradient(transparent,var(--bg) 35%);padding:24px 16px calc(14px + env(safe-area-inset-bottom))}
+#bottom .in{max-width:760px;margin:0 auto}
+#moreBtn{width:100%;background:var(--acc);color:#fff;border:0;border-radius:14px;padding:15px;font-size:18px;font-weight:600;box-shadow:0 4px 14px rgba(154,63,20,.25)}
+#moreBtn:disabled{background:#cdbfae;box-shadow:none;cursor:default}
 @keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @media (min-width:700px){html,body{font-size:19px}}
 </style>
@@ -76,6 +90,7 @@ main{max-width:760px;margin:0 auto;padding:18px 16px 120px}
 <nav class="drawer" id="drawer"></nav>
 
 <main id="main"></main>
+<div id="bottom"><div class="in"><button id="moreBtn">Дальше ↓</button></div></div>
 
 <script>
 /* ===== ДАННЫЕ =====
@@ -281,134 +296,117 @@ const PARTS = [
 ];
 
 /* ===== ЛОГИКА ===== */
-const KEY="nekrasov_rus_v1";
+const KEY="nekrasov_rus_v2";
 let S={rev:{},ans:{}};
 try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r));}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 
-// разбить часть на блоки (каждый блок заканчивается вопросом), пронумеровать тезисы
-let n=0;
-PARTS.forEach(p=>{
-  p.blocks=[];let cur=[];let qi=0;
+// Разбить на главы, пронумеровать тезисы
+const CH=[];let n=0,qn=0;
+PARTS.forEach((p,pi)=>{
+  p.ch=[];let cur=null;
   p.items.forEach(it=>{
-    if(it[0]==="t"){n++;cur.push({k:"t",n,txt:it[1],quote:it[2]});}
-    else if(it[0]==="h"){cur.push({k:"h",title:it[1]});}
-    else{cur.push({k:"q",id:p.id+"_"+(qi++),q:it[1],opts:it[2],a:it[3],ex:it[4]});p.blocks.push(cur);cur=[];}
+    if(it[0]==="h"){cur={id:"c"+CH.length,pi,title:it[1],items:[]};CH.push(cur);p.ch.push(cur);}
+    else if(it[0]==="t"){n++;cur.items.push({k:"t",n,txt:it[1],quote:it[2]});}
+    else cur.items.push({k:"q",id:"q"+(qn++),q:it[1],opts:it[2],a:it[3],ex:it[4]});
   });
-  if(cur.length)p.blocks.push(cur);
-  p.first=p.blocks[0].find(x=>x.k==="t").n;
-  p.last=n;
+  p.first=p.ch[0].items.find(x=>x.k==="t").n;p.last=n;
 });
+CH.forEach((c,i)=>{c.idx=i;const t=c.items.filter(x=>x.k==="t");c.from=t[0].n;c.to=t[t.length-1].n;});
 const TOTAL=n;
-function revealed(p){return Math.min(S.rev[p.id]||1,p.blocks.length);}
-function partProgress(p){
-  const qs=p.blocks.flat().filter(x=>x.k==="q");
-  const done=qs.filter(x=>S.ans[x.id]!==undefined).length;
-  return qs.length?done/qs.length:0;
-}
+const rev=c=>Math.max(1,Math.min(S.rev[c.id]||1,c.items.length));
+const isDone=c=>{const r=rev(c);const last=c.items[c.items.length-1];return r>=c.items.length&&(last.k!=="q"||S.ans[last.id]!==undefined);};
+const chProg=c=>isDone(c)?1:(rev(c)-1)/c.items.length;
 
 const $=s=>document.querySelector(s);
 const main=$("#main");
-let curPart=null;
-
+let cur=null;
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;");}
 
 function home(){
-  curPart=null;$("#topTitle").textContent="Кому на Руси жить хорошо";
-  const all=PARTS.reduce((a,p)=>a+partProgress(p)*p.blocks.length,0)/PARTS.reduce((a,p)=>a+p.blocks.length,0);
-  $("#bar").style.width=(all*100)+"%";
-  let h=`<section class="hero">
-  <h2>Кому на Руси жить хорошо</h2>
+  cur=null;$("#topTitle").textContent="Кому на Руси жить хорошо";hideBottom();
+  const all=CH.reduce((a,c)=>a+chProg(c),0)/CH.length;$("#bar").style.width=(all*100)+"%";
+  let h=`<section class="hero"><h2>Кому на Руси жить хорошо</h2>
   <p class="lead">Н. А. Некрасов · вся поэма в ${TOTAL} тезисах</p>
-  <div class="card">
-   <p><b>О чём поэма.</b> Семь мужиков спорят, кому на Руси живётся хорошо, и отправляются искать счастливого человека. Время — первые годы после отмены крепостного права (1861). По дороге они встречают попа, помещика, крестьян, слушают их истории — и так перед нами проходит жизнь всего народа.</p>
-   <p style="margin:0"><b>Как заниматься.</b> Читайте тезисы по порядку. Через каждые несколько тезисов — вопрос: ответьте, чтобы открыть продолжение. Цитаты выделены — их полезно знать для ответа у доски. Прогресс сохраняется на этом устройстве.</p>
-  </div>
-  <p class="note">Порядок частей — как в большинстве изданий. В некоторых учебниках «Крестьянка» стоит перед «Последышем» — части можно открывать в любом порядке.</p>
-  </section><div class="parts">`;
-  PARTS.forEach((p,i)=>{
-    const pr=Math.round(partProgress(p)*100);
-    h+=`<button class="part-btn" data-p="${i}"><b>${p.title}</b><small>${p.sub} · тезисы ${p.first}–${p.last}</small><div class="mini"><i style="width:${pr}%"></i></div><small>${pr?("пройдено "+pr+"%"):"не начато"}</small></button>`;
+  <div class="card"><p><b>О чём поэма.</b> Семь мужиков спорят, кому на Руси живётся хорошо, и отправляются искать счастливого человека. Время — первые годы после отмены крепостного права (1861). По дороге они встречают попа, помещика, крестьян, слушают их истории — и так перед нами проходит жизнь всего народа.</p>
+  <p style="margin:0"><b>Как заниматься.</b> Выберите главу. Тезисы появляются по одному — прочитали, нажали «Дальше». Иногда будет вопрос: ответьте, чтобы идти дальше. Цитаты выделены — их полезно знать для ответа у доски. Прогресс сохраняется на этом устройстве.</p></div>
+  <p class="note">Порядок частей — как в большинстве изданий. В некоторых учебниках «Крестьянка» стоит перед «Последышем».</p></section>`;
+  PARTS.forEach(p=>{
+    h+=`<div class="part-head">${p.title}<small>${p.sub} · тезисы ${p.first}–${p.last}</small></div><div class="parts">`;
+    p.ch.forEach(c=>{
+      const pr=Math.round(chProg(c)*100);
+      h+=`<button class="part-btn ch-btn" data-c="${c.idx}"><span><b>${c.title}</b><small>тезисы ${c.from}–${c.to}</small></span><em class="${isDone(c)?"ok":""}">${isDone(c)?"✓":(pr?pr+"%":"")}</em></button>`;
+    });
+    h+=`</div>`;
   });
-  h+=`</div>`;
   main.innerHTML=h;
-  main.querySelectorAll(".part-btn").forEach(b=>b.onclick=()=>openPart(+b.dataset.p));
+  main.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>openCh(+b.dataset.c,"top"));
   drawer();window.scrollTo(0,0);
 }
 
-function renderItem(x,p,bi){
-  if(x.k==="h")return `<h3 class="chap" id="c_${p.id}_${slug(x.title)}">${x.title}</h3>`;
-  if(x.k==="t")return `<div class="th"><div class="num">${x.n}</div><div class="tx">${x.txt}${x.quote?`<div class="quote">${esc(x.quote)}</div>`:""}</div></div>`;
-  const a=S.ans[x.id];const answered=a!==undefined;
-  let h=`<div class="quiz" id="q_${x.id}"><div class="lbl">Проверь себя</div><div class="q">${x.q}</div>`;
-  x.opts.forEach((o,i)=>{
-    let cls="";if(answered){if(i===x.a)cls="ok";else if(i===a)cls="bad";}
-    h+=`<button class="opt ${cls}" data-q="${x.id}" data-i="${i}" ${answered?"disabled":""}>${o}</button>`;
-  });
-  if(answered){
-    h+=`<div class="fb ${a===x.a?"ok":"bad"}"><b>${a===x.a?"Верно!":"Не совсем."}</b> ${x.ex}</div>`;
-    if(bi===revealed(p)-1 && bi<p.blocks.length-1) h+=`<button class="next" data-next="1">Дальше →</button>`;
-  }
+function itemHTML(x,c,isLast){
+  if(x.k==="t")return `<div class="th" id="i_${x.n}"><div class="num">${x.n}</div><div class="tx">${x.txt}${x.quote?`<div class="quote">${esc(x.quote)}</div>`:""}</div></div>`;
+  const a=S.ans[x.id],answered=a!==undefined;
+  let h=`<div class="quiz" id="${x.id}"><div class="lbl">Проверь себя</div><div class="q">${x.q}</div>`;
+  x.opts.forEach((o,i)=>{let cls="";if(answered){if(i===x.a)cls="ok";else if(i===a)cls="bad";}
+    h+=`<button class="opt ${cls}" data-q="${x.id}" data-i="${i}" ${answered?"disabled":""}>${o}</button>`;});
+  if(answered)h+=`<div class="fb ${a===x.a?"ok":"bad"}"><b>${a===x.a?"Верно!":"Не совсем."}</b> ${x.ex}</div>`;
   return h+`</div>`;
 }
-function slug(t){return t.replace(/[^\wа-яё]+/gi,"_");}
 
-function openPart(i,scrollTo){
-  curPart=i;const p=PARTS[i];$("#topTitle").textContent=p.title;
-  const r=revealed(p);
-  let h=`<div class="part-title">${p.title}</div><p class="lead">${p.sub}</p>`;
-  for(let b=0;b<r;b++)p.blocks[b].forEach(x=>h+=renderItem(x,p,b));
-  const lastQ=p.blocks[p.blocks.length-1].find(x=>x.k==="q");
-  if(r===p.blocks.length && (!lastQ || S.ans[lastQ.id]!==undefined)){
-    const nx=PARTS[i+1];
-    h+=`<div class="done">Часть пройдена ✓</div>`+(nx?`<button class="primary" id="nextPart">Дальше: ${nx.title} →</button>`:`<button class="primary" id="toHome">Вся поэма пройдена — на главную</button>`);
+function openCh(i,mode){
+  cur=i;const c=CH[i],p=PARTS[c.pi];
+  $("#topTitle").textContent=p.title+" · "+c.title;
+  const r=rev(c);
+  let h=`<div class="crumb">${p.title}</div><h3 class="chap first">${c.title}</h3>`;
+  for(let k=0;k<r;k++)h+=itemHTML(c.items[k],c,k===r-1);
+  if(isDone(c)){
+    h+=`<div class="done">Глава прочитана ✓</div><div class="navrow">`+
+      (i>0?`<button class="sec" id="prevCh">← ${CH[i-1].title}</button>`:"")+
+      (i<CH.length-1?`<button class="primary" id="nextCh">${CH[i+1].pi!==c.pi?PARTS[CH[i+1].pi].title+": ":""}${CH[i+1].title} →</button>`:`<button class="primary" id="toHome">Вся поэма пройдена — на главную</button>`)+`</div>`;
   }
   main.innerHTML=h;
-  $("#bar").style.width=(partProgress(p)*100)+"%";
+  $("#bar").style.width=(chProg(c)*100)+"%";
   main.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(b.dataset.q,+b.dataset.i));
-  const nb=main.querySelector("[data-next]");if(nb)nb.onclick=()=>{S.rev[p.id]=r+1;save();openPart(i,"new");};
-  const np=$("#nextPart");if(np)np.onclick=()=>openPart(i+1);
+  const pv=$("#prevCh");if(pv)pv.onclick=()=>openCh(i-1,"top");
+  const nx=$("#nextCh");if(nx)nx.onclick=()=>openCh(i+1,"top");
   const th=$("#toHome");if(th)th.onclick=home;
-  drawer();
-  if(scrollTo==="new"){
-        const nodes=main.querySelectorAll(".th,.chap");
-    // прокрутить к первому элементу нового блока
-    const idx=p.blocks.slice(0,r-1).flat().filter(x=>x.k!=="q").length;
-    const el=nodes[idx];if(el)el.scrollIntoView({behavior:"smooth",block:"start"});
-  }else if(scrollTo){const el=document.getElementById(scrollTo);if(el)el.scrollIntoView({block:"start"});}
-  else{
-    // продолжить с последнего открытого места
-    const qs=main.querySelectorAll(".quiz");const last=qs[qs.length-1];
-    if(last&&r>1)last.scrollIntoView({block:"center"});else window.scrollTo(0,0);
-  }
+  bottom(c);drawer();
+  const lastEl=main.querySelector(".th:last-of-type, .quiz:last-of-type")&&[...main.querySelectorAll(".th,.quiz")].pop();
+  if(mode==="top")window.scrollTo(0,0);
+  if(mode==="last"&&lastEl)lastEl.scrollIntoView({behavior:"smooth",block:"center"});
 }
 
+function bottom(c){
+  const r=rev(c),last=c.items[r-1];
+  const b=$("#bottom"),btn=$("#moreBtn");
+  if(isDone(c)){hideBottom();return;}
+  b.style.display="block";
+  if(last.k==="q"&&S.ans[last.id]===undefined){btn.disabled=true;btn.textContent="Ответьте на вопрос";}
+  else if(r<c.items.length){btn.disabled=false;btn.textContent=c.items[r].k==="q"?"Дальше: вопрос ↓":"Дальше ↓";}
+  else hideBottom();
+}
+function hideBottom(){$("#bottom").style.display="none";}
+$("#moreBtn").onclick=()=>{
+  const c=CH[cur];const r=rev(c);if(r>=c.items.length)return;
+  S.rev[c.id]=r+1;save();openCh(cur,"last");
+};
 function answer(id,i){
-  if(S.ans[id]!==undefined)return;
-  S.ans[id]=i;save();
-  const p=PARTS[curPart];const y=window.scrollY;
-  openPart(curPart,"keep");window.scrollTo(0,y);
-  const el=document.getElementById("q_"+id);if(el)el.scrollIntoView({behavior:"smooth",block:"center"});
+  if(S.ans[id]!==undefined)return;S.ans[id]=i;save();
+  const y=window.scrollY;openCh(cur,"keep");window.scrollTo(0,y);
 }
 
 function drawer(){
   let h=`<button class="icon-btn" id="dHome" style="width:100%">⌂ Главная</button>`;
-  PARTS.forEach((p,i)=>{
-    h+=`<h3>${p.title}</h3>`;
-    const r=revealed(p);
-    p.blocks.forEach((bl,bi)=>bl.forEach(x=>{
-      if(x.k==="h"){const open=bi<r;h+=`<a href="#" class="${open?"":"locked"}" data-p="${i}" data-c="c_${p.id}_${slug(x.title)}">${x.title}</a>`;}
-    }));
-  });
+  PARTS.forEach(p=>{h+=`<h3>${p.title}</h3>`;
+    p.ch.forEach(c=>h+=`<a href="#" data-c="${c.idx}" class="${cur===c.idx?"cur":""}">${c.title}${isDone(c)?" ✓":""}</a>`);});
   h+=`<button class="reset" id="reset">Сбросить прогресс</button><p class="note" id="resetNote"></p>`;
   const d=$("#drawer");d.innerHTML=h;
-  d.querySelectorAll("a[data-p]").forEach(a=>a.onclick=e=>{e.preventDefault();closeD();openPart(+a.dataset.p,a.dataset.c);});
+  d.querySelectorAll("a[data-c]").forEach(a=>a.onclick=e=>{e.preventDefault();closeD();openCh(+a.dataset.c,"top");});
   $("#dHome").onclick=()=>{closeD();home();};
   let armed=false;
-  $("#reset").onclick=()=>{
-    if(!armed){armed=true;$("#resetNote").textContent="Нажмите ещё раз, чтобы стереть все ответы.";return;}
-    S={rev:{},ans:{}};save();closeD();home();
-  };
+  $("#reset").onclick=()=>{if(!armed){armed=true;$("#resetNote").textContent="Нажмите ещё раз, чтобы стереть все ответы.";return;}
+    S={rev:{},ans:{}};save();closeD();home();};
 }
 function closeD(){document.body.classList.remove("open");}
 $("#menuBtn").onclick=()=>document.body.classList.toggle("open");
