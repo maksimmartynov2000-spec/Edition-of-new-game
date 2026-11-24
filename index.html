@@ -1,693 +1,420 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="format-detection" content="telephone=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Ася">
-<meta name="theme-color" content="#f6f1e7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#191714" media="(prefers-color-scheme: dark)">
-<title>«Ася» по порядку — тезисы и вопросы</title>
+<title>Кому на Руси жить хорошо — по тезисам</title>
+<meta name="theme-color" content="#f6f1e7">
 <style>
 :root{
-  color-scheme: light dark;
-  --bg:#f6f1e7; --glass:rgba(246,241,231,.88); --side:#efe8da;
-  --card:#fffdf8; --ink:#2a2520; --muted:#7c7164; --quote:#4a4037;
-  --line:#e5dccb; --line2:#d6cbb6; --chip:#ece4d4;
-  --accent:#8c3b2c; --onaccent:#fff;
-  --qbg:#f2e9d6; --qline:#e2d3b3;
-  --ok:#2e7a4b; --okbg:#e4f1e7; --bad:#b0412f; --badbg:#f8e5df;
-  --serif: ui-serif, "New York", Georgia, "Times New Roman", serif;
-  --sans: -apple-system, BlinkMacSystemFont, system-ui, "Helvetica Neue", Arial, sans-serif;
-  --fs: 18px; --hdr: 0px; --bar: 0px; --col: 720px;
-  --sl: max(16px, env(safe-area-inset-left)); --sr: max(16px, env(safe-area-inset-right));
-}
-@media (prefers-color-scheme: dark){
-  :root{
-    --bg:#191714; --glass:rgba(25,23,20,.88); --side:#1f1c18;
-    --card:#24211c; --ink:#ece5d8; --muted:#a39888; --quote:#d6cbb9;
-    --line:#38322a; --line2:#4a4237; --chip:#312c25;
-    --accent:#e3a183; --onaccent:#1b1310;
-    --qbg:#2a251e; --qline:#433a2e;
-    --ok:#7fca97; --okbg:#1e3226; --bad:#f2907c; --badbg:#3b2420;
-  }
+  --bg:#f6f1e7; --card:#fffdf8; --ink:#2b2520; --muted:#7a6f63; --line:#e4d9c7;
+  --acc:#9a3f14; --acc-soft:#f3e2d3; --ok:#2e7d4f; --ok-soft:#e1f2e7; --bad:#b3261e; --bad-soft:#fbe4e1;
+  --quote:#f1e9da;
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%; text-size-adjust:100%; touch-action:manipulation; background:var(--bg)}
-body{margin:0; font-family:var(--serif); font-size:var(--fs); line-height:1.55; color:var(--ink); background:var(--bg);
-  -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent}
-button{font:inherit; color:inherit; -webkit-tap-highlight-color:transparent; touch-action:manipulation}
-.app{min-height:100dvh}
-.main{min-height:100dvh; display:flex; flex-direction:column; min-width:0}
-
-/* ---------- верхняя панель (телефон) ---------- */
-.top{position:sticky; top:0; z-index:20; background:var(--glass);
-  -webkit-backdrop-filter:saturate(1.4) blur(16px); backdrop-filter:saturate(1.4) blur(16px);
-  border-bottom:1px solid var(--line);
-  padding: calc(env(safe-area-inset-top) + 8px) var(--sr) 0 var(--sl)}
-.top-row{max-width:var(--col); margin:0 auto; display:flex; align-items:center; gap:12px; padding-bottom:9px}
-.top-title{min-width:0; flex:1}
-.top-title b{display:block; font-size:1.15rem; line-height:1.2}
-.top-title span{display:block; font-family:var(--sans); font-size:.78rem; color:var(--muted);
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.top-count{font-family:var(--sans); font-size:.78rem; color:var(--muted); font-variant-numeric:tabular-nums}
-.btn-ch{border:0; background:var(--chip); border-radius:999px; min-height:38px; padding:0 16px;
-  font-family:var(--sans); font-size:.88rem; font-weight:600; color:var(--accent)}
-.track{height:3px; background:var(--line); margin:0 calc(-1 * var(--sl)) 0 calc(-1 * var(--sr))}
-.fill{height:100%; width:0; background:var(--accent); transition:width .3s ease}
-
-/* ---------- лента ---------- */
-#feed{flex:1; width:100%; max-width:calc(var(--col) + 32px); margin:0 auto; padding:14px var(--sr) 28px var(--sl)}
-.th,.qz,.chap,.fb,.end,.intro{scroll-margin-top:calc(var(--hdr) + 12px); scroll-margin-bottom:calc(var(--bar) + 12px)}
-.intro{font-family:var(--sans); font-size:.9rem; line-height:1.5; color:var(--muted);
-  border:1px dashed var(--line2); border-radius:16px; padding:12px 14px; margin:6px 0 4px}
-.intro b{color:var(--ink)}
-.chap{margin:30px 0 12px; text-align:center}
-.chap .roman{font-family:var(--sans); font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); font-weight:700}
-.chap h2{margin:2px 0 0; font-size:1.4rem; font-weight:600; line-height:1.25}
-.chap::after{content:""; display:block; width:44px; height:2px; background:var(--line2); margin:10px auto 0; border-radius:2px}
-
-.th{position:relative; background:var(--card); border:1px solid var(--line); border-radius:16px;
-  padding:13px 16px 14px 52px; margin:10px 0; box-shadow:0 1px 2px rgba(0,0,0,.04)}
-.th .num{position:absolute; left:13px; top:14px; width:27px; height:27px; border-radius:50%;
-  display:grid; place-items:center; font-family:var(--sans); font-size:.68rem; font-weight:700;
-  color:var(--muted); border:1px solid var(--line2); font-variant-numeric:tabular-nums}
-.th p{margin:0}
-.th blockquote{margin:9px 0 0; padding:1px 0 1px 12px; border-left:3px solid var(--accent);
-  font-style:italic; color:var(--quote); font-size:.96em}
-
-.qz{background:var(--qbg); border:1px solid var(--qline); border-radius:18px; padding:15px 15px 16px; margin:18px 0}
-.qz .lab{font-family:var(--sans); font-size:.72rem; font-weight:800; letter-spacing:.13em; text-transform:uppercase; color:var(--accent)}
-.qz .ask{margin:5px 0 12px; font-weight:600; line-height:1.4}
-.opts{display:grid; gap:10px}
-.opt{appearance:none; -webkit-appearance:none; display:flex; gap:12px; align-items:flex-start; width:100%; text-align:left;
-  min-height:54px; padding:12px 14px; border-radius:14px; border:1.5px solid var(--line2); background:var(--card);
-  font-size:.97rem; line-height:1.42; cursor:pointer; transition:border-color .15s, background-color .15s, opacity .15s, transform .08s}
-.opt:active:not([disabled]){transform:scale(.985)}
-.opt .l{flex:none; width:27px; height:27px; border-radius:50%; display:grid; place-items:center; margin-top:-1px;
-  font-family:var(--sans); font-size:.8rem; font-weight:700; background:var(--chip); color:var(--muted)}
-.opt[disabled]{cursor:default}
-.opts.done .opt:not(.ok):not(.bad){opacity:.5}
-.opt.ok{border-color:var(--ok); background:var(--okbg)}
-.opt.ok .l{background:var(--ok); color:var(--card)}
-.opt.bad{border-color:var(--bad); background:var(--badbg)}
-.opt.bad .l{background:var(--bad); color:var(--card)}
-@media (hover:hover){ .opt:not([disabled]):hover{border-color:var(--accent)} }
-.fb{margin-top:12px; padding:12px 14px; border-radius:12px; background:var(--card); border:1px solid var(--line); font-size:.95rem; line-height:1.5}
-.fb[hidden]{display:none}
-.fb .v{font-family:var(--sans); font-weight:800}
-.fb .v.okt{color:var(--ok)} .fb .v.badt{color:var(--bad)}
-
-.end{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:18px; margin:28px 0 8px}
-.end h3{margin:0 0 8px; font-size:1.25rem}
-.end ul{margin:0; padding-left:1.1em}
-.end li{margin:6px 0}
-
-.new{animation:appear .32s ease both}
-@keyframes appear{from{opacity:0; transform:translateY(10px)}}
-@media (prefers-reduced-motion:reduce){ .new{animation:none} .fill{transition:none} }
-
-/* ---------- нижняя кнопка ---------- */
-.bar{position:sticky; bottom:0; z-index:15; background:var(--glass);
-  -webkit-backdrop-filter:saturate(1.4) blur(16px); backdrop-filter:saturate(1.4) blur(16px);
-  border-top:1px solid var(--line); padding:10px var(--sr) max(12px, env(safe-area-inset-bottom)) var(--sl)}
-.bar-in{max-width:var(--col); margin:0 auto; display:flex}
-#next{flex:1; min-height:56px; border:0; border-radius:16px; background:var(--accent); color:var(--onaccent);
-  font-family:var(--sans); font-size:1.05rem; font-weight:650; cursor:pointer; transition:background-color .15s, transform .08s}
-#next:active:not(:disabled){transform:scale(.985)}
-#next:disabled{background:var(--chip); color:var(--muted); cursor:default}
-
-/* ---------- главы: шторка на телефоне ---------- */
-.scrim{position:fixed; inset:0; z-index:35; background:rgba(0,0,0,.38); opacity:0; pointer-events:none; transition:opacity .2s}
-.scrim.show{opacity:1; pointer-events:auto}
-.nav{position:fixed; left:0; right:0; bottom:0; z-index:40; max-height:84dvh; display:flex; flex-direction:column;
-  background:var(--card); border-radius:22px 22px 0 0; box-shadow:0 -12px 40px rgba(0,0,0,.2);
-  transform:translateY(105%); transition:transform .28s cubic-bezier(.2,.8,.2,1), visibility 0s linear .28s; visibility:hidden;
-  padding:0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
-.nav.open{transform:none; visibility:visible; transition:transform .28s cubic-bezier(.2,.8,.2,1), visibility 0s}
-.brand{display:none}
-.sheet-head{display:flex; align-items:center; justify-content:space-between; padding:14px 18px 8px}
-.sheet-head b{font-size:1.15rem}
-.sheet-head button{border:0; background:none; color:var(--accent); font-family:var(--sans); font-weight:600; font-size:1rem; min-height:44px; padding:0 4px}
-.grab{width:40px; height:5px; border-radius:3px; background:var(--line2); margin:8px auto 0}
-.nav-list{overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; padding:2px 8px 6px}
-.ch-btn{display:flex; align-items:center; gap:10px; width:100%; min-height:48px; padding:6px 12px; border:0; background:none;
-  border-radius:12px; text-align:left; cursor:pointer; line-height:1.3}
-.ch-btn .r{flex:none; width:44px; font-family:var(--sans); font-size:.8rem; font-weight:700; color:var(--muted)}
-.ch-btn .n{flex:1; min-width:0}
-.ch-btn .d{flex:none; width:8px; height:8px; border-radius:50%; background:var(--line2)}
-.ch-btn.reached .d{background:var(--accent)}
-.ch-btn.cur{background:var(--chip)}
-.ch-btn.cur .r{color:var(--accent)}
-@media (hover:hover){ .ch-btn:hover{background:var(--chip)} }
-.nav-foot{padding:6px 18px 12px; border-top:1px solid var(--line)}
-.btn-reset{border:0; background:none; color:var(--muted); font-family:var(--sans); font-size:.9rem; min-height:44px; padding:0; cursor:pointer; text-decoration:underline; text-underline-offset:3px}
-
-/* ---------- iPad горизонтально и широкие экраны ---------- */
-@media (min-width:900px) and (min-height:600px){
-  :root{--fs:20px; --col:700px}
-  .app{display:grid; grid-template-columns:320px minmax(0,1fr)}
-  .top,.scrim,.sheet-head,.grab{display:none}
-  .nav{position:sticky; top:0; align-self:start; height:100dvh; max-height:none; transform:none; visibility:visible;
-    border-radius:0; box-shadow:none; background:var(--side); border-right:1px solid var(--line); transition:none;
-    padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom) env(safe-area-inset-left); font-size:17px}
-  .brand{display:block; padding:26px 22px 14px}
-  .brand .b1{font-size:2rem; font-weight:700; line-height:1.1}
-  .brand .b2{font-family:var(--sans); font-size:.82rem; color:var(--muted); margin-top:4px}
-  .brand .b3{font-family:var(--sans); font-size:.82rem; color:var(--muted); margin-top:12px; line-height:1.45}
-  .brand .track{margin:14px 0 6px; border-radius:2px; overflow:hidden; height:4px}
-  .brand .pt{font-family:var(--sans); font-size:.8rem; color:var(--muted); font-variant-numeric:tabular-nums}
-  .nav-list{flex:1; padding:4px 10px 8px}
-  .ch-btn{min-height:40px; padding:5px 12px}
-  .nav-foot{padding:4px 22px 10px}
-  #feed{padding-top:22px}
-  .th{padding:15px 20px 16px 58px}
-  .th .num{left:16px; top:16px; width:28px; height:28px}
-  .qz{padding:18px 18px 18px}
-}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:18px;line-height:1.55;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;cursor:pointer}
+.top{position:sticky;top:0;z-index:20;background:rgba(246,241,231,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:10px 16px}
+.top h1{font-size:16px;margin:0;flex:1;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:6px 12px;font-size:15px}
+.bar{height:4px;background:var(--line)}
+.bar i{display:block;height:100%;background:var(--acc);width:0;transition:width .3s}
+main{max-width:760px;margin:0 auto;padding:18px 16px 120px}
+.serif{font-family:Georgia,"Times New Roman",serif}
+.hero h2{font-family:Georgia,serif;font-size:30px;line-height:1.2;margin:10px 0 6px;color:var(--acc)}
+.hero p{margin:0 0 12px}
+.lead{color:var(--muted);font-size:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:12px 0}
+.parts{display:grid;gap:12px;margin-top:16px}
+.part-btn{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.part-btn b{display:block;font-size:19px}
+.part-btn small{color:var(--muted);font-size:14px}
+.mini{height:6px;background:var(--line);border-radius:3px;margin-top:10px;overflow:hidden}
+.mini i{display:block;height:100%;background:var(--acc)}
+.primary{display:block;width:100%;background:var(--acc);color:#fff;border:0;border-radius:14px;padding:14px;font-size:18px;font-weight:600;margin-top:16px}
+.part-title{font-family:Georgia,serif;color:var(--acc);font-size:28px;line-height:1.2;margin:8px 0 4px}
+.chap{font-family:Georgia,serif;font-size:23px;margin:30px 0 8px;padding-top:6px;border-top:2px solid var(--acc);scroll-margin-top:70px}
+.th{display:flex;gap:12px;margin:12px 0;animation:in .35s ease}
+.num{flex:0 0 34px;height:34px;border-radius:50%;background:var(--acc-soft);color:var(--acc);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.th .tx{flex:1}
+.quote{margin:8px 0 2px;background:var(--quote);border-left:4px solid var(--acc);border-radius:0 10px 10px 0;padding:10px 14px;font-family:Georgia,serif;font-style:italic;white-space:pre-line;font-size:17.5px}
+.quiz{background:var(--card);border:2px solid var(--acc);border-radius:16px;padding:16px 18px;margin:22px 0;animation:in .35s ease}
+.quiz .lbl{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--acc);font-weight:700}
+.quiz .q{font-weight:600;margin:6px 0 12px}
+.opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:12px 14px;margin:8px 0;font-size:17px}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft)}
+.opt.bad{border-color:var(--bad);background:var(--bad-soft)}
+.fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-size:16.5px}
+.fb.ok{background:var(--ok-soft)}
+.fb.bad{background:var(--bad-soft)}
+.next{margin-top:12px;background:var(--acc);color:#fff;border:0;border-radius:12px;padding:12px 16px;font-weight:600;width:100%}
+.done{text-align:center;color:var(--muted);margin:30px 0}
+.drawer-bg{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:30;display:none}
+.drawer{position:fixed;top:0;bottom:0;left:0;width:min(340px,86vw);background:var(--bg);z-index:31;transform:translateX(-102%);transition:transform .25s;overflow-y:auto;padding:16px 16px 40px;border-right:1px solid var(--line)}
+.open .drawer{transform:none}.open .drawer-bg{display:block}
+.drawer h3{font-family:Georgia,serif;color:var(--acc);margin:18px 0 6px;font-size:19px}
+.drawer a{display:block;padding:7px 10px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:16px}
+.drawer a:hover{background:var(--acc-soft)}
+.drawer a.locked{color:#b5aa9c;pointer-events:none}
+.drawer a.locked::after{content:" · ещё не открыто";font-size:12px}
+.reset{margin-top:24px;border:1px solid var(--bad);color:var(--bad);background:transparent;border-radius:10px;padding:8px 12px;font-size:14px}
+.note{font-size:14px;color:var(--muted)}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (min-width:700px){html,body{font-size:19px}}
 </style>
 </head>
 <body>
-<div class="app">
-  <nav class="nav" id="nav" aria-label="Главы">
-    <div class="grab"></div>
-    <div class="sheet-head"><b>Главы</b><button type="button" id="navClose">Готово</button></div>
-    <div class="brand">
-      <div class="b1">Ася</div>
-      <div class="b2">И. С. Тургенев · 1858</div>
-      <div class="b3" id="brandWhat"></div>
-      <div class="track"><div class="fill" id="fill2"></div></div>
-      <div class="pt" id="pt2"></div>
-    </div>
-    <div class="nav-list" id="navList"></div>
-    <div class="nav-foot"><button type="button" class="btn-reset" id="reset">Начать заново</button></div>
-  </nav>
-  <div class="scrim" id="scrim"></div>
+<div class="top"><div class="top-in">
+  <button class="icon-btn" id="menuBtn" aria-label="Оглавление">☰</button>
+  <h1 id="topTitle">Кому на Руси жить хорошо</h1>
+  <button class="icon-btn" id="homeBtn">Главная</button>
+</div><div class="bar"><i id="bar"></i></div></div>
 
-  <main class="main">
-    <header class="top">
-      <div class="top-row">
-        <div class="top-title"><b>Ася</b><span id="curLabel">Глава I</span></div>
-        <div class="top-count" id="pt1"></div>
-        <button type="button" class="btn-ch" id="navOpen">Главы</button>
-      </div>
-      <div class="track"><div class="fill" id="fill1"></div></div>
-    </header>
+<div class="drawer-bg" id="drawerBg"></div>
+<nav class="drawer" id="drawer"></nav>
 
-    <div id="feed" aria-live="polite"></div>
-
-    <div class="bar"><div class="bar-in"><button type="button" id="next">Дальше</button></div></div>
-  </main>
-</div>
+<main id="main"></main>
 
 <script>
-(function(){
-"use strict";
+/* ===== ДАННЫЕ =====
+  ["h","Глава"]                         — заголовок главы
+  ["t","текст","цитата (необязательно)"] — тезис
+  ["q","вопрос",["A","B","C"],верный_индекс,"пояснение"] — вопрос
+*/
+const PARTS = [
+{id:"p1", title:"Часть первая", sub:"Пролог и главы «Поп», «Сельская ярмонка», «Пьяная ночь», «Счастливые», «Помещик»", items:[
+["h","Пролог"],
+["t","Некрасов писал поэму с 1863 по 1877 год и не успел закончить. Действие происходит вскоре после отмены крепостного права (1861)."],
+["t","Начало — как в сказке: не сказано ни года, ни места. На большой дороге встречаются <b>семь мужиков</b>.","В каком году — рассчитывай,\nВ какой земле — угадывай,\nНа столбовой дороженьке\nСошлись семь мужиков"],
+["t","Мужики — <b>временнообязанные</b>: по закону уже свободны, но пока не выкупили землю, обязаны работать на помещика или платить ему."],
+["t","Названия мест «говорящие»: губерния Подтянутая, уезд Терпигорев, волость Пустопорожняя, деревни Заплатово, Дырявино, Разутово, Знобишино, Горелово, Неелово, Неурожайка. Всё это — про бедность и терпение."],
+["t","Мужики заспорили о главном вопросе поэмы:","Кому живётся весело,\nВольготно на Руси?"],
+["q","Что значит, что мужики «временнообязанные»?",["Они ещё обязаны работать или платить помещику","Их временно забрали в солдаты","Они наняты на работу на время"],0,"После 1861 года крестьяне стали свободными, но до выкупа земли оставались «временно обязанными» помещику."],
+["t","Ответы разные: <b>Роман</b> — помещику, <b>Демьян</b> — чиновнику, <b>Лука</b> — попу."],
+["t","<b>Братья Губины, Иван и Митродор</b>, — купцу; старик <b>Пахом</b> — вельможе, министру; <b>Пров</b> — царю."],
+["t","Заметьте: все называют тех, кто <b>выше</b> мужика. Что счастье может быть у самого народа, им в голову не приходит."],
+["t","Каждый стоит на своём. Мужики забывают, куда шли, спорят до ночи, разводят костёр и в конце концов дерутся."],
+["t","Шум будит весь лес: откликается эхо, сбегаются звери, слетаются птицы. Пахом ловит птенчика пеночки."],
+["q","Кому, по мнению Луки, живётся лучше всех?",["Купцу","Попу","Царю"],1,"Лука уверен, что лучше всех живётся попу. Первая же встреча это проверит."],
+["t","Мать-пеночка просит отпустить птенца и за это рассказывает, где спрятана <b>скатерть-самобранка</b>. Она будет кормить мужиков в пути."],
+["t","Пеночка предупреждает: просить больше ведра водки в день нельзя — иначе случится беда. А их одежда в дороге не износится."],
+["t","Мужики дают зарок: не возвращаться домой, пока не узнают, <b>кому живётся весело, вольготно на Руси</b>. Так начинается их путешествие."],
+["q","Что пеночка дала мужикам в обмен на птенца?",["Кошелёк с деньгами","Скатерть-самобранку","Волшебные сапоги"],1,"Пеночка рассказала, где зарыта скатерть-самобранка. Это сказочный элемент: число семь, говорящая птица, волшебный предмет."],
 
-/* ============ СОДЕРЖАНИЕ ============
-   t — тезис, q — цитата из текста Тургенева (необязательно)
-   ask — вопрос «что было дальше?», o — 3 варианта, a — номер верного (0,1,2), why — пояснение */
-var DATA = [
-{n:"I", t:"Городок на Рейне", items:[
- {t:"Н. Н. вспоминает молодость: ему около двадцати пяти, он только что «вырвался на волю» и уехал за границу — не учиться, а просто посмотреть на мир.", q:"Мне было тогда лет двадцать пять"},
- {t:"Он путешествует без цели и без плана. Памятники и красивые виды его мало трогают — интересны ему только люди.", q:"Меня занимали исключительно одни люди"},
- {t:"Недавно его отвергла молодая вдова — предпочла ему баварского лейтенанта. Чтобы прийти в себя, Н. Н. поселяется в маленьком немецком городке З. на левом берегу Рейна."},
- {t:"Любимое место Н. Н. — каменная скамья под старым ясенем у реки. В ветвях ясеня стоит маленькая статуя мадонны. Запомните её: она появится в самом конце.", q:"с почти детским лицом и красным сердцем на груди, пронзенным мечами"},
- {ask:"Однажды вечером Н. Н. сидит у реки. Что было дальше?", o:["Мимо проходит вдова под руку с баварским лейтенантом","С другого берега, из городка Л., доносится музыка","Перевозчик предлагает ему прокатиться по Рейну до Кёльна"], a:1,
-  why:"Музыка — случайность, с которой начинается вся история. Это в характере Н. Н.: он живёт без плана и идёт туда, куда позовёт настроение."},
- {t:"Из Л. звучит вальс: контрабас, скрипка, флейта. Старик объясняет, что студенты из города Б. приехали на коммерш — студенческий праздник."},
- {t:"Н. Н. садится в лодку перевозчика и переправляется через Рейн в Л."}
+["h","Глава I. Поп"],
+["t","Первым странники встречают <b>попа</b>. Лука задаёт ему вопрос: сладко ли живётся?"],
+["t","Поп сначала спрашивает, что такое счастье, и сам отвечает:","В чём счастие, по-вашему?\nПокой, богатство, честь —\nНе так ли, други милые?"],
+["t","<b>Покоя нет.</b> Попа зовут к больным и умирающим в любой час и в любую погоду — отказать он не может."],
+["t","Тяжелее всего — видеть чужое горе: слёзы сирот, плач вдов, смерть."],
+["t","<b>Богатства нет.</b> Раньше доход давали помещики: свадьбы, крестины, похороны в усадьбах. Теперь они разъехались по городам и за границу."],
+["q","Из каких трёх вещей, по словам попа, состоит счастье?",["Здоровье, семья, вера","Покой, богатство, честь","Свобода, земля, воля"],1,"Покой, богатство, честь — и поп по очереди доказывает, что у него нет ни одного из трёх."],
+["t","Остались крестьяне, а они нищие. Брать с бедняков последнее совестно, но иначе попу не прожить."],
+["t","<b>Чести нет.</b> Народ сочиняет про попов насмешливые сказки и песни, встретить попа считается дурной приметой."],
+["t","Поп уходит, а мужики набрасываются на Луку: вот тебе и сладкая поповская жизнь. Вывод: поп не счастлив."],
+
+["h","Глава II. Сельская ярмонка"],
+["t","Странники приходят на ярмарку в <b>село Кузьминское</b> — богатое, торговое и очень грязное. («Ярмонка» — старое народное слово, то же, что «ярмарка».)"],
+["t","Ярмарка шумит: торгуют, пьют, пляшут, смеются. Больше всего в селе питейных заведений."],
+["q","Где проходит ярмарка?",["В селе Кузьминском","В уездном городе","В деревне Заплатово"],0,"Ярмарка — в богатом, но грязном торговом селе Кузьминском."],
+["t","У лавки горюет <b>старик Вавила</b>: обещал внучке козловые ботинки, а деньги пропил."],
+["t","Ботинки ему покупает <b>барин Павлуша Веретенников</b> — он собирает народные песни и пословицы. Вавила от радости даже забыл сказать спасибо."],
+["t","В лавке с книжками народ покупает лубок: портреты генералов, глупые книжки вроде «Милорда глупого»."],
+["t","Авторское отступление — мечта о просвещении народа:","Когда мужик не Блюхера\nИ не милорда глупого —\nБелинского и Гоголя\nС базара понесёт?"],
+["t","Народ толпится у балагана с Петрушкой и хохочет. К вечеру вся ярмарка пьяна."],
+["q","Кто купил ботинки внучке Вавилы?",["Поп","Помещик Оболт-Оболдуев","Барин Павлуша Веретенников"],2,"Веретенников — собиратель песен и пословиц. Он ещё появится в следующей главе."],
+
+["h","Глава III. Пьяная ночь"],
+["t","Ночью народ расходится с ярмарки. Вся дорога — пьяные: кто падает в канаву, кто поёт, кто ругается."],
+["t","Бабы спорят, у кого дома хуже. Странники слушают разговоры — это живая картина народной жизни."],
+["t","Веретенников записывает песни и пословицы, а потом упрекает мужиков: пьют до одури, оттого и бедны."],
+["t","Ему отвечает <b>Яким Нагой</b> из деревни Босово:","Он до смерти работает,\nДо полусмерти пьёт!.."],
+["t","Портрет Якима: грудь впалая, лицо в морщинах, как трещины на высохшей земле. Он похож на саму землю-матушку."],
+["q","Кто заступился за мужиков, когда их упрекали в пьянстве?",["Яким Нагой","Вавила","Ермил Гирин"],0,"Яким Нагой — один из главных народных голосов первой части."],
+["t","Яким говорит: пьянство меряют, а горе и непосильный труд никто не меряет.","Нет меры хмелю русскому.\nА горе наше меряли?\nРаботе мера есть?"],
+["t","Смысл: мужик пьёт не от природной распущенности, а от тяжёлой жизни."],
+["t","Судьба Якима: жил в Петербурге, вздумал тягаться с купцом — попал в тюрьму, вернулся в деревню и стал пахать землю."],
+["t","Сыну он купил лубочные картинки и сам их полюбил. На пожаре Яким первым делом спасал <b>картинки</b>, а скопленные 35 рублей расплавились в комок."],
+["t","Даже в нищете мужик тянется к красоте — эту деталь учителя любят спрашивать."],
+["q","Что Яким Нагой спасал на пожаре в первую очередь?",["Деньги","Картинки","Иконы"],1,"Картинки. А 35 рублей сплавились в комок — за него потом дали всего 11 рублей."],
+
+["h","Глава IV. Счастливые"],
+["t","На людной площади странники с ведром водки объявляют: кто докажет, что счастлив, — того угостим."],
+["t","Приходит <b>дьячок</b>: счастье, мол, в благодушии да в шкалике водки. Его прогоняют ни с чем."],
+["t","<b>Старуха</b> хвалится: у неё на грядке уродилась крупная репа. Над ней смеются."],
+["t","<b>Солдат с медалями</b>: в двадцати сражениях был — не убит, били палками — выжил, голодал — не умер. Ему наливают."],
+["t","<b>Каменотёс-олончанин</b> хвалится силой. Ему отвечает мужик с одышкой: сам когда-то хвастал силой, надорвался и теперь едет умирать домой."],
+["q","Чем «счастлив» солдат?",["У него большая пенсия","Он прошёл войны и остался жив","Его отпустили домой богатым"],1,"Его «счастье» — просто выжить. Это и есть горькое «мужицкое счастье»."],
+["t","<b>Бывший дворовый</b> князя Переметьева гордится, что был «любимым рабом» и от барских объедков нажил подагру — «благородную» болезнь. Его прогоняют."],
+["t","<b>Белорус</b> счастлив, что теперь ест вдоволь хлеба — раньше жевал хлеб с мякиной."],
+["t","Ведро пустеет, а настоящих счастливых нет. Мужики подводят итог:","Эй, счастие мужицкое!\nДырявое с заплатами,\nГорбатое с мозолями,\nПроваливай домой!"],
+["t","Из толпы советуют: ищите <b>Ермила Гирина</b> — вот кто счастлив."],
+["t","Ермил — честный человек: был писарем, потом мир выбрал его <b>бурмистром</b> (управляющим из крестьян). Судил по правде, денег не брал."],
+["q","Почему прогнали бывшего дворового?",["Он украл водку","Он гордился своим рабством и «барской» болезнью","Он не захотел пить"],1,"Он считает счастьем быть любимым рабом барина. Для странников это позор, а не счастье."],
+["t","История с мельницей: её продавали с торгов, соперник — купец Алтынников. Ермилу срочно нужна была тысяча рублей."],
+["t","Ермил прямо на базарной площади попросил денег у народа — и люди сразу собрали ему нужную сумму."],
+["t","Через неделю Ермил вернул долг всем до копейки. Остался лишний рубль, хозяин не нашёлся — Ермил отдал его нищим."],
+["t","Был у Ермила и грех: он выгородил младшего брата от рекрутчины, отдав в солдаты сына вдовы Ненилы Власьевны. Потом раскаялся, чуть не повесился и добился, чтобы парня вернули."],
+["t","Кажется, у Ермила есть всё: покой, богатство, честь. Но рассказчик добавляет: Ермил <b>сидит в остроге</b> — его связали с бунтом в вотчине помещика Обрубкова."],
+["t","Вывод: даже честный и уважаемый человек на Руси не защищён. Счастье Ермила — правда и уважение народа, но и его настигает беда."],
+["q","Как Ермил Гирин добыл деньги на мельницу?",["Занял у купца Алтынникова","Попросил у народа на базарной площади","Продал свой дом"],1,"Люди поверили ему на слово — а он вернул всё до копейки. Это главный эпизод про Ермила."],
+
+["h","Глава V. Помещик"],
+["t","По дороге мчится коляска. В ней помещик — круглый, усатый, румяный, с сигарой: <b>Гаврила Афанасьевич Оболт-Оболдуев</b>."],
+["t","Приняв мужиков за разбойников, он выхватывает пистолет. Узнав, в чём дело, смеётся, садится на коврик, слуга подаёт ему херес."],
+["t","Помещик хвастает родом: предок — татарин Оболдуй, который забавлял царицу медведем; по матери род идёт от князя Щепина, пытавшегося поджечь Москву. Гордиться тут, по сути, нечем."],
+["t","С тоской вспоминает «золотое время» крепостного права: псовая охота, пиры, мужики несут подарки."],
+["t","Власть у него была безграничная:","Закон — моё желание!\nКулак — моя полиция!"],
+["q","О чём тоскует помещик?",["О молодости и здоровье","О временах крепостного права","О службе в армии"],1,"Он скучает по безграничной власти над крестьянами — до реформы 1861 года."],
+["t","Он уверяет, что правил «по-отечески»: наказывал любя, на Пасху христосовался с мужиками."],
+["t","Странники про себя понимают, что случилось:","Порвалась цепь великая,\nПорвалась — расскочилася:\nОдним концом по барину,\nДругим по мужику!.."],
+["t","Смысл: реформа ударила по обоим — помещик потерял власть и доход, а мужик так и не зажил лучше."],
+["t","Теперь усадьбы разрушаются, леса вырубают, крестьяне на барина не работают. А сам помещик трудиться не умеет и не хочет — он дворянин."],
+["t","Слышен колокольный звон. Помещик говорит: звонят не по крестьянину — по жизни помещичьей. И рыдает."],
+["t","Итог первой части: счастливого не нашли ни «наверху» (поп, помещик), ни «внизу» (крестьяне)."],
+["q","Что значат слова «Порвалась цепь великая… одним концом по барину, другим по мужику»?",["Отмена крепостного права ударила и по помещику, и по крестьянину","Мужики порвали цепь и сбежали","Помещик посадил мужиков на цепь"],0,"«Цепь» — крепостное право. Её отмена изменила жизнь обоих, но счастья не принесла никому."]
 ]},
-{n:"II", t:"Коммерш", items:[
- {t:"Коммерш — торжественный студенческий пир с песнями и пивом. В Л. он идёт в саду гостиницы «Солнце», под липами и флагами."},
- {ask:"Н. Н. смотрит на праздник из толпы зрителей. Что было дальше?", o:["Он слышит русскую речь и знакомится с братом и сестрой — Гагиным и Асей","Студенты зовут его за стол, и он пирует с ними до утра","Он встречает знакомого из Петербурга и уходит с ним в гостиницу"], a:0,
-  why:"Обычно Н. Н. избегал русских за границей, а тут заговаривает первым. Интерес к живым людям — та самая черта, о которой он говорил в гл. I."},
- {t:"В толпе Н. Н. слышит русскую речь: молодой человек зовёт девушку «Ася». У Н. Н. невольно вырывается вопрос.", q:"Вы русские?"},
- {t:"Молодой человек — Гагин. Он приглашает Н. Н. к себе. Обычно Н. Н. сторонился русских за границей, но Гагин ему сразу понравился."},
- {t:"Ася, «сестра» Гагина, — невысокая, смуглая, с короткими чёрными кудрями, как у мальчика. Она то дичится, то смеётся без причины. Брат её подбадривает.", q:"Ася, полно ежиться! он не кусается."},
- {ask:"Гагин зовёт Н. Н. в гости. Куда они идут?", o:["В гостиницу «Солнце», за стол к студентам","На развалины старого замка — смотреть закат","В домик Гагиных на винограднике над Рейном"], a:2,
-  why:"Домик на винограднике станет главным местом действия: здесь будут разговоры, вальс, ночное ожидание Аси — и отсюда Гагины однажды утром исчезнут."},
- {t:"Они поднимаются в домик Гагиных на винограднике и ужинают на воздухе: кислое молоко, ягоды, хлеб, рейнвейн. Ася уходит в дом и долго стоит у окна."},
- {t:"Ночью перевозчик везёт Н. Н. обратно по лунному Рейну, Ася весело кричит ему вслед. Дома Н. Н. чувствует себя счастливым и понимает, что за весь вечер ни разу не вспомнил о вдове.", q:"Вы в лунный столб въехали"}
+
+{id:"p2", title:"Последыш", sub:"Князь Утятин и крестьянская «комедия»", items:[
+["h","Последыш"],
+["t","Странники выходят к Волге. Идёт сенокос, на лугах работают крестьяне деревни Вахлаки."],
+["t","По реке плывёт барская семья: старый <b>князь Утятин</b> по прозвищу <b>Последыш</b>, его сыновья, невестки, дети. Рядом — бурмистр <b>Влас</b>."],
+["t","Князь велит разметать готовый стог: сено, мол, сырое. Сено сухое, но мужики молча выполняют нелепый приказ."],
+["t","Странники удивлены: ведь крепостное право отменили — почему мужики слушаются? Влас объясняет."],
+["t","Узнав об отмене крепостного права, старый князь не поверил, разгневался — и его хватил удар."],
+["q","Почему князя Утятина прозвали «Последышем»?",["Он младший сын в семье","Он последний «крепостник», который живёт так, будто реформы не было","Он всегда приходит последним"],1,"Последыш — последний помещик старого, крепостного времени."],
+["t","Наследники боятся: если старик узнает правду, он лишит их наследства."],
+["t","Они уговаривают крестьян разыграть комедию — притвориться, что крепостное право не отменено. За это обещают отдать им заливные луга после смерти князя."],
+["t","Влас играть не захотел и бурмистром быть отказался. Его место занял <b>Клим Лавин</b> — хвастун и бездельник, ему эта комедия по душе."],
+["t","<b>Ипат</b> — «холоп примерный»: князь в шутку купал его зимой в проруби, а Ипат благодарен и гордится барской «милостью»."],
+["t","Только <b>Агап Петров</b> не стал притворяться и в лицо выругал князя."],
+["q","Кто из крестьян отказался участвовать в комедии и выругал князя?",["Клим Лавин","Ипат","Агап Петров"],2,"Агап Петров — единственный, кто не стерпел унижения."],
+["t","Князь велит высечь Агапа. Мужики хитрят: напоили его, заперли на конюшне, и он громко кричал для вида."],
+["t","Но к утру Агап умер — не вынес позора."],
+["t","Князь устраивает на лугу обед; мужики изображают покорность, Клим произносит льстивые речи."],
+["t","Один из странников не выдерживает и хохочет. Его спасает находчивая баба: говорит князю, что смеялся её сын-дурачок."],
+["t","В тот же день у князя случается второй удар — и он умирает."],
+["q","Получили ли крестьяне обещанные луга?",["Да, сразу после смерти князя","Нет, наследники обманули — идёт тяжба","Луга купил Клим"],1,"Наследники обещание не выполнили. Комедия унизила крестьян и ничего им не дала."],
+["t","Смысл главы: крепостное право отменено, но рабская привычка подчиняться живёт и в барах, и в мужиках."]
 ]},
-{n:"III", t:"Этюды Гагина", items:[
- {t:"Утром Гагин будит Н. Н. песней под окном. За кофе он рассказывает, что хочет стать художником: он обеспечен, но поздно взялся за дело."},
- {t:"Н. Н. делится историей несчастной любви к вдове. Гагин слушает вежливо, но без особого сочувствия."},
- {ask:"Гагин показывает Н. Н. свои этюды. Что было дальше?", o:["Н. Н. восхищается и советует отправить их на выставку","Н. Н. честно говорит, что они живые, но незаконченные, — и Гагин сердится на себя","Н. Н. из вежливости молчит, и Гагин обижается"], a:1,
-  why:"Гагин сам называет свою беду — «славянская распущенность»: начать хватает таланта, довести до конца — терпения. Мотив «не довести до конца» в повести ещё вернётся."},
- {t:"Этюды живые, но небрежные и незаконченные. Н. Н. откровенно говорит об этом. Гагин бросает картоны на диван и винит «славянскую распущенность».", q:"Коли хватит терпенья, из меня выйдет что-нибудь"},
- {t:"Хозяйка сообщает: Ася ушла на «развалину» — старый замок в двух верстах от Л. Гагин предлагает пойти за ней.", q:"Пойдемте-ка лучше Асю отыскивать"}
+
+{id:"p3", title:"Крестьянка", sub:"Жизнь Матрёны Тимофеевны Корчагиной", items:[
+["h","Пролог"],
+["t","Странники решают искать счастливых среди женщин. Им указывают на <b>Матрёну Тимофеевну Корчагину</b> из села Клин — её прозвали «губернаторшей»."],
+["t","Матрёна — около 38 лет, статная, красивая, строгая. Сначала ей некогда — идёт уборка хлеба. Странники помогают ей жать, и вечером она рассказывает свою жизнь."],
+["h","Глава 1. До замужества"],
+["t","Детство в родительском доме было счастливым: её любили, хотя работать она начала с пяти лет."],
+["t","Посватался <b>Филипп Корчагин</b>, печник из чужой деревни. Матрёна поплакала, но вышла замуж."],
+["q","Как прозвали Матрёну Тимофеевну?",["Барыня","Губернаторша","Вдовушка"],1,"Почему «губернаторша» — узнаем в седьмой главе."],
+["h","Глава 2. Песни"],
+["t","В доме мужа ей тяжело: свёкор, свекровь и золовки попрекают и заваливают работой. Муж уходит на заработки в Петербург."],
+["t","Её жизнь рассказана через народные песни: о злой свекрови, о том, как муж однажды побил её."],
+["t","Рождается первенец <b>Дёмушка</b> — её единственная радость. К ней пристаёт управляющий Ситников."],
+["h","Глава 3. Савелий, богатырь святорусский"],
+["t","Единственный, кто её жалел, — дед <b>Савелий</b>, отец свёкра. Огромный, похожий на медведя, живёт в отдельной светёлке."],
+["t","Родные дразнят его «клеймёным, каторжным». Он отвечает гордо:","Клеймёный, да не раб!"],
+["q","Кто говорит о себе «Клеймёный, да не раб!»?",["Яким Нагой","Дед Савелий","Ермил Гирин"],1,"Савелий был на каторге (отсюда клеймо), но душой рабом не стал."],
+["t","История Савелия: его деревня Корёжина стояла в глуши. Помещик Шалашников порол мужиков за оброк, а они терпели."],
+["t","Потом прислали управляющего-немца <b>Христиана Христианыча Фогеля</b>. Он хитростью заставил мужиков построить дорогу и закабалил их полностью."],
+["t","Мужики долго терпели. Однажды Савелий толкнул Фогеля в яму, и мужики с криком «Наддай!» закопали его живым."],
+["t","Савелия приговорили к 20 годам каторги и 20 годам поселения. Его вывод о терпении:","Недотерпеть — пропасть,\nПеретерпеть — пропасть!"],
+["t","Савелий — «богатырь святорусский»: в нём сила народа и терпение, которое может кончиться бунтом."],
+["q","Что сделали мужики с немцем Фогелем?",["Выгнали из деревни","Закопали живым в яму","Пожаловались губернатору"],1,"Это бунт: терпение кончилось. За это Савелий попал на каторгу."],
+["h","Глава 4. Дёмушка"],
+["t","Матрёна оставляла Дёмушку с дедом, когда работала в поле. Однажды Савелий задремал — и свиньи загрызли ребёнка."],
+["t","Приезжают становой и лекарь, подозревают Матрёну и прямо при ней вскрывают тело сына. Горе Матрёны страшное."],
+["t","Савелий кается и уходит в монастырь. Матрёна прощает его."],
+["h","Глава 5. Волчица"],
+["t","Проходят годы, у Матрёны рождаются ещё дети. Сын <b>Федот</b>, восьми лет, пасёт овец; волчица утаскивает овцу."],
+["t","Федот догоняет волчицу, но видит, что она голодная, с волчатами, — и отдаёт ей овцу. Мальчика должны высечь."],
+["t","Матрёна ложится под розги вместо сына."],
+["q","Как Матрёна спасла сына Федота от наказания?",["Заплатила за овцу","Легла под розги вместо него","Упросила старосту"],1,"Матрёна приняла наказание на себя — ещё одна деталь о её силе и любви."],
+["h","Глава 6. Трудный год"],
+["t","Неурожай, голод. Свекровь винит Матрёну: она, мол, надела чистую рубаху на Рождество — вот беда и пришла."],
+["t","Мужа Филиппа забирают в солдаты не в очередь. Матрёна беременна, семья остаётся без кормильца."],
+["h","Глава 7. Губернаторша"],
+["t","Зимней ночью Матрёна идёт в город к губернатору. У его дома ей становится плохо — она рожает."],
+["t","Помогает жена губернатора <b>Елена Александровна</b>: крестит ребёнка (Лиодорушку) и добивается, чтобы мужа вернули. Отсюда прозвище — «губернаторша»."],
+["q","Кто помог вернуть мужа Матрёны из солдат?",["Дед Савелий","Жена губернатора Елена Александровна","Бурмистр Влас"],1,"Добрая губернаторша — редкий в поэме пример помощи «сверху»."],
+["h","Глава 8. Бабья притча"],
+["t","Матрёна отвечает странникам:","Не дело — между бабами\nСчастливую искать!.."],
+["t","Она пересказывает притчу старушки-богомолки:","Ключи от счастья женского,\nОт нашей вольной волюшки,\nЗаброшены, потеряны\nУ Бога самого!"],
+["t","Смысл части: жизнь крестьянки — непосильный труд, побои, смерть детей, бесправие. Но в Матрёне огромная сила духа."],
+["q","Что говорит Матрёна о женском счастье?",["Что она самая счастливая на селе","Что ключи от женского счастья потеряны","Что счастье — в богатстве"],1,"Ключи «потеряны у Бога самого» — среди крестьянок счастливых нет."]
 ]},
-{n:"IV", t:"Развалина", items:[
- {t:"Дорога к развалине идёт по лесистой долине с ручьём. Замок стоит на скале: четырёхугольная башня с трещиной, плющ, деревья прямо на стенах."},
- {ask:"Мужчины подходят к замку и замечают Асю. Где она?", o:["Сидит на краю стены прямо над пропастью","Читает книгу у подножия башни","Ждёт их у ворот с корзинкой ягод"], a:0,
-  why:"Ася с первых сцен делает то, что пугает и привлекает внимание. Н. Н. и тревожится, и раздражается: ему кажется, что всё это нарочно."},
- {t:"Ася сидит на краю стены над пропастью. Гагин в ужасе вскрикивает, Н. Н. упрекает её в неосторожности.", q:"экая сумасшедшая!"},
- {t:"Старушка в балаганчике продаёт пиво и пряники. Ася карабкается по развалинам со стаканом воды, будто поливает цветы на стенах. Н. Н. раздражён.", q:"Да она как коза лазит"},
- {t:"Гагин поднимает тост за «даму сердца» Н. Н. Ася тут же спрашивает, есть ли у него такая дама."},
- {ask:"Прогулка окончена. Как Ася ведёт себя дальше?", o:["Запирается у себя и не выходит до вечера","Снова дерзит и хохочет за обедом","По дороге шалит, а дома надевает лучшее платье и держится как чинная барышня"], a:2,
-  why:"Резкая смена ролей — главная загадка Аси. Это не каприз ради каприза: Ася ищет, какой ей быть. Почему — станет ясно в гл. VIII."},
- {t:"На обратном пути Ася хохочет и громко поёт мимо чопорной английской семьи. А дома переодевается в лучшее платье и за обедом держится чинно, как благовоспитанная барышня."},
- {t:"Вечером Ася уходит к фрау Луизе, вдове бургомистра: её тянет к людям простого круга. Когда Н. Н. и Гагин проходят мимо, Ася из окна третьего этажа бросает Гагину ветку герани.", q:"вообрази, что я дама твоего сердца"},
- {t:"По дороге домой Н. Н. раздражён и впервые думает: а сестра ли Ася Гагину?"},
- {ask:"Наутро Н. Н. снова у Гагиных. Какой он застаёт Асю?", o:["Тихой и скромной: в старом платье шьёт у окна","Снова на развалинах замка","Обиженной: она не выходит к гостю"], a:0,
-  why:"После вчерашних выходок — полная тишина. Н. Н. не понимает, где настоящая Ася. Скоро он назовёт это одним словом."}
-]},
-{n:"V", t:"Хамелеон", items:[
- {t:"Утром Ася совсем другая: в старом платье сидит у окна, шьёт и тихо напевает — простая русская девушка."},
- {t:"Гагин пишет этюд с дубом в долине, Н. Н. идёт с ним. Они лежат на траве и говорят о живописи, о назначении художника, о молодости."},
- {t:"Ася весь день скромна и не кокетничает. Гагин шутит, что она «пост и покаяние на себя наложила». Вечером Ася рано уходит спать."},
- {ask:"Н. Н. возвращается к себе. Что он думает об Асе?", o:["Что влюблён и завтра же признается","Что она хамелеон — и всё-таки не сестра Гагину","Что больше не будет ходить к Гагиным"], a:1,
-  why:"«Хамелеон» точно схватывает главную черту Аси — быструю смену облика. А подозрение «не сестра» подготовит следующее недоразумение."},
- {t:"Ложась спать, Н. Н. думает: «Что за хамелеон эта девушка!» И тут же добавляет:", q:"А все-таки она ему не сестра"}
-]},
-{n:"VI", t:"Беседка из акаций", items:[
- {t:"Проходят две недели. Н. Н. бывает у Гагиных каждый день. Ася его избегает, перестаёт шалить и выглядит озабоченной."},
- {t:"Ася хорошо говорит по-французски и по-немецки, но воспитание у неё странное: она горда и стыдлива. Застав её за французским романом, Н. Н. подшучивает — и слышит резкий ответ.", q:"Вы думаете, что я только смеяться умею"},
- {ask:"Вечером Н. Н. читает Гагину вслух поэму Гёте «Герман и Доротея». Что было дальше?", o:["Ася смеётся над поэмой и уходит к фрау Луизе","Ася просит книгу и читает её всю ночь","Ася тихо слушает до конца, а назавтра ведёт себя как домовитая Доротея"], a:2,
-  why:"Ася примеряет на себя героинь книг: сегодня Доротея, позже — пушкинская Татьяна. Она ищет образец, на который хочется быть похожей."},
- {t:"Ася сначала мелькает рядом, потом садится и слушает «Германа и Доротею» до конца. На следующий день она подражает Доротее — домовита и степенна."},
- {t:"Н. Н. всё больше уверен, что Гагин ведёт себя не как брат: он ласков с Асей слишком снисходительно и как-то принуждённо."},
- {ask:"Однажды вечером Н. Н. проходит мимо беседки из акаций, где сидят Гагин и Ася. Что он слышит?", o:["Ася в слезах говорит Гагину, что никого не хочет любить, кроме него","Гагин говорит Асе, что скоро они вернутся в Россию","Ася просит брата больше не звать Н. Н."], a:0,
-  why:"Для Н. Н. это звучит как признание возлюбленной и подтверждает его подозрения. На самом деле это привязанность сестры — но он узнает об этом только в гл. VIII."},
- {t:"Ася рыдает в беседке и говорит Гагину эти слова. Н. Н. уходит злой: он решил, что его обманывают. И ему горько.", q:"Нет, я никого не хочу любить, кроме тебя"}
-]},
-{n:"VII", t:"Три дня в горах", items:[
- {t:"Н. Н. уходит на три дня в горы, вверх по Рейну, к хребту, который называют Собачьей спиной. Причина у него одна.", q:"одно чувство было мне ясно: нежелание видеться с Гагиным"},
- {t:"Он ночует в деревенских харчевнях, лежит на тёплых камнях и смотрит на облака. Запоминаются мелочи: запах смолы, стук дятлов, форели в ручьях."},
- {t:"Он пробует думать о вдове — и понимает, что всё прошло. В горах Н. Н. навсегда прощается со своим увлечением."},
- {ask:"На третий день Н. Н. возвращается домой. Что его ждёт?", o:["Письмо от вдовы с просьбой о встрече","Записка Гагина: тот удивлён его исчезновением и зовёт к себе","Ася у ясеня с мадонной"], a:1,
-  why:"Шаг навстречу снова делает не Н. Н. — его зовут, и он идёт. Эта пассивность героя ещё сыграет свою роль."},
- {t:"Дома Н. Н. находит записку Гагина: тот удивлён его внезапным отъездом и просит прийти. На следующий день Н. Н. отправляется в Л."}
-]},
-{n:"VIII", t:"Тайна Аси", items:[
- {t:"Увидев Н. Н., Ася беспричинно смеётся и убегает. Разговор не клеится. Н. Н. ссылается на срочную работу, и Гагин провожает его через Рейн."},
- {t:"У ясеня с мадонной Гагин спрашивает, что Н. Н. думает об Асе. У неё доброе сердце, говорит он, но голова бедовая.", q:"Ее надо хорошенько узнать, чтобы о ней судить"},
- {ask:"Гагин решается рассказать правду. Кто такая Ася?", o:["Его невеста — они скрывают помолвку от родных","Сирота, дочь его опекуна","Его сестра по отцу, дочь бывшей горничной Татьяны"], a:2,
-  why:"Это ключ к поведению Аси: дочь барина и горничной не своя ни среди господ, ни среди прислуги. Отсюда гордость, стыдливость и желание доказать, что она «не хуже»."},
- {t:"Ася — сестра Гагина по отцу. Её мать Татьяна была горничной матери Гагина. Отец хотел на ней жениться, но Татьяна отказалась и жила у своей сестры-скотницы."},
- {t:"Гагина ещё мальчиком увёз в Петербург дядя. Когда Асе было девять, Татьяна умерла, и отец взял девочку к себе в дом."},
- {t:"Умирая, отец поручил Асю сыну. Двадцатилетний Гагин остался с тринадцатилетней девочкой на руках: четыре года пансиона в Петербурге, а в семнадцать — заграница.", q:"завещаю тебе мою дочь – твою сестру."},
- {ask:"Гагин закончил рассказ. Что чувствует Н. Н.?", o:["Облегчение: подозрения рассеялись, на душе легко","Обиду: его так долго держали в неведении","Желание уехать, чтобы не мешать брату и сестре"], a:0,
-  why:"Раздражение Н. Н. держалось на мысли об обмане. Нет обмана — нет и причины сторониться Аси. Путь к сближению открыт."},
- {t:"Гагин признаётся, что с сестрой ему нелегко. Н. Н. становится легко на душе.", q:"Порох она настоящий."}
-]},
-{n:"IX", t:"Вальс", items:[
- {t:"Н. Н. снова у Гагиных. Ася встречает его бледная и молчаливая. Гагин замечает сестре, что гость вернулся по своей воле.", q:"Вот он опять… и, заметь, сам захотел вернуться."},
- {t:"Ася ведёт Н. Н. в виноградник; они садятся на плиту над долиной. Она расспрашивает о горах, о легенде про Лорелею, о чёрном коте фрау Луизе — и говорит откровеннее, чем раньше."},
- {t:"Мимо проходят богомольцы с хоругвями. Ася смотрит им вслед."},
- {ask:"Ася провожает взглядом богомольцев. О чём она мечтает?", o:["Поступить на сцену и стать актрисой","Пойти куда-нибудь далеко, на молитву, на трудный подвиг","Вернуться в Россию, в деревню отца"], a:1,
-  why:"Ася хочет жизни, в которой есть смысл и поступок. Этим она резко отличается от Н. Н., который живёт «без цели, без плана»."},
- {t:"Ася мечтает о трудном подвиге. Н. Н. отвечает коротко: «Попытайтесь» — и замечает: «Вы честолюбивы».", q:"Пойти куда-нибудь далеко, на молитву, на трудный подвиг"},
- {t:"Ася просит почитать что-нибудь из «Евгения Онегина» и признаётся, на кого хотела бы быть похожей.", q:"А я хотела бы быть Татьяной"},
- {ask:"Вечер продолжается. Что предлагает Ася?", o:["Покататься втроём на лодке по Рейну","Спеть русские песни","Потанцевать вальс"], a:2,
-  why:"Вальс станет символом их общего счастья. Запомните его: в гл. XII Ася откажется вальсировать — и по этому отказу будет видно, как много изменилось."},
- {t:"Ася просит брата сыграть вальс. Звучит вальс Ланнера; Н. Н. и Ася кружатся по комнате, и он чувствует её близость."}
-]},
-{n:"X", t:"Жажда счастья", items:[
- {t:"День проходит весело, как у детей. Ася мила и проста, Гагин радуется, глядя на неё."},
- {t:"Поздно вечером Н. Н. просит перевозчика пустить лодку вниз по течению. Перевозчик дремлет над вёслами, лодка плывёт сама.", q:"царственная река понесла нас."},
- {ask:"Лодка плывёт по ночному Рейну, на берегу поёт соловей. Что чувствует Н. Н.?", o:["Тоску по вдове и желание уехать","Спокойствие: всё прояснилось","Что в нём «зажглась жажда счастья»"], a:2,
-  why:"Он ещё не называет это любовью к Асе — ему хочется «счастья» вообще. Н. Н. чувствует, но не формулирует. А кто не формулирует, тот и не действует."},
- {t:"Звёзды, небо и вода кажутся ему неспокойными. Н. Н. чувствует слёзы и жажду счастья.", q:"Нет! во мне зажглась жажда счастья."}
-]},
-{n:"XI", t:"«Что мне читать?»", items:[
- {t:"Назавтра Ася краснеет, когда Н. Н. входит. Она принарядилась, но печальна. Гагин увлечённо пишет картину — хочет «поймать природу за хвост»."},
- {t:"Ася говорит, что плохо спала: думала о жизни с матерью. Она называет себя необразованной и неумелой."},
- {ask:"Ася жалуется, что ничего не знает. О чём она просит Н. Н.?", o:["Сказать ей, что читать и что делать","Уговорить брата снова отдать её в пансион","Учить её немецкому"], a:0,
-  why:"Ася признаёт за Н. Н. право решать за неё. Она доверяет ему всё — и от этого его будущая нерешительность становится ещё тяжелее."},
- {t:"Ася спрашивает, умна ли она, и просит совета: что ей читать, что делать? Она будет делать всё, что он скажет."},
- {t:"Ася сжимает его руку. Гагин зовёт Н. Н. посмотреть фон картины, и Ася уходит.", q:"Ведь вам не будет скучно со мной?"}
-]},
-{n:"XII", t:"Крылья", items:[
- {t:"Через час Ася возвращается и задаёт странный вопрос. Ей кажется, что всё вокруг с ней прощается.", q:"если б я умерла, вам было бы жаль меня?"},
- {t:"Ася просит верить всему, что она скажет, — даёт «честное слово». Н. Н. смеётся, и она обижается."},
- {ask:"Ася пытается объяснить, что с ней происходит. Какой образ она находит?", o:["«Я как птица в клетке»","«Крылья у меня выросли – да лететь некуда»","«Я как Лорелея: пою, а никто не слышит»"], a:1,
-  why:"Крылья — любовь и готовность к поступку; «некуда» — Ася не видит, куда это чувство может привести. Ответа она ждёт от Н. Н."},
- {t:"Ася говорит о себе так:", q:"Крылья у меня выросли – да лететь некуда."},
- {t:"Гагин предлагает сыграть вальс — Ася резко отказывается и бледнеет. Вечером Н. Н. идёт к Рейну и задаёт себе вопрос.", q:"Неужели она меня любит?"},
- {ask:"На следующий день Н. Н. снова у Гагиных. Как Ася?", o:["Больна: у неё болит голова, она почти не выходит","Весела и снова лазит по развалинам","Уехала на день в Кёльн"], a:0,
-  why:"Чувство Аси так сильно, что переходит в болезнь. А Н. Н. становится «скучно и пусто» — он уже тоскует по ней, хотя себе в этом не признаётся."}
-]},
-{n:"XIII", t:"Записка", items:[
- {t:"Н. Н. не хочет заглядывать в себя, но образ Аси засел в душе. Весь день он у Гагиных, а Асе нездоровится: она ненадолго спускается с повязанным лбом, бледная, и слабо улыбается.", q:"Это пройдет, это ничего, все пройдет, не правда ли?"},
- {t:"Следующее утро — как в полусне: ни работать, ни бездельничать не выходит. Н. Н. бродит по городу, и вдруг мальчик окликает его: «Вы ли господин Н.?» — и передаёт записку от «фрейлейн Annette»."},
- {ask:"Н. Н. разворачивает записку. Что в ней?", o:["Гагин сообщает, что они завтра уезжают","Ася просит больше не приходить","Ася просит о встрече в четыре часа у каменной часовни возле развалины"], a:2,
-  why:"Ася сама назначает свидание — для барышни того времени шаг смелый, почти немыслимый. Он показывает и силу её чувства, и готовность к поступку."},
- {t:"Почерк Аси: она должна его видеть, сегодня она сделала «большую неосторожность». Встреча — в четыре часа у каменной часовни на дороге возле развалины. Н. Н. велит мальчику передать: «да»."}
-]},
-{n:"XIV", t:"Признание Гагина", items:[
- {t:"Н. Н. дома перечитывает записку — ещё нет полудня. Входит Гагин, пасмурный и взволнованный, и сразу говорит главное.", q:"моя сестра, Ася, в вас влюблена."},
- {t:"Ночью у Аси был жар, она плакала; хозяйка разбудила Гагина в два часа. Ася умоляла увезти её, если он хочет, чтобы она осталась жива, — и призналась в любви к Н. Н."},
- {t:"По словам Гагина, Ася полюбила Н. Н. с первого взгляда и боится, что он её презирает, раз знает её историю."},
- {ask:"Гагин задаёт Н. Н. прямой вопрос. Какой?", o:["«Вы её любите?»","«Ведь вы не женитесь на ней?»","«Зачем вы ей писали?»"], a:1,
-  why:"Для Гагина главное — судьба сестры, а её будущее зависит от брака. Для Н. Н. это проверка: готов ли он к решению. И он уходит от прямого ответа."},
- {t:"Н. Н. признаёт, что Ася ему нравится, но о женитьбе прямо не отвечает. Он показывает Гагину записку Аси — тот удивлён.", q:"ведь вы не женитесь на ней?"},
- {t:"Договариваются: Н. Н. пойдёт на свидание и честно объяснится, Гагин подождёт дома. Но уехать Гагины решили в любом случае — завтра.", q:"С огнем шутить нельзя."},
- {t:"Оставшись один, Н. Н. мечется: досадует на откровенность Гагина, а любовь Аси его и радует, и смущает.", q:"Жениться на семнадцатилетней девочке, с ее нравом, как это можно!"},
- {ask:"До свидания ещё есть время. Что происходит дальше?", o:["Ася приходит к Н. Н. сама, не дождавшись четырёх часов","Тот же мальчик приносит вторую записку: встреча переносится в дом фрау Луизе","Гагин просит отменить свидание"], a:1,
-  why:"Ася меняет открытую часовню у дороги на закрытую комнату. Позже Н. Н. будет корить себя, что даже не задумался, почему."}
-]},
-{n:"XV", t:"Ганхен", items:[
- {t:"Вторая записка: свидание переносится в дом фрау Луизе — постучать внизу и подняться на третий этаж."},
- {t:"Н. Н. заходит в сад за городской стеной, где играют в кегли и пьют пиво. Хорошенькая служанка Ганхен плачет: её жених ушёл в солдаты. Н. Н. даёт ей талер — она даже не благодарит."},
- {ask:"Н. Н. ждёт часа свидания и думает о будущем. Какое решение он принимает?", o:["Жениться он не может, и Ася не узнает, что он тоже её полюбил","Сегодня же сделать Асе предложение","Не идти на свидание и уехать"], a:0,
-  why:"Решение принято до встречи — не сердцем, а рассудком. Поэтому на свидание Н. Н. идёт не признаваться, а «объясняться»."},
- {t:"Н. Н. вспоминает слова Гагина «С огнем шутить нельзя» и решает: жениться он не может.", q:"она не узнает, что и я полюбил ее"},
- {t:"В сумерках он приходит к дому фрау Луизе. В тёмной прихожей его ведёт костлявая старушечья рука, по крутой лестнице он поднимается на третий этаж."},
- {t:"Фрау Луизе с приторной улыбкой указывает на маленькую дверь. Н. Н. входит."},
- {ask:"Н. Н. входит в комнату. Что он видит?", o:["Комната пуста: Ася не пришла","Ася и Гагин ждут его вдвоём","Ася сидит у окна, закутанная в шаль, и дрожит"], a:2,
-  why:"Решиться на свидание Асе было очень трудно. Она ждёт от Н. Н. одного — ответа на своё чувство."}
-]},
-{n:"XVI", t:"Свидание", items:[
- {t:"В полутёмной комнате у окна сидит Ася в длинной шали и дрожит. Н. Н. обращается к ней по имени-отчеству. Её рука холодна, она не может вымолвить ни слова.", q:"Анна Николаевна"},
- {t:"Он садится рядом, держит её руку, тихо зовёт: «Ася». Она поднимает глаза, он целует её руку — и Ася кладёт голову ему на грудь.", q:"Ваша…"},
- {ask:"Ася чуть слышно шепчет: «Ваша…» Что делает Н. Н.?", o:["Обнимает её и говорит, что любит","Вспоминает о Гагине и отшатывается","Молчит, и они сидят так до темноты"], a:1,
-  why:"Это кульминация повести. В решающую секунду Н. Н. думает не о ней и не о своём чувстве, а о брате и приличиях. Чернышевский потом разберёт эту сцену в статье «Русский человек на rendez-vous» как проверку героя."},
- {t:"Н. Н. вдруг вспоминает о Гагине и отстраняется. Он говорит, что брат всё знает.", q:"Что мы делаем!.."},
- {t:"Ася отвечает: она не звала брата — он пришёл сам. Она заперлась, но у хозяйки был другой ключ."},
- {t:"Н. Н. упрекает её: она сама выдала тайну, усомнилась в нём — и теперь всё кончено. Ася опускается на колени и рыдает."},
- {ask:"Ася на коленях, в слезах. Что было дальше?", o:["Н. Н. поднимает её и обещает всё исправить","Входит Гагин и уводит сестру","Ася вырывается и убегает"], a:2,
-  why:"Ася ушла не потому, что её прямо отвергли, а потому, что вместо любви услышала упрёки. Слова, которого она ждала, так и не прозвучало."},
- {t:"Н. Н. пытается её поднять, но Ася вырывается и убегает. Входит фрау Луизе: «Фрейлейн ушла?» Н. Н. смотрит на неё «как дурак» и уходит."}
-]},
-{n:"XVII", t:"Досада", items:[
- {t:"Н. Н. выходит из города прямо в поле.", q:"Досада, досада бешеная, меня грызла."},
- {t:"Он корит себя: не понял, почему Ася сменила место встречи, не удержал её, когда был с ней наедине. Твердит «Я поступил по совести» — и знает, что это неправда."},
- {ask:"Наступает ночь. Что понимает и что делает Н. Н.?", o:["Что не может её потерять, — и идёт к дому Гагиных","Что поступил правильно, — и идёт спать","Что надо уехать, — и идёт за билетом на пароход"], a:0,
-  why:"Понимание приходит, когда Аси рядом уже нет. Так у Н. Н. всё время: чувство опаздывает за событиями."},
- {t:"Образ Аси не отпускает его. С наступлением ночи он большими шагами идёт к дому, где живёт Ася.", q:"Разве я могу лишиться ее?"}
-]},
-{n:"XVIII", t:"Поиски", items:[
- {t:"Гагин встречает его у дома тревожным вопросом. Аси дома нет.", q:"Видели вы сестру?"},
- {t:"Н. Н. признаётся, что видел её у фрау Луизе. Но где она теперь — неизвестно: ни дома, ни у часовни её нет."},
- {ask:"Аси нигде нет. Что решают Н. Н. и Гагин?", o:["Ждать до утра: Ася всегда возвращается","Разойтись в разные стороны и искать её","Позвать на помощь соседей и хозяйку"], a:1,
-  why:"Тревога общая: Гагин помнит ночные слёзы сестры, Н. Н. — как она убежала от него в слезах."},
- {t:"Они расходятся: Н. Н. — в город, Гагин — в другую сторону. Встретиться договариваются через час."}
-]},
-{n:"XIX", t:"Белая фигура", items:[
- {t:"Н. Н. обходит улицы, берег Рейна, дом фрау Луизе. Досада сменяется страхом и раскаянием.", q:"Куда она могла пойти, что она с собою сделала?"},
- {t:"Именно теперь он понимает, что любит Асю, — и что так и не сказал ей об этом. Он повторяет себе это сто раз."},
- {ask:"Н. Н. выходит на берег Рейна. Что он видит?", o:["Асю в лодке посреди реки","Гагина с фонарём","У старого каменного креста мелькает что-то белое — и исчезает"], a:2,
-  why:"Белая фигура у креста только усиливает страх. Ася ли это — Тургенев не говорит. Герой остаётся в неизвестности, как и читатель."},
- {t:"У старого каменного креста на берегу мелькает что-то белое. Н. Н. кричит: «Ася!» — никто не отзывается.", q:"Что-то белое мелькнуло вдруг на самом берегу реки"},
- {t:"Н. Н. спешит обратно — узнать, не нашёл ли её Гагин."}
-]},
-{n:"XX", t:"«Завтра я буду счастлив!»", items:[
- {t:"По тропинке виноградника он поднимается к дому и видит свет в комнате Аси. Он стучит, из окна высовывается Гагин."},
- {t:"Гагин шёпотом сообщает: Ася вернулась и уже раздевается. «Слава богу!» Н. Н. хочет поговорить, но Гагин отвечает, что сейчас не время, и закрывает окно.", q:"Она вернулась"},
- {ask:"Н. Н. счастлив и уверен в своём чувстве. Что он решает?", o:["Просить руки Аси — но завтра утром","Разбудить Асю и признаться немедленно","Подождать неделю и всё обдумать"], a:0,
-  why:"Решающая ошибка — отложить. Мысль рассказчика, которая сейчас прозвучит, звучит как приговор."},
- {t:"Н. Н. мог бы сразу просить руки Аси, но откладывает до утра.", q:"Завтра я буду счастлив!"},
- {t:"Тогда Н. Н. шёл в город словно на крыльях, и ему казалось, что соловей поёт о его любви. А рассказчик, вспоминая этот вечер, говорит горькую вещь.", q:"У счастья нет завтрашнего дня"},
- {ask:"Утром Н. Н. приходит к Гагиным с готовым решением. Что он застаёт?", o:["Ася встречает его у калитки в дорожном платье","Домик пуст: Гагины уехали","Гагин просит подождать — Ася ещё спит"], a:1,
-  why:"Развязка наступает, пока Н. Н. «ждал утра». Гагин делает то, о чём договорились ещё накануне: уезжает в любом случае."}
-]},
-{n:"XXI", t:"Отъезд", items:[
- {t:"Окна и двери домика открыты настежь, на пороге валяются бумажки. Служанка сообщает: Гагины уехали в шесть утра, не сказав куда.", q:"Уехали!"},
- {t:"Хозяйка передаёт письмо Гагина. Он просит не сердиться: разлука необходима, Ася сама всё ему рассказала. Гагин ссылается на «предрассудки» и пишет, что жениться на Асе Н. Н. не может. Искать их не нужно.", q:"Вчера вечером, – писал он, – пока мы оба молча ждали Асю, я убедился окончательно в необходимости разлуки."},
- {t:"Н. Н. в ярости: кто дал Гагину право похитить у него Асю? В конторе пароходства он узнаёт: билеты взяты до Кёльна. Он решает ехать следом."},
- {ask:"Фрау Луизе передаёт Н. Н. записку от Аси. Что в ней?", o:["Адрес в Кёльне и просьба приехать","Упрёк за то, что он всё рассказал брату","Прощание: скажи он «одно слово» — она бы осталась"], a:2,
-  why:"Записка — ключ к повести. Ася ждала не подвига и не предложения — одного слова. Н. Н. понимает это, когда исправить уже ничего нельзя."},
- {t:"Фрау Луизе отдаёт Н. Н. записку Аси.", q:"Прощайте, мы не увидимся более. Не из гордости я уезжаю – нет, мне нельзя иначе. Вчера, когда я плакала перед вами, если б вы мне сказали одно слово, одно только слово – я бы осталась. Вы его не сказали. Видно, так лучше… Прощайте навсегда!"},
- {t:"Н. Н. понимает: он любил её — и не сказал.", q:"Одно слово… О, я безумец!"},
- {ask:"Н. Н. уплывает на пароходе. Что он видит на берегу?", o:["Ганхен смеётся с молодым человеком, а из зелени ясеня смотрит мадонна","Асю, которая машет ему платком","Гагина, передумавшего уезжать"], a:0,
-  why:"Вчера Ганхен плакала о женихе, сегодня утешилась — простое чувство быстро проходит. А мадонна на ясене возвращает нас к гл. I: вокруг всё как прежде, изменилась только жизнь героя."},
- {t:"С парохода Н. Н. видит Ганхен с молодым человеком, а на другом берегу из тёмной зелени старого ясеня выглядывает маленькая мадонна."}
-]},
-{n:"XXII", t:"Цветок герани", items:[
- {t:"В Кёльне Н. Н. узнаёт, что Гагины уехали в Лондон. Он едет за ними, но в Лондоне поиски ни к чему не приводят."},
- {t:"Долго он не хотел смириться, но в конце концов оставил надежду. Годы спустя мельком видел в вагоне женщину, похожую на Асю, — но, вероятно, ошибся.", q:"Я даже не знаю, жива ли она."},
- {t:"Он признаётся: горевал не слишком долго и даже утешал себя мыслью, что с Асей не был бы счастлив."},
- {t:"Но такого чувства он больше не испытал ни к одной женщине.", q:"Осужденный на одиночество бессемейного бобыля"},
- {ask:"Что Н. Н. хранит в память об Асе?", o:["Портрет Аси работы Гагина","Шаль, оставленную в доме фрау Луизе","Её записочки и высохший цветок герани"], a:2,
-  why:"Цветок — тот самый, что Ася бросила из окна в гл. IV. Начало и конец истории сходятся в одной детали."},
- {t:"Он хранит записочки Аси и высохший цветок герани, который она когда-то бросила из окна. Повесть заканчивается мыслью о том, как мало остаётся от человека.", q:"Так легкое испарение ничтожной травки переживает все радости и все горести человека – переживает самого человека."}
+
+{id:"p4", title:"Пир — на весь мир", sub:"Песни, легенды и Гриша Добросклонов", items:[
+["h","Вступление"],
+["t","После смерти Последыша вахлаки устраивают пир. На нём — странники, староста <b>Влас</b>, семинаристы <b>Савва и Гриша Добросклоновы</b>, сыновья бедного дьячка."],
+["h","Горькое время — горькие песни"],
+["t","Поют песни о крестьянской доле: «Весёлая» (весёлая только по названию), «Барщинная», «Голодная» — о вечно голодном мужике."],
+["h","Про холопа примерного — Якова верного"],
+["t","Рассказ о <b>Якове</b> — верном слуге жестокого помещика <b>Поливанова</b>. Барин бил его, а Яков служил преданно."],
+["t","Когда у барина отнялись ноги, Яков возил и нянчил его."],
+["t","Племянник Якова, <b>Гриша</b>, хотел жениться на девушке <b>Арише</b>. Барин сам её приглядел — и отдал Гришу в рекруты."],
+["t","Яков завёз барина в глухой Чёртов овраг и повесился там на дереве. Беспомощный барин всю ночь провёл рядом с телом."],
+["q","Как отомстил Яков барину?",["Убил его","Завёз в овраг и повесился у него на глазах","Ушёл от него в город"],1,"Не поднял руку на барина, но наказал его страшнее: оставил одного в овраге рядом со своим телом."],
+["t","Вывод о рабской преданности:","Люди холопского звания —\nСущие псы иногда:\nЧем тяжелей наказания,\nТем им милей господа."],
+["h","О двух великих грешниках"],
+["t","Богомолец <b>Ионушка</b> рассказывает легенду о <b>Кудеяре</b> — атамане разбойников, который раскаялся."],
+["t","Старец велел ему срубить ножом огромный дуб — тогда грехи простятся."],
+["t","Мимо проезжал <b>пан Глуховский</b> и хвастал, что мучает своих холопов без зазрения совести. Кудеяр убил пана — и дуб тут же рухнул."],
+["q","Почему рухнул дуб в легенде о Кудеяре?",["Кудеяр наконец перерезал ствол","Кудеяр убил жестокого пана — грехи прощены","Дуб разбило молнией"],1,"Смысл легенды: убить угнетателя — не грех, а искупление."],
+["h","Крестьянский грех"],
+["t","<b>Игнат Прохоров</b> рассказывает: старый адмирал перед смертью дал <b>вольную</b> восьми тысячам своих крестьян и отдал её старосте <b>Глебу</b>."],
+["t","Наследник подкупил Глеба, и тот сжёг вольную. Тысячи людей остались крепостными."],
+["t","Вахлаки признают: это самый страшный грех — предать своих. Это общий крестьянский грех."],
+["q","В чём «крестьянский грех» Глеба?",["Он убил барина","Он за деньги сжёг вольную своих односельчан","Он отказался работать"],1,"Предательство своих ради денег — самый страшный грех, по мнению крестьян."],
+["h","Доброе время — добрые песни"],
+["t","<b>Гриша Добросклонов</b> — сын бедного дьячка и рано умершей матери Домны. Рос впроголодь, учится в семинарии."],
+["t","Мать пела ему грустную песню «Солёная». С пятнадцати лет Гриша твёрдо решил: жить для счастья родной вахлачины, всего народа."],
+["t","Гриша сочиняет песни. Самая известная — «Русь»:","Ты и убогая,\nТы и обильная,\nТы и могучая,\nТы и бессильная,\nМатушка-Русь!"],
+["t","В ней — вера в силу народа:","Рать подымается —\nНеисчислимая!\nСила в ней скажется\nНесокрушимая!"],
+["q","Кто такой Гриша Добросклонов?",["Сын помещика","Сын дьячка, семинарист, мечтающий служить народу","Солдат, вернувшийся с войны"],1,"Гриша — «народный заступник», ответ поэмы на вопрос о счастье."],
+["t","Автор говорит о его будущем:","Ему судьба готовила\nПуть славный, имя громкое\nНародного заступника,\nЧахотку и Сибирь."],
+["t","Финал поэмы:","Быть бы нашим странникам\nПод родною крышею,\nЕсли б знать могли они,\nЧто творилось с Гришею."],
+["t","То есть счастливый найден — это Гриша. Но странники об этом так и не узнали."],
+["t","Главная мысль поэмы: счастье — не богатство, не чин и не покой, а жизнь ради других и борьба за счастье народа."],
+["q","Кого в финале поэмы автор считает по-настоящему счастливым?",["Помещика Оболт-Оболдуева","Матрёну Тимофеевну","Гришу Добросклонова"],2,"Гриша счастлив, потому что живёт ради народа, — хотя впереди у него чахотка и Сибирь."]
 ]}
 ];
 
-/* ============ ПОДГОТОВКА ============ */
-var LET = ["А","Б","В"];
-var KEY = "asya-chrono-v1";
-var ITEMS = [], CH_START = [], TH_UPTO = [], thN = 0, qN = 0;
-DATA.forEach(function(ch, ci){
-  CH_START[ci] = ITEMS.length;
-  ch.items.forEach(function(it){
-    var o = {ci: ci};
-    for (var k in it) o[k] = it[k];
-    if (it.ask){ o.type = "q"; o.n = ++qN; } else { o.type = "t"; o.n = ++thN; }
-    ITEMS.push(o); TH_UPTO.push(thN);
+/* ===== ЛОГИКА ===== */
+const KEY="nekrasov_rus_v1";
+let S={rev:{},ans:{}};
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+
+// разбить часть на блоки (каждый блок заканчивается вопросом), пронумеровать тезисы
+let n=0;
+PARTS.forEach(p=>{
+  p.blocks=[];let cur=[];let qi=0;
+  p.items.forEach(it=>{
+    if(it[0]==="t"){n++;cur.push({k:"t",n,txt:it[1],quote:it[2]});}
+    else if(it[0]==="h"){cur.push({k:"h",title:it[1]});}
+    else{cur.push({k:"q",id:p.id+"_"+(qi++),q:it[1],opts:it[2],a:it[3],ex:it[4]});p.blocks.push(cur);cur=[];}
   });
+  if(cur.length)p.blocks.push(cur);
+  p.first=p.blocks[0].find(x=>x.k==="t").n;
+  p.last=n;
 });
-var N = ITEMS.length, TH_TOTAL = thN, Q_TOTAL = qN;
-
-function typo(s){
-  return s.replace(/Н\. Н\./g, "Н. Н.").replace(/ ([—–]) /g, " $1 ").replace(/ (гл\.) /g, " $1 ");
+const TOTAL=n;
+function revealed(p){return Math.min(S.rev[p.id]||1,p.blocks.length);}
+function partProgress(p){
+  const qs=p.blocks.flat().filter(x=>x.k==="q");
+  const done=qs.filter(x=>S.ans[x.id]!==undefined).length;
+  return qs.length?done/qs.length:0;
 }
-var SMOOTH = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
 
-var st = {pos: 0, ans: {}};
-try {
-  var saved = JSON.parse(localStorage.getItem(KEY) || "null");
-  if (saved && typeof saved.pos === "number" && saved.pos >= 0 && saved.pos < N){
-    st.pos = Math.floor(saved.pos); st.ans = saved.ans && typeof saved.ans === "object" ? saved.ans : {};
-  }
-} catch(e){}
-function save(){ try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e){} }
+const $=s=>document.querySelector(s);
+const main=$("#main");
+let curPart=null;
 
-var $ = function(id){ return document.getElementById(id); };
-var feed = $("feed"), nextBtn = $("next"), nav = $("nav"), scrim = $("scrim"), navList = $("navList");
-var root = document.documentElement;
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;");}
 
-/* ============ ЭЛЕМЕНТЫ ЛЕНТЫ ============ */
-function mk(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
-
-function elIntro(){
-  var d = mk("div", "intro");
-  d.innerHTML = "<b>Как это работает.</b> Читайте тезисы по порядку и нажимайте «Дальше». Примерно каждые три шага — вопрос «что было дальше?»: выберите вариант и сразу увидите, верно ли. Прогресс сохраняется на этом устройстве.";
-  return d;
-}
-function elChapter(ci){
-  var s = mk("section", "chap"); s.id = "ch-" + ci; s.setAttribute("data-ci", ci);
-  s.appendChild(mk("div", "roman", "Глава " + DATA[ci].n));
-  s.appendChild(mk("h2", null, DATA[ci].t));
-  return s;
-}
-function elThesis(it){
-  var a = mk("article", "th");
-  a.appendChild(mk("span", "num", String(it.n)));
-  a.appendChild(mk("p", null, typo(it.t)));
-  if (it.q) a.appendChild(mk("blockquote", null, "«" + it.q + "»"));
-  return a;
-}
-function elQuestion(it, i){
-  var a = mk("article", "qz");
-  a.appendChild(mk("div", "lab", "Что было дальше?"));
-  a.appendChild(mk("p", "ask", typo(it.ask)));
-  var opts = mk("div", "opts");
-  it.o.forEach(function(txt, k){
-    var b = mk("button", "opt"); b.type = "button";
-    b.appendChild(mk("span", "l", LET[k]));
-    b.appendChild(mk("span", null, typo(txt)));
-    b.addEventListener("click", function(){ answer(i, k); });
-    opts.appendChild(b);
+function home(){
+  curPart=null;$("#topTitle").textContent="Кому на Руси жить хорошо";
+  const all=PARTS.reduce((a,p)=>a+partProgress(p)*p.blocks.length,0)/PARTS.reduce((a,p)=>a+p.blocks.length,0);
+  $("#bar").style.width=(all*100)+"%";
+  let h=`<section class="hero">
+  <h2>Кому на Руси жить хорошо</h2>
+  <p class="lead">Н. А. Некрасов · вся поэма в ${TOTAL} тезисах</p>
+  <div class="card">
+   <p><b>О чём поэма.</b> Семь мужиков спорят, кому на Руси живётся хорошо, и отправляются искать счастливого человека. Время — первые годы после отмены крепостного права (1861). По дороге они встречают попа, помещика, крестьян, слушают их истории — и так перед нами проходит жизнь всего народа.</p>
+   <p style="margin:0"><b>Как заниматься.</b> Читайте тезисы по порядку. Через каждые несколько тезисов — вопрос: ответьте, чтобы открыть продолжение. Цитаты выделены — их полезно знать для ответа у доски. Прогресс сохраняется на этом устройстве.</p>
+  </div>
+  <p class="note">Порядок частей — как в большинстве изданий. В некоторых учебниках «Крестьянка» стоит перед «Последышем» — части можно открывать в любом порядке.</p>
+  </section><div class="parts">`;
+  PARTS.forEach((p,i)=>{
+    const pr=Math.round(partProgress(p)*100);
+    h+=`<button class="part-btn" data-p="${i}"><b>${p.title}</b><small>${p.sub} · тезисы ${p.first}–${p.last}</small><div class="mini"><i style="width:${pr}%"></i></div><small>${pr?("пройдено "+pr+"%"):"не начато"}</small></button>`;
   });
-  a.appendChild(opts);
-  var fb = mk("div", "fb"); fb.hidden = true; a.appendChild(fb);
-  if (st.ans[i] !== undefined) paintAnswer(a, it, st.ans[i]);
-  return a;
-}
-function paintAnswer(card, it, k){
-  var opts = card.querySelector(".opts"), btns = opts.querySelectorAll(".opt"), fb = card.querySelector(".fb");
-  opts.classList.add("done");
-  for (var j = 0; j < btns.length; j++){ btns[j].disabled = true; }
-  btns[it.a].classList.add("ok");
-  if (k !== it.a) btns[k].classList.add("bad");
-  fb.textContent = "";
-  var right = k === it.a;
-  fb.appendChild(mk("span", "v " + (right ? "okt" : "badt"), right ? "Верно. " : "Неверно. "));
-  if (!right) fb.appendChild(document.createTextNode("Правильный ответ — " + LET[it.a] + ". "));
-  fb.appendChild(document.createTextNode(typo(it.why)));
-  fb.hidden = false;
-  return fb;
-}
-function elEnd(){
-  var d = mk("section", "end"); d.id = "end";
-  d.innerHTML = "<h3>Конец повести</h3><ul>" +
-    "<li><b>Кульминация</b> — свидание в доме фрау Луизе (гл. XVI): на порыв Аси Н. Н. отвечает упрёками.</li>" +
-    "<li><b>Ключ к повести</b> — «одно слово» из записки Аси (гл. XXI).</li>" +
-    "<li><b>«У счастья нет завтрашнего дня»</b> (гл. XX): Н. Н. откладывает — и теряет.</li>" +
-    "<li><b>Сквозные детали:</b> мадонна на ясене (гл. I и XXI), вальс (гл. IX и XII), цветок герани (гл. IV и XXII).</li>" +
-    "<li><b>Тип героя</b> — «лишний человек»: тонко чувствует, но в решающий момент не действует. См. статью Н. Г. Чернышевского «Русский человек на rendez-vous» (1858).</li>" +
-    "</ul>";
-  return d;
+  h+=`</div>`;
+  main.innerHTML=h;
+  main.querySelectorAll(".part-btn").forEach(b=>b.onclick=()=>openPart(+b.dataset.p));
+  drawer();window.scrollTo(0,0);
 }
 
-function appendItem(i, animate){
-  var it = ITEMS[i], head = null;
-  if (CH_START[it.ci] === i){ head = elChapter(it.ci); if (animate) head.classList.add("new"); feed.appendChild(head); }
-  var el = it.type === "t" ? elThesis(it) : elQuestion(it, i);
-  el.id = "it-" + i; if (animate) el.classList.add("new");
-  feed.appendChild(el);
-  return {head: head, el: el};
-}
-function syncEnd(animate){
-  var end = $("end");
-  if (st.pos === N - 1 && !end){ end = elEnd(); if (animate) end.classList.add("new"); feed.appendChild(end); return end; }
-  if (st.pos !== N - 1 && end) end.remove();
-  return null;
-}
-function render(){
-  feed.textContent = "";
-  feed.appendChild(elIntro());
-  for (var i = 0; i <= st.pos; i++) appendItem(i, false);
-  syncEnd(false);
-  curCh = -1; update(); trackChapter();
-}
-
-/* ============ ЛОГИКА ============ */
-function pending(){ var it = ITEMS[st.pos]; return it.type === "q" && st.ans[st.pos] === undefined; }
-
-function update(){
-  if (st.pos === N - 1 && !pending()){ nextBtn.textContent = "Пройти заново"; nextBtn.disabled = false; }
-  else if (pending()){ nextBtn.textContent = "Выберите ответ"; nextBtn.disabled = true; }
-  else { nextBtn.textContent = "Дальше"; nextBtn.disabled = false; }
-  var done = TH_UPTO[st.pos], frac = ((st.pos + 1) / N * 100).toFixed(1) + "%";
-  $("fill1").style.width = frac; $("fill2").style.width = frac;
-  $("pt1").textContent = done + "/" + TH_TOTAL;
-  $("pt2").textContent = "Тезис " + done + " из " + TH_TOTAL;
-  var btns = navList.children;
-  for (var c = 0; c < btns.length; c++) btns[c].classList.toggle("reached", CH_START[c] <= st.pos);
-}
-
-function next(){
-  if (st.pos === N - 1 && !pending()){ restart(); return; }
-  if (pending() || st.pos >= N - 1) return;
-  st.pos++; save();
-  var r = appendItem(st.pos, true);
-  var end = syncEnd(true);
-  update();
-  requestAnimationFrame(function(){
-    if (r.head) r.head.scrollIntoView({behavior: SMOOTH, block: "start"});
-    else r.el.scrollIntoView({behavior: SMOOTH, block: "nearest"});
-    if (end) setTimeout(function(){ end.scrollIntoView({behavior: SMOOTH, block: "nearest"}); }, 380);
+function renderItem(x,p,bi){
+  if(x.k==="h")return `<h3 class="chap" id="c_${p.id}_${slug(x.title)}">${x.title}</h3>`;
+  if(x.k==="t")return `<div class="th"><div class="num">${x.n}</div><div class="tx">${x.txt}${x.quote?`<div class="quote">${esc(x.quote)}</div>`:""}</div></div>`;
+  const a=S.ans[x.id];const answered=a!==undefined;
+  let h=`<div class="quiz" id="q_${x.id}"><div class="lbl">Проверь себя</div><div class="q">${x.q}</div>`;
+  x.opts.forEach((o,i)=>{
+    let cls="";if(answered){if(i===x.a)cls="ok";else if(i===a)cls="bad";}
+    h+=`<button class="opt ${cls}" data-q="${x.id}" data-i="${i}" ${answered?"disabled":""}>${o}</button>`;
   });
-}
-
-function answer(i, k){
-  if (st.ans[i] !== undefined) return;
-  st.ans[i] = k; save();
-  var card = $("it-" + i);
-  var fb = paintAnswer(card, ITEMS[i], k);
-  fb.classList.add("new");
-  update();
-  requestAnimationFrame(function(){ fb.scrollIntoView({behavior: SMOOTH, block: "nearest"}); });
-  if (i === st.pos) nextBtn.focus({preventScroll: true});
-}
-
-function restart(){
-  if (!confirm("Начать заново? Прогресс и ответы будут сброшены.")) return;
-  st = {pos: 0, ans: {}}; save(); closeNav(); render();
-  window.scrollTo({top: 0, behavior: "auto"});
-}
-
-function jump(ci){
-  var idx = CH_START[ci];
-  if (idx > st.pos){
-    if (!confirm("Перейти к главе " + DATA[ci].n + "? Пропущенные вопросы останутся без ответа — к ним можно вернуться, прокрутив вверх.")) return;
-    st.pos = idx; save(); render();
+  if(answered){
+    h+=`<div class="fb ${a===x.a?"ok":"bad"}"><b>${a===x.a?"Верно!":"Не совсем."}</b> ${x.ex}</div>`;
+    if(bi===revealed(p)-1 && bi<p.blocks.length-1) h+=`<button class="next" data-next="1">Дальше →</button>`;
   }
-  closeNav();
-  var h = $("ch-" + ci);
-  if (h) requestAnimationFrame(function(){ h.scrollIntoView({behavior: SMOOTH, block: "start"}); });
+  return h+`</div>`;
 }
+function slug(t){return t.replace(/[^\wа-яё]+/gi,"_");}
 
-/* ============ ГЛАВЫ: список, шторка, текущая глава ============ */
-DATA.forEach(function(ch, ci){
-  var b = mk("button", "ch-btn"); b.type = "button";
-  b.appendChild(mk("span", "r", ch.n));
-  b.appendChild(mk("span", "n", ch.t));
-  b.appendChild(mk("span", "d"));
-  b.addEventListener("click", function(){ jump(ci); });
-  navList.appendChild(b);
-});
-function plural(n, a, b, c){ var m10 = n % 10, m100 = n % 100; return n + " " + (m10 === 1 && m100 !== 11 ? a : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? b : c); }
-$("brandWhat").textContent = "Вся повесть по порядку: " + plural(TH_TOTAL, "тезис", "тезиса", "тезисов") + " и " + plural(Q_TOTAL, "вопрос", "вопроса", "вопросов") + " «что было дальше?».";
-
-var navIsSheet = function(){ return getComputedStyle($("navClose")).display !== "none" && getComputedStyle(document.querySelector(".sheet-head")).display !== "none"; };
-function openNav(){
-  nav.classList.add("open"); scrim.classList.add("show");
-  var cur = navList.children[Math.max(curCh, 0)];
-  if (cur) cur.scrollIntoView({block: "center"});
-}
-function closeNav(){ nav.classList.remove("open"); scrim.classList.remove("show"); }
-$("navOpen").addEventListener("click", openNav);
-$("navClose").addEventListener("click", closeNav);
-scrim.addEventListener("click", closeNav);
-$("reset").addEventListener("click", restart);
-nextBtn.addEventListener("click", next);
-
-var curCh = -1, ticking = false;
-function trackChapter(){
-  var heads = feed.querySelectorAll(".chap"), lim = Math.max((parseFloat(getComputedStyle(root).getPropertyValue("--hdr")) || 0) + 70, innerHeight * 0.45), cur = 0;
-  if (scrollY + innerHeight >= document.documentElement.scrollHeight - 4) lim = innerHeight - (parseFloat(getComputedStyle(root).getPropertyValue("--bar")) || 0) - 40;
-  for (var j = 0; j < heads.length; j++){
-    if (heads[j].getBoundingClientRect().top <= lim) cur = +heads[j].getAttribute("data-ci"); else break;
+function openPart(i,scrollTo){
+  curPart=i;const p=PARTS[i];$("#topTitle").textContent=p.title;
+  const r=revealed(p);
+  let h=`<div class="part-title">${p.title}</div><p class="lead">${p.sub}</p>`;
+  for(let b=0;b<r;b++)p.blocks[b].forEach(x=>h+=renderItem(x,p,b));
+  const lastQ=p.blocks[p.blocks.length-1].find(x=>x.k==="q");
+  if(r===p.blocks.length && (!lastQ || S.ans[lastQ.id]!==undefined)){
+    const nx=PARTS[i+1];
+    h+=`<div class="done">Часть пройдена ✓</div>`+(nx?`<button class="primary" id="nextPart">Дальше: ${nx.title} →</button>`:`<button class="primary" id="toHome">Вся поэма пройдена — на главную</button>`);
   }
-  if (cur === curCh) return;
-  curCh = cur;
-  $("curLabel").textContent = "Глава " + DATA[cur].n + " · " + DATA[cur].t;
-  var btns = navList.children;
-  for (var c = 0; c < btns.length; c++){
-    var on = c === cur; btns[c].classList.toggle("cur", on);
-    if (on) btns[c].setAttribute("aria-current", "true"); else btns[c].removeAttribute("aria-current");
-  }
-  if (!navIsSheet()){
-    var b = btns[cur], box = navList.getBoundingClientRect(), bb = b.getBoundingClientRect();
-    if (bb.top < box.top || bb.bottom > box.bottom) b.scrollIntoView({block: "nearest"});
+  main.innerHTML=h;
+  $("#bar").style.width=(partProgress(p)*100)+"%";
+  main.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(b.dataset.q,+b.dataset.i));
+  const nb=main.querySelector("[data-next]");if(nb)nb.onclick=()=>{S.rev[p.id]=r+1;save();openPart(i,"new");};
+  const np=$("#nextPart");if(np)np.onclick=()=>openPart(i+1);
+  const th=$("#toHome");if(th)th.onclick=home;
+  drawer();
+  if(scrollTo==="new"){
+        const nodes=main.querySelectorAll(".th,.chap");
+    // прокрутить к первому элементу нового блока
+    const idx=p.blocks.slice(0,r-1).flat().filter(x=>x.k!=="q").length;
+    const el=nodes[idx];if(el)el.scrollIntoView({behavior:"smooth",block:"start"});
+  }else if(scrollTo){const el=document.getElementById(scrollTo);if(el)el.scrollIntoView({block:"start"});}
+  else{
+    // продолжить с последнего открытого места
+    const qs=main.querySelectorAll(".quiz");const last=qs[qs.length-1];
+    if(last&&r>1)last.scrollIntoView({block:"center"});else window.scrollTo(0,0);
   }
 }
-window.addEventListener("scroll", function(){
-  if (ticking) return; ticking = true;
-  requestAnimationFrame(function(){ ticking = false; trackChapter(); });
-}, {passive: true});
 
-function measure(){
-  var t = document.querySelector(".top"), b = document.querySelector(".bar");
-  root.style.setProperty("--hdr", (t.offsetHeight || 0) + "px");
-  root.style.setProperty("--bar", (b.offsetHeight || 0) + "px");
-  if (!navIsSheet()) closeNav();
+function answer(id,i){
+  if(S.ans[id]!==undefined)return;
+  S.ans[id]=i;save();
+  const p=PARTS[curPart];const y=window.scrollY;
+  openPart(curPart,"keep");window.scrollTo(0,y);
+  const el=document.getElementById("q_"+id);if(el)el.scrollIntoView({behavior:"smooth",block:"center"});
 }
-window.addEventListener("resize", measure);
-window.addEventListener("orientationchange", function(){ setTimeout(measure, 250); });
 
-/* ============ КЛАВИАТУРА (iPad с клавиатурой) ============ */
-document.addEventListener("keydown", function(e){
-  if (e.metaKey || e.ctrlKey || e.altKey) return;
-  if (e.key === "Escape"){ closeNav(); return; }
-  if (nav.classList.contains("open")) return;
-  if (pending()){
-    var map = {"1":0,"2":1,"3":2,"а":0,"б":1,"в":2,"a":0,"b":1,"c":2};
-    var k = map[(e.key || "").toLowerCase()];
-    if (k !== undefined){ e.preventDefault(); answer(st.pos, k); return; }
-  }
-  if (e.key === "ArrowRight" || ((e.key === "Enter" || e.key === " ") && !(document.activeElement && document.activeElement.tagName === "BUTTON"))){
-    e.preventDefault(); if (!nextBtn.disabled) next();
-  }
-});
-
-/* ============ СТАРТ ============ */
-measure();
-render();
-if (st.pos > 0){
-  var last = $("end") || $("it-" + st.pos);
-  if (last) last.scrollIntoView({block: "nearest"});
-  trackChapter();
+function drawer(){
+  let h=`<button class="icon-btn" id="dHome" style="width:100%">⌂ Главная</button>`;
+  PARTS.forEach((p,i)=>{
+    h+=`<h3>${p.title}</h3>`;
+    const r=revealed(p);
+    p.blocks.forEach((bl,bi)=>bl.forEach(x=>{
+      if(x.k==="h"){const open=bi<r;h+=`<a href="#" class="${open?"":"locked"}" data-p="${i}" data-c="c_${p.id}_${slug(x.title)}">${x.title}</a>`;}
+    }));
+  });
+  h+=`<button class="reset" id="reset">Сбросить прогресс</button><p class="note" id="resetNote"></p>`;
+  const d=$("#drawer");d.innerHTML=h;
+  d.querySelectorAll("a[data-p]").forEach(a=>a.onclick=e=>{e.preventDefault();closeD();openPart(+a.dataset.p,a.dataset.c);});
+  $("#dHome").onclick=()=>{closeD();home();};
+  let armed=false;
+  $("#reset").onclick=()=>{
+    if(!armed){armed=true;$("#resetNote").textContent="Нажмите ещё раз, чтобы стереть все ответы.";return;}
+    S={rev:{},ans:{}};save();closeD();home();
+  };
 }
-})();
+function closeD(){document.body.classList.remove("open");}
+$("#menuBtn").onclick=()=>document.body.classList.toggle("open");
+$("#drawerBg").onclick=closeD;
+$("#homeBtn").onclick=home;
+home();
 </script>
 </body>
 </html>
